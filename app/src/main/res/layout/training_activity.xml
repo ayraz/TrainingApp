@@ -2,15 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
 
-    </data>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/trainingActivityRootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="cz.nudz.www.trainingapp.TrainingActivity">
-
 
         <android.support.constraint.Guideline
             android:id="@+id/trainingActivityGuideCenter"
@@ -57,31 +54,32 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_add_black_24dp" />
 
-        <ImageView
-            android:id="@+id/trainingActivityCueLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="160dp"
-            app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
-            app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_left_black_24dp" />
+        <!--<ImageView-->
+            <!--android:id="@+id/trainingActivityCueLeft"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginTop="160dp"-->
+            <!--app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"-->
+            <!--app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:srcCompat="@drawable/ic_arrow_left_black_24dp" />-->
 
-        <ImageView
-            android:id="@+id/trainingActivityCueLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="160dp"
-            android:visibility="gone"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
-            app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_right_black_24dp" />
+        <!--<ImageView-->
+            <!--android:id="@+id/trainingActivityCueLeft"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginTop="160dp"-->
+            <!--android:visibility="gone"-->
+            <!--app:layout_constraintHorizontal_bias="0.501"-->
+            <!--app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"-->
+            <!--app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:srcCompat="@drawable/ic_arrow_right_black_24dp" />-->
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>

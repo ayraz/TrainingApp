@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -12,13 +13,13 @@ import android.graphics.drawable.Drawable;
 
 public class ShapeView extends android.support.v7.widget.AppCompatImageView {
 
-    private Drawable shape;
+    public final Point positionInLayout;
 
-    public ShapeView(Context context, Drawable shape) {
+    public ShapeView(Context context, Drawable shape, Point positionInLayout) {
         super(context);
-        this.shape = shape;
-//        shape.setBounds(0,0,50,25);
+        this.positionInLayout = positionInLayout;
         this.setImageDrawable(shape);
+//        shape.setBounds(0,0,50,25);
     }
 
 //    @Override

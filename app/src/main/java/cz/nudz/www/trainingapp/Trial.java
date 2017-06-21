@@ -1,13 +1,15 @@
 package cz.nudz.www.trainingapp;
 
-import android.content.Intent;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import cz.nudz.www.trainingapp.utils.ArrayUtils;
 
 /**
  * Created by artem on 05-Jun-17.
@@ -15,44 +17,50 @@ import java.util.List;
 
 public class Trial {
 
-    public static final int STIM_CENTER_MARGIN = 50; // should this be random?
+    public static final int DIFFICULTY_SCALE_FACTOR = 2;
 
     private final Paradigm paradigm;
     private final int difficulty;
-    private final int stimuliNum;
+    private final int stimCount;
 
-    private final List<Integer> stimuliColors;
-    private List<Integer> probeColors;
-
-    private final List<Point> stimuliTopLeftPositions;
-
-    public Trial(Paradigm paradigm, int difficulty, Integer[] colors) {
-        this.paradigm = paradigm;
-        this.difficulty = difficulty;
-        this.stimuliNum = difficulty * 2; // <-- just for testing purposes...
-
-        // setup stimuli positions...
-        stimuliTopLeftPositions = new ArrayList<>(stimuliNum);
-        for (int i = 0; i < stimuliNum; ++i) {
-            double angle = Math.toRadians((double) 360 / stimuliNum * i);
-            Point pos = new Point(Math.cos(angle) + STIM_CENTER_MARGIN, Math.sin(angle) + STIM_CENTER_MARGIN);
-            stimuliTopLeftPositions.add(pos);
-        }
-        Collections.shuffle(stimuliTopLeftPositions);
-
-        // setup stimuli/probe colors..
-        stimuliColors = Arrays.asList(colors);
-        Collections.shuffle(stimuliColors);
+    public List<ShapeView> getStimuli() {
+        return stimuli;
     }
 
-    public static class Point {
+    private final List<ShapeView> stimuli;
+    private final Context ctx;
 
-        private double x;
-        private double y;
+    public Trial(Paradigm paradigm, int difficulty, Point center, double radius, Context ctx) {
+        this.paradigm = paradigm;
+        this.difficulty = difficulty;
+        this.stimCount = difficulty * DIFFICULTY_SCALE_FACTOR; // <-- just for testing purposes...
+        this.ctx = ctx;
 
-        public Point(double x, double y) {
-            this.x = x;
-            this.y = y;
+        // Setup trial's stimuli...
+        Resources res = ctx.getResources();
+
+        // Generate positions, assuming root layout..
+        List<Point> stimPositions = new ArrayList<>(stimCount);
+        for (int i = 0; i < stimCount; ++i) {
+            double angle = Math.toRadians(((double) 360 / stimCount) * i);
+            Point pos = new Point(
+                    (int) Math.floor(Math.sin(angle) * radius + center.x),
+                    (int) Math.floor(Math.cos(angle) * radius + center.y));
+            stimPositions.add(pos);
+        }
+        Collections.shuffle(stimPositions);
+
+        // Setup stimuli/probe colors..
+        List<Integer> colors = ArrayUtils.toIntArrayList(res.getIntArray(R.array.trialColors));
+        Collections.shuffle(colors);
+
+        // Create views..
+        final Drawable drawable = res.getDrawable(R.drawable.rect);
+        stimuli = new ArrayList<>(stimCount);
+        for (int i = 0; i < stimCount; ++i) {
+            ShapeView shape = new ShapeView(ctx, drawable, stimPositions.get(i));
+            shape.setColorFilter(colors.get(i));
+            stimuli.add(shape);
         }
     }
 }
