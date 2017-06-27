@@ -55,16 +55,13 @@ public class TrainingActivity extends AppCompatActivity {
         binding.trainingActivityRootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // Immediately unsubscribe to not get stuck in a loop..
+                // prevent event loop
                 binding.trainingActivityRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                // get display's center coordinates
-                Display display = getWindowManager().getDefaultDisplay();
-                int actionbarHeight = getSupportActionBar().getHeight();
-
-                Point outSize = new Point();
-                display.getSize(outSize);
-                Point center = new Point(outSize.x/2, (outSize.y - actionbarHeight)/2);
+                // get display's center coordinates using fixation
+                Point center = new Point();
+                center.x = (int) (binding.trainingActivityFixationPoint.getX() + binding.trainingActivityFixationPoint.getWidth() / 2);
+                center.y = (int) (binding.trainingActivityFixationPoint.getY() + binding.trainingActivityFixationPoint.getHeight() / 2);
                 // test trial
                 final Trial trial = new Trial(Paradigm.COLOR, 5, center, 150d, context);
 
@@ -81,7 +78,7 @@ public class TrainingActivity extends AppCompatActivity {
                 lastView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        // Immediately unsubscribe to not get stuck in a loop..
+                        // prevent event loop
                         lastView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                         for (ShapeView v : stimuli) {

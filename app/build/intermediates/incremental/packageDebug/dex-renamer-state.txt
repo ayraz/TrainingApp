@@ -1,7 +1,0 @@
-#Tue Jun 27 21:49:02 CEST 2017
-base.0=G\:\\MEGA\\TrainingApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_e8bed03aadcb4d255fff3cc87607326653a9a1ca
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=G\:\\MEGA\\TrainingApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_cb6bc6869fd77b5a1e642314ca20e89c43173f31\\classes.dex
-base.1=G\:\\MEGA\\TrainingApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_cb6bc6869fd77b5a1e642314ca20e89c43173f31
-file.0=G\:\\MEGA\\TrainingApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_e8bed03aadcb4d255fff3cc87607326653a9a1ca\\classes.dex

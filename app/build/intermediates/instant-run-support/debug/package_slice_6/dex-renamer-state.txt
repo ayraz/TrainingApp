@@ -1,4 +1,0 @@
-#Tue Jun 27 22:14:59 CEST 2017
-base.0=G\:\\MEGA\\TrainingApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_6
-renamed.0=classes.dex
-file.0=G\:\\MEGA\\TrainingApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_6\\classes.dex
