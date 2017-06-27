@@ -55,9 +55,10 @@ public class Trial {
         Collections.shuffle(colors);
 
         // Create views..
-        final Drawable drawable = res.getDrawable(R.drawable.rect);
         stimuli = new ArrayList<>(stimCount);
         for (int i = 0; i < stimCount; ++i) {
+            // 'clone' drawable so that we can alter color for each.
+            Drawable drawable = res.getDrawable(R.drawable.rect).mutate();
             ShapeView shape = new ShapeView(ctx, drawable, stimPositions.get(i));
             shape.setColorFilter(colors.get(i));
             stimuli.add(shape);
