@@ -1,9 +1,6 @@
 package cz.nudz.www.trainingapp;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
@@ -13,25 +10,25 @@ import android.graphics.drawable.Drawable;
 
 public class ShapeView extends android.support.v7.widget.AppCompatImageView {
 
-    public final Point positionInLayout;
+    public final Point position;
 
-    public ShapeView(Context context, Drawable shape, Point positionInLayout) {
+    public ShapeView(Context context, Drawable shape, Point position) {
         super(context);
-        this.positionInLayout = positionInLayout;
+        this.position = position;
         this.setImageDrawable(shape);
-//        shape.setBounds(0,0,50,25);
+//        view.setBounds(0,0,50,25);
     }
 
 //    @Override
 //    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        int w = resolveSize(shape.getBounds().width(), widthMeasureSpec);
-//        int h = resolveSize(shape.getBounds().height(), widthMeasureSpec);
+//        int w = resolveSize(view.getBounds().width(), widthMeasureSpec);
+//        int h = resolveSize(view.getBounds().height(), widthMeasureSpec);
 //
 //        setMeasuredDimension(w, h);
 //    }
 
 //    @Override
 //    protected void onDraw(Canvas canvas) {
-//        shape.draw(canvas);
+//        view.draw(canvas);
 //    }
 }

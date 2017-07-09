@@ -11,10 +11,10 @@
         android:topLeftRadius="0dp"
         android:topRightRadius="0dp" />
     <size
-        android:height="50dp"
-        android:width="50dp">
+        android:height="20dp"
+        android:width="20dp">
     </size>
     <solid
-        android:color="@android:color/background_dark">
+        android:color="@android:color/transparent">
     </solid>
 </shape>
