@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="cz.nudz.www.trainingapp.MainActivity"
+        tools:layout_editor_absoluteY="89dp"
+        tools:layout_editor_absoluteX="0dp">
+
+        <Button
+            android:id="@+id/mainActivityExperimentBtn"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/mainActivityTrialBtn"
+            app:layout_constraintRight_toLeftOf="@+id/mainActivityTutorialBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/mainActivityTutorial" />
+
+        <Button
+            android:id="@+id/mainActivityTutorialBtn"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/mainActivityExperimentBtn"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/mainActivityTrial" />
+
+        <Button
+            android:id="@+id/mainActivityTrialBtn"
+            android:layout_width="189dp"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/mainActivityExperimentBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/mainActivityExperiment" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
