@@ -1,23 +1,32 @@
 package cz.nudz.www.trainingapp;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Space;
 
+import java.security.acl.Group;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
+import cz.nudz.www.trainingapp.utils.ArrayUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
-
-import static android.support.constraint.ConstraintSet.PARENT_ID;
 
 public class TrainingActivity extends AppCompatActivity {
 
@@ -32,19 +41,7 @@ public class TrainingActivity extends AppCompatActivity {
     private TrainingActivityBinding binding;
     private ConstraintLayout layout;
     private Context context;
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int x = (int)event.getX();
-        int y = (int)event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-                Log.d(TAG, "x: " + x + " y: " + y);
-        }
-        return false;
-    }
+    private Resources res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +50,37 @@ public class TrainingActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
         layout = binding.trainingActivityRootLayout;
         context = this;
+        res = getResources();
+
+        // SETUP...
+        final Trial trial = new Trial(Paradigm.COLOR, 5, context);
+        final int stimCount = trial.getStimCount();
+        final int halfCount = stimCount / 2;
+
+        final Drawable square = res.getDrawable(R.drawable.square);
+
+        // Expand grid with empty views to ensure proper placement of stimuli.
+//        for (int i = 0; i < rowColCount; ++i) {
+//            GridLayout.Spec spec = GridLayout.spec(i);
+//            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+//            params.columnSpec = spec;
+//            params.rowSpec = spec;
+//
+//            for (int j = 0; j < 2; ++j) {
+//                Space space = new cSpace(this);
+//                space.setBackground(square);
+//                space.setVisibility(View.INVISIBLE);
+//                space.setLayoutParams(params);
+//                if (j == 0)
+//                    binding.trainingActivityLeftGrid.addView(space);
+//                else
+//                    binding.trainingActivityRightGrid.addView(space);
+//            }
+//        }
+
+        // Setup stimuli/probe colors..
+        final List<Integer> colors = ArrayUtils.toIntArrayList(res.getIntArray(R.array.trialColors));
+        Collections.shuffle(colors);
 
         //
         // EVENT HANDLERS
@@ -66,84 +94,154 @@ public class TrainingActivity extends AppCompatActivity {
         binding.trainingActivityRootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // prevent event loop
+                // prevent infinite event loop
                 binding.trainingActivityRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                final Trial trial = new Trial(Paradigm.COLOR, 6, context);
-                // First just throw in the views to get them drawn
-                // so that we have actual sizes to work with..
-                final List<Stimulus> stimuli = trial.getStimuli();
-                for (Stimulus stim : stimuli) {
-                    // we need to set view's id to later find it in the layout..
-                    stim.view.setId(View.generateViewId());
-                    stim.view.setVisibility(View.INVISIBLE);
-                    layout.addView(stim.view);
+                // Drawable height/width are the same (square) so get whatever..
+                // also right and left grids are the same.
+                int stimWidth = square.getIntrinsicWidth();
+                // add padding half of stimuli size so that we have some space for 'randomness' later
+                final int gridCellSize = stimWidth * 2;
+                final int gridSize = binding.trainingActivityLeftGrid.getWidth();
+                final int rowColCount = (int) Math.sqrt(Math.pow(gridSize, 2) / Math.pow(gridCellSize, 2));
+
+                binding.trainingActivityLeftGrid.setRowCount(rowColCount);
+                binding.trainingActivityLeftGrid.setColumnCount(rowColCount);
+                binding.trainingActivityRightGrid.setRowCount(rowColCount);
+                binding.trainingActivityRightGrid.setColumnCount(rowColCount);
+
+                // Generate semi-random positions in the grid..
+                final List<Point> leftPositions = new ArrayList<>(stimCount);
+                final List<Point> rightPositions = new ArrayList<>(stimCount);
+                for (int i = 0; i < halfCount; ++i) {
+                    // find empty position
+                    Point pos;
+                    do {
+                        pos = getRandomPos(rowColCount);
+                    }
+                    while (leftPositions.indexOf(pos) != -1);
+                    leftPositions.add(pos);
                 }
-                final Stimulus lastStim = stimuli.get(stimuli.size()-1);
+                for (int i = halfCount; i < stimCount; ++i) {
+                    Point pos;
+                    do {
+                        pos = getRandomPos(rowColCount);
+                    }
+                    while (rightPositions.indexOf(pos) != -1);
+                    rightPositions.add(pos);
+                }
+
+                // First just create views to get them drawn, so that we have actual sizes to work with..
+                final List<ImageView> stimuli = new ArrayList<>(stimCount);
+                for (int i = 0; i < stimCount; ++i) {
+                    // 'clone' drawable so that we can alter color for each.
+                    Drawable drawable = square.mutate();
+                    ImageView v = new ImageView(context);
+//                    v.setVisibility(View.INVISIBLE);
+                    v.setImageDrawable(drawable);
+                    v.setColorFilter(colors.get(i % colors.size()));
+                    // we need to set view's id to later find it in the layout..
+                    v.setId(View.generateViewId());
+                    RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params1.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    v.setLayoutParams(params1);
+
+                    Point pos;
+                    if (i < halfCount) {
+                        pos = leftPositions.get(i);
+                    } else {
+                        pos = rightPositions.get(i-halfCount);
+                    }
+                    GridLayout.Spec colSpec = GridLayout.spec(pos.x);
+                    GridLayout.Spec rowSpec = GridLayout.spec(pos.y);
+
+                    GridLayout.LayoutParams params2 = new GridLayout.LayoutParams();
+                    params2.rowSpec = rowSpec;
+                    params2.columnSpec = colSpec;
+                    params2.width = gridCellSize;
+                    params2.height = gridCellSize;
+
+                    // Create a container to hold our stimuli so we can 'randomize' position inside it.
+                    RelativeLayout container = new RelativeLayout(context);
+                    container.setLayoutParams(params2);
+                    container.addView(v);
+
+                    if (i < halfCount) {
+                        binding.trainingActivityLeftGrid.addView(container);
+                    } else {
+                        binding.trainingActivityRightGrid.addView(container);
+                    }
+                }
 
                 // Once the last view's layout is finished we can start setting up stimuli
-                lastStim.view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        // prevent event loop
-                        lastStim.view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                        // SETUP...
-                        // get display's center coordinates using fixation
-                        Point center = new Point();
-                        ImageView fixation = binding.trainingActivityFixationPoint;
-                        center.x = (int) (fixation.getX() + fixation.getWidth() / 2);
-                        center.y = (int) (fixation.getY() + fixation.getHeight() / 2);
-
-                        // get drawing boundaries for figures
-                        float leftBound = binding.trainingActivityGuideLeft.getX();
-                        float rightBound = binding.trainingActivityGuideRight.getX();
-
-                        trial.setupStimuli(lastStim.view.getWidth(), lastStim.view.getHeight(), center, 280d, leftBound, rightBound);
-
-                        for (Stimulus stim : stimuli) {
-                            // There is currently a bug with connect's horizontal margins,
-                            // here is a workaround: https://stackoverflow.com/questions/44129278/adding-constraints-to-a-view-in-a-constraintlayout-ignore-left-and-right-margins
-                            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
-                                    ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                            // now we can get actual dimensions...
-                            params.setMargins(
-                                    (stim.position.x - stim.view.getWidth()/2),
-                                    (stim.position.y - stim.view.getHeight()/2),
-                                    0, 0);
-                            params.leftToLeft = PARENT_ID;
-                            params.topToTop = PARENT_ID;
-                            stim.view.setLayoutParams(params);
-                        }
-
-                        // START THE TRIAL...
-                        final View cue;
-                        switch (trial.cueSide) {
-                            case LEFT:
-                                cue = binding.trainingActivityCueLeft;
-                                break;
-                            case RIGHT:
-                                cue = binding.trainingActivityCueRight;
-                                break;
-                            default:
-                                throw new IllegalStateException(String.format("Trials's cueSide state is invalid: {0}", trial.cueSide.toString()));
-                        }
-                        cue.setVisibility(View.VISIBLE);
-
-                        new android.os.Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                cue.setVisibility(View.GONE);
-                                for (Stimulus stim : stimuli) {
-                                    stim.view.setVisibility(View.VISIBLE);
-                                }
-
-
-                            }
-                        }, CUE_INTERVAL);
-                    }
-                });
+//                final ImageView lastStim = stimuli.get(stimuli.size() - 1);
+//                lastStim.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        // prevent event loop
+//                        lastStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//
+//                        // START THE TRIAL...
+//                        final View cue;
+//                        switch (trial.getCueSide()) {
+//                            case LEFT:
+//                                cue = binding.trainingActivityCueLeft;
+//                                break;
+//                            case RIGHT:
+//                                cue = binding.trainingActivityCueRight;
+//                                break;
+//                            default:
+//                                throw new IllegalStateException(String.format("Trials's cueSide state is invalid: {0}", trial.getCueSide().toString()));
+//                        }
+//                        cue.setVisibility(View.VISIBLE);
+//
+//                        new android.os.Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                cue.setVisibility(View.GONE);
+//                                for (ImageView stim : stimuli) {
+//                                    stim.setVisibility(View.VISIBLE);
+//                                }
+//
+//
+//                            }
+//                        }, CUE_INTERVAL);
+//                    }
+//                });
             }
         });
+    }
+
+    @NonNull
+    private Point getRandomPos(int rowColCount) {
+        return new Point(
+                        RandomUtils.nextInt(0, rowColCount-1),
+                        RandomUtils.nextInt(0, rowColCount-1)
+                );
+    }
+
+    /**
+     * See: https://math.stackexchange.com/questions/466198/algorithm-to-get-the-maximum-size-of-n-squares-that-fit-into-a-rectangle-with-a
+     * @param x Width of containing rectangle.
+     * @param y Height of containing rectangle.
+     * @param n Number of rectangles to be contained within the grid.
+     * @return Optimal containing square size.
+     */
+    private static int optimalContainingSquareSize(int x, int y, int n) {
+        double sx, sy;
+        double px = Math.ceil(Math.sqrt(n * x / y));
+        if (Math.floor(px * y / x) * px < n)  // does not fit, y/(x/px)=px*y/x
+            sx = y / Math.ceil(px * y / x);
+        else
+            sx = x / px;
+        double py = Math.ceil(Math.sqrt(n * y / x));
+        if (Math.floor(py * x / y) * py < n)  // does not fit
+            sy = x / Math.ceil(x * py / y);
+        else
+            sy = y / py;
+
+        return (int) Math.max(sx, sy);
     }
 }
