@@ -24,14 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.04" />
 
         <android.support.constraint.Guideline
             android:id="@+id/trainingActivityGuideRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_percent="0.96" />
 
         <android.support.constraint.Guideline
             android:id="@+id/trainingActivityGuideBottom"
@@ -85,10 +85,10 @@
             tools:layout_editor_absoluteY="112dp"
             tools:layout_editor_absoluteX="0dp" />
 
-        <GridLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/trainingActivityLeftGrid"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/trainingActivityGuideBottom"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
@@ -96,22 +96,22 @@
             app:layout_constraintTop_toTopOf="@+id/trainingActivityGuideTop"
             app:layout_constraintVertical_bias="0.0">
 
-        </GridLayout>
+        </android.support.constraint.ConstraintLayout>
 
-        <GridLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/trainingActivityRightGrid"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             app:layout_constraintBottom_toTopOf="@+id/trainingActivityGuideBottom"
-            app:layout_constraintHorizontal_bias="0.916"
+            app:layout_constraintHorizontal_bias="0.909"
             app:layout_constraintLeft_toRightOf="@+id/trainingActivityFixationPoint"
             app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
             app:layout_constraintTop_toBottomOf="@id/trainingActivityGuideTop"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="1.0">
 
-        </GridLayout>
+        </android.support.constraint.ConstraintLayout>
 
 
     </android.support.constraint.ConstraintLayout>

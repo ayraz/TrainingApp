@@ -11,8 +11,8 @@
         android:topLeftRadius="0dp"
         android:topRightRadius="0dp" />
     <size
-        android:height="50dp"
-        android:width="50dp">
+        android:height="64dp"
+        android:width="64dp">
     </size>
     <!--<solid-->
         <!--android:color="@android:color/transparent">-->

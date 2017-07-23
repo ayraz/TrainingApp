@@ -35,17 +35,17 @@ public class Trial {
     /**
      *
      * @param paradigm
-     * @param difficulty - Zero based.
+     * @param difficulty: one-based, range: 1 to 6.
      * @param ctx
      */
     public Trial(Paradigm paradigm, int difficulty, Context ctx) {
-        assert difficulty >= 0 && difficulty <= 5;
+        assert difficulty >= 1 && difficulty <= 6;
 
         this.ctx = ctx;
         this.res = ctx.getResources();
         this.paradigm = paradigm;
         this.difficulty = difficulty;
-        this.stimCount = (2 + difficulty) * 2;
+        this.stimCount = (1 + difficulty) * 2;
         this.cueSide = Math.random() < 0.5 ? Side.LEFT : Side.RIGHT;
 
         // Create views..

@@ -20,12 +20,30 @@ public final class RandomUtils {
      * @return Integer between min and max, inclusive.
      * @see java.util.Random#nextInt(int)
      */
-    public static int nextInt(int min, int max) {
+    public static int nextIntInclusive(int min, int max) {
+        if (min >= max)
+            throw new IllegalArgumentException("Max value must be greater than min.");
 
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
+        // nextInt is normally exclusive of the top value, so add 1 to make it inclusive
         int randomInt = rand.nextInt((max - min) + 1) + min;
+        return randomInt;
+    }
 
+    /**
+     * Returns a pseudo-random number between min and max, inclusive.
+     * The difference between min and max can be at most
+     * <code>Integer.MAX_VALUE - 1</code>.
+     *
+     * @param min Minimum value
+     * @param max Maximum value.  Must be greater than min.
+     * @return Integer between min and max, exclusive.
+     * @see java.util.Random#nextInt(int)
+     */
+    public static int nextIntExclusive(int min, int max) {
+        if (min >= max)
+            throw new IllegalArgumentException("Max value must be greater than min.");
+
+        int randomInt = rand.nextInt(max - min) + min;
         return randomInt;
     }
 }
