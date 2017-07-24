@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tutorialActivityPager"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/tutorialActivitySeparator"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </android.support.v4.view.ViewPager>
+
+        <LinearLayout
+            android:id="@+id/tutorialActivityNextBtn"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tutorialActivitySeparator"
+            app:layout_constraintLeft_toRightOf="@+id/tutorialActivityPrevBtn"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="@string/tutorialActivityNextBtnText" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:paddingLeft="16dp"
+                app:srcCompat="@drawable/arrow_right_black"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/tutorialActivityPrevBtn"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tutorialActivitySeparator"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tutorialActivityNextBtn"
+            app:layout_constraintVertical_bias="0.485">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:paddingRight="16dp"
+                app:srcCompat="@drawable/arrow_left_black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="@string/tutorialActivityPrevBtnText" />
+        </LinearLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/tutorialActivitySeparator"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

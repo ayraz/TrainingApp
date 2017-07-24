@@ -62,7 +62,7 @@
             android:layout_height="0dp"
             app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
             app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
-            app:srcCompat="@drawable/ic_arrow_left_black_24dp"
+            app:srcCompat="@drawable/arrow_left_black"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/trainingActivityFixationPoint" />
 
@@ -72,7 +72,7 @@
             android:layout_height="0dp"
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/ic_arrow_right_black_24dp"
+            app:srcCompat="@drawable/arrow_right_black"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/trainingActivityFixationPoint" />
 

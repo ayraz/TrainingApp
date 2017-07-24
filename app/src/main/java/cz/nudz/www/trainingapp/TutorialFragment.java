@@ -2,9 +2,10 @@ package cz.nudz.www.trainingapp;
 
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,12 @@ import cz.nudz.www.trainingapp.databinding.TutorialFragmentBinding;
 public class TutorialFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String TUTORIAL_TOP_TEXT = "param1";
-    private static final String TUTORIAL_BOTTOM_TEXT = "param2";
+    private static final String TUTORIAL_TOP_TEXT_ID = "param1";
+    private static final String TUTORIAL_BOTTOM_TEXT_ID = "param2";
 
     // TODO: Rename and change types of parameters
-    private String topText;
-    private String bottomText;
+    private Integer topTextId;
+    private Integer bottomTextId;
     private TutorialFragmentBinding binding;
 
 
@@ -36,16 +37,18 @@ public class TutorialFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param topText Parameter 1.
-     * @param bottomText Parameter 2.
+     * @param topTextId Parameter 1.
+     * @param bottomTextId Parameter 2.
      * @return A new instance of fragment TutorialFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TutorialFragment newInstance(String topText, String bottomText) {
+    public static TutorialFragment newInstance(@Nullable Integer topTextId, @Nullable Integer bottomTextId) {
         TutorialFragment fragment = new TutorialFragment();
         Bundle args = new Bundle();
-        args.putString(TUTORIAL_TOP_TEXT, topText);
-        args.putString(TUTORIAL_BOTTOM_TEXT, bottomText);
+
+        args.putInt(TUTORIAL_TOP_TEXT_ID, topTextId != null ? topTextId : 0);
+        args.putInt(TUTORIAL_BOTTOM_TEXT_ID, bottomTextId != null ? bottomTextId : 0);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,8 +57,8 @@ public class TutorialFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            topText = getArguments().getString(TUTORIAL_TOP_TEXT);
-            bottomText = getArguments().getString(TUTORIAL_BOTTOM_TEXT);
+            topTextId = getArguments().getInt(TUTORIAL_TOP_TEXT_ID);
+            bottomTextId = getArguments().getInt(TUTORIAL_BOTTOM_TEXT_ID);
         }
     }
 
@@ -64,8 +67,10 @@ public class TutorialFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_fragment, container, false);
 
-        binding.tutorialFragmentTopText.setText(topText);
-        binding.tutorialFragmentBottomText.setText(bottomText);
+        if (topTextId != null && !topTextId.equals(0))
+            binding.tutorialFragmentTopText.setText(Html.fromHtml(getString(topTextId)));
+        if (bottomTextId != null && !bottomTextId.equals(0))
+            binding.tutorialFragmentBottomText.setText(Html.fromHtml(getString(bottomTextId)));
 
         return binding.getRoot();
     }
