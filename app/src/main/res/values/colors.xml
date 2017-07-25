@@ -14,8 +14,11 @@
     <color name="darkBlue">#0000ff</color>
     <color name="lightGreen">#00ff00</color>
     <color name="darkGreen">#009900</color>
+    <color name="brown">#663300</color>
     <color name="grey">#808080</color>
     <color name="orange">#ff8000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 
     <integer-array name="trialColors">
         <item>@color/red</item>
@@ -28,5 +31,8 @@
         <item>@color/darkGreen</item>
         <item>@color/grey</item>
         <item>@color/orange</item>
+        <item>@color/brown</item>
+        <item>@color/black</item>
+        <item>@color/white</item>
     </integer-array>
 </resources>

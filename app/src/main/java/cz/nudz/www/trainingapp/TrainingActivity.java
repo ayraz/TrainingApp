@@ -51,8 +51,11 @@ public class TrainingActivity extends AppCompatActivity {
 
         // SETUP...
         final Trial trial = new Trial(Paradigm.COLOR, 1, context);
-        final int stimCount = trial.getStimCount();
-        final int halfCount = stimCount / 2;
+        final int totalStimCount = trial.getStimCount();
+        final int perGridStimCount = totalStimCount / 2;
+
+        // stimuli number must be even
+        assert totalStimCount % 2 == 0;
 
         final Drawable square = res.getDrawable(R.drawable.square);
 
@@ -71,18 +74,26 @@ public class TrainingActivity extends AppCompatActivity {
                 // prevent infinite event loop
                 binding.trainingActivityRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                // Drawable height/width are the same (square) so get whatever..
-                // also right and left grids are the same.
-                int stimWidth = square.getIntrinsicWidth();
-                // add padding half of stimuli size so that we have some space for 'randomness' later
-                int padding = stimWidth;
-                final int gridCellSize = stimWidth + padding;
-                final int gridSize = binding.trainingActivityLeftGrid.getWidth();
-                final List<Rect> positions = generateGridPositions(gridSize, gridCellSize);
-                Collections.shuffle(positions);
+                // Grids on both sides are identical so use whatever.
+                // They aren't true squares so take the minimum dimension as grid size.
+                final int gridSize = Math.min(binding.trainingActivityLeftGrid.getWidth(), binding.trainingActivityLeftGrid.getHeight());
+                final int cellSize = optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
+                // each cell can contain 4 actual stimuli; this excess space is for 'quasi-randomness'..
+                // simulated with padding inside the cell.
+                final int padding = perGridStimCount <= 4 ? 40 : 20;
+                final int stimSize = (cellSize / 2) - padding;
+                final List<Rect> leftPositions = generateGridPositions(gridSize, cellSize);
+                // beware this is not a deep copy!
+                final List<Rect> rightPositions = new ArrayList<Rect>(leftPositions);
+                Collections.shuffle(leftPositions);
+                Collections.shuffle(rightPositions);
 
-                final List<ImageView> stimuli = new ArrayList<>(stimCount);
-                for (int i = 0; i < stimCount; ++i) {
+                if (leftPositions.size() < perGridStimCount)
+                    throw new IllegalStateException("The grid is too small for the number of stimuli.");
+
+
+                final List<ImageView> stimuli = new ArrayList<>(totalStimCount);
+                for (int i = 0; i < totalStimCount; ++i) {
                     // 'clone' drawable so that we can alter color for each.
                     Drawable drawable = res.getDrawable(R.drawable.square).mutate();
                     ImageView v = new ImageView(context);
@@ -94,18 +105,17 @@ public class TrainingActivity extends AppCompatActivity {
                     stimuli.add(v);
 
                     FrameLayout container = new FrameLayout(context);
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.topMargin = RandomUtils.nextIntInclusive(0, padding);
-                    params.leftMargin = RandomUtils.nextIntInclusive(0, padding);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(stimSize, stimSize);
+                    int paddingEnd = cellSize - stimSize - padding;
+                    params.topMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
+                    params.leftMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
                     v.setLayoutParams(params);
                     container.addView(v);
 
-                    if (i < halfCount) {
-                        addViewToGrid(container, binding.trainingActivityLeftGrid, positions.get(i), gridCellSize);
+                    if (i < perGridStimCount) {
+                        addViewToGrid(container, binding.trainingActivityLeftGrid, leftPositions.get(i), cellSize);
                     } else {
-                        addViewToGrid(container, binding.trainingActivityRightGrid, positions.get(i % halfCount), gridCellSize);
+                        addViewToGrid(container, binding.trainingActivityRightGrid, rightPositions.get(i % perGridStimCount), cellSize);
                     }
                 }
 
@@ -147,8 +157,8 @@ public class TrainingActivity extends AppCompatActivity {
 
                                         // pick random index for non-cued grid
                                         int index = trial.getCueSide() == Side.RIGHT
-                                                ? RandomUtils.nextIntExclusive(0, halfCount)
-                                                : RandomUtils.nextIntExclusive(halfCount, stimCount);
+                                                ? RandomUtils.nextIntExclusive(0, perGridStimCount)
+                                                : RandomUtils.nextIntExclusive(perGridStimCount, totalStimCount);
 
                                         final ImageView changedStim = stimuli.get(index);
 
@@ -210,5 +220,28 @@ public class TrainingActivity extends AppCompatActivity {
         params.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
         v.setLayoutParams(params);
         grid.addView(v);
+    }
+
+    /**
+     * See: https://math.stackexchange.com/questions/466198/algorithm-to-get-the-maximum-size-of-n-squares-that-fit-into-a-rectangle-with-a
+     * @param x Width of containing grid.
+     * @param y Height of containing grid.
+     * @param n Number of rectangles to be contained within the grid.
+     * @return Optimal containing square size.
+     */
+    private static int optimalContainingSquareSize(int x, int y, int n) {
+        double sx, sy;
+        double px = Math.ceil(Math.sqrt(n * x / y));
+        if (Math.floor(px * y / x) * px < n)  // does not fit, y/(x/px)=px*y/x
+            sx = y / Math.ceil(px * y / x);
+        else
+            sx = x / px;
+        double py = Math.ceil(Math.sqrt(n * y / x));
+        if (Math.floor(py * x / y) * py < n)  // does not fit
+            sy = x / Math.ceil(x * py / y);
+        else
+            sy = y / py;
+
+        return (int) Math.max(sx, sy);
     }
 }
