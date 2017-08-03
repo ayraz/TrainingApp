@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -30,10 +32,14 @@ public class TrainingActivity extends AppCompatActivity {
     private static final String TAG = TrainingActivity.class.getSimpleName();
 
     // Measure = milliseconds
-    public static final int CUE_INTERVAL = 350;
-    public static final int MEMORIZATION_INTERVAL = 200;
-    public static final int RETENTION_INTERVAL = 900;
-    public static final int TEST_INTERVAL = 2000;
+    private static final int CUE_INTERVAL = 300;
+    private static final int CUE_PAUSE = 100;
+    private static final int MEMORIZATION_INTERVAL = 100;
+    private static final int RETENTION_INTERVAL = 900;
+    private static final int TEST_INTERVAL = 2000;
+    private static final int DEBUG_SLOW = 1;
+
+    private static final int TRIAL_COUNT = 20;
 
     private TrainingActivityBinding binding;
     private ConstraintLayout layout;
@@ -53,6 +59,7 @@ public class TrainingActivity extends AppCompatActivity {
         final Trial trial = new Trial(Paradigm.COLOR, 1, context);
         final int totalStimCount = trial.getStimCount();
         final int perGridStimCount = totalStimCount / 2;
+        final List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);
 
         // stimuli number must be even
         assert totalStimCount % 2 == 0;
@@ -60,8 +67,32 @@ public class TrainingActivity extends AppCompatActivity {
         final Drawable square = res.getDrawable(R.drawable.square);
 
         // Setup stimuli/probe colors..
+        // The color count covers entirely stimuli count even for hardest difficulty + 1 for color change.
         final List<Integer> colors = ArrayUtils.toIntArrayList(res.getIntArray(R.array.trialColors));
         Collections.shuffle(colors);
+        // take last (unreachable) color
+        final int changeColor = colors.get(colors.size() - 1);
+
+        // user answer handlers
+        binding.trainingActivitySameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answers.add(!trial.isChanging());
+
+                // allow only one answer
+                v.setClickable(false);
+            }
+        });
+
+        binding.trainingActivityDifferentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                answers.add(trial.isChanging());
+
+                // allow only one answer
+                v.setClickable(false);
+            }
+        });
 
         /*
          * Using this callback as an indicator that layout has finished..
@@ -99,7 +130,7 @@ public class TrainingActivity extends AppCompatActivity {
                     ImageView v = new ImageView(context);
                     v.setVisibility(View.INVISIBLE);
                     v.setImageDrawable(drawable);
-                    v.setColorFilter(colors.get(i % colors.size()));
+                    v.setColorFilter(colors.get(i));
                     // we need to set view's id to later find it in the layout..
                     v.setId(View.generateViewId());
                     stimuli.add(v);
@@ -142,56 +173,67 @@ public class TrainingActivity extends AppCompatActivity {
                         }
                         cue.setVisibility(View.VISIBLE);
 
-                        // MEMORY ARRAY
-                        new android.os.Handler().postDelayed(new Runnable() {
-                            @Override
+                        final Handler handler = new Handler();
+                        // CUE PAUSE
+                        handler.postDelayed(new Runnable() {
                             public void run() {
-                                cue.setVisibility(View.GONE);
-                                setViewsVisible(stimuli, true);
+                                cue.setVisibility(View.INVISIBLE);
 
-                                // RETENTION INTERVAL
-                                new android.os.Handler().postDelayed(new Runnable() {
+                                // MEMORY ARRAY
+                                handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        setViewsVisible(stimuli, false);
+                                        setViewsVisible(true, stimuli.toArray(new View[stimuli.size()]));
 
-                                        // pick random index for non-cued grid
-                                        int index = trial.getCueSide() == Side.RIGHT
-                                                ? RandomUtils.nextIntExclusive(0, perGridStimCount)
-                                                : RandomUtils.nextIntExclusive(perGridStimCount, totalStimCount);
-
-                                        final ImageView changedStim = stimuli.get(index);
-
-                                        // pick random color, different from previous
-                                        List<Integer> filteredColors = CollectionUtils.filterList(colors, new Predicate() {
-                                            @Override
-                                            public boolean apply(Object o) {
-                                                return changedStim.getColorFilter().equals(o) ? false : true;
-                                            }
-                                        });
-                                        int colorIndex = RandomUtils.nextIntExclusive(0, filteredColors.size());
-                                        changedStim.setColorFilter(filteredColors.get(colorIndex));
-
-                                        // TEST ARRAY
-                                        new android.os.Handler().postDelayed(new Runnable() {
+                                        // RETENTION INTERVAL
+                                        handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                setViewsVisible(stimuli, true);
+                                                setViewsVisible(false, stimuli.toArray(new View[stimuli.size()]));
+
+                                                if (trial.isChanging()) {
+                                                    // pick random index for cued grid
+                                                    int index = trial.getCueSide() == Side.LEFT
+                                                            ? RandomUtils.nextIntExclusive(0, perGridStimCount)
+                                                            : RandomUtils.nextIntExclusive(perGridStimCount, totalStimCount);
+
+                                                    final ImageView changedStim = stimuli.get(index);
+                                                    changedStim.setColorFilter(changeColor);
+                                                }
+
+                                                // TEST ARRAY
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        setViewsVisible(true, stimuli.toArray(new View[stimuli.size()]));
+                                                        setViewsVisible(true,
+                                                                binding.trainingActivitySameBtn,
+                                                                binding.trainingActivityDifferentBtn);
+
+                                                        // TRIAL END
+                                                        handler.postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+
+                                                            }
+                                                        }, TEST_INTERVAL * DEBUG_SLOW);
+                                                    }
+                                                }, RETENTION_INTERVAL);
                                             }
-                                        }, RETENTION_INTERVAL);
+                                        }, MEMORIZATION_INTERVAL * DEBUG_SLOW);
                                     }
-                                }, MEMORIZATION_INTERVAL);
+                                }, CUE_INTERVAL);
                             }
-                        }, CUE_INTERVAL);
+                        }, CUE_PAUSE * DEBUG_SLOW);
                     }
                 });
             }
         });
     }
 
-    private static void setViewsVisible(List<ImageView> stimuli, boolean visible) {
-        for (ImageView stim : stimuli) {
-            stim.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    private static void setViewsVisible(boolean visible, View... views) {
+        for (View v : views) {
+            v.setVisibility(visible ? View.VISIBLE: View.INVISIBLE);
         }
     }
 

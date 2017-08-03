@@ -19,6 +19,8 @@
     <color name="orange">#ff8000</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="lightPurple">#c44dff</color>
+    <color name="wine">#990033</color>
 
     <integer-array name="trialColors">
         <item>@color/red</item>
@@ -34,5 +36,7 @@
         <item>@color/brown</item>
         <item>@color/black</item>
         <item>@color/white</item>
+        <item>@color/lightPurple</item>
+        <item>@color/wine</item>
     </integer-array>
 </resources>
