@@ -1,30 +1,26 @@
 package cz.nudz.www.trainingapp;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.android.internal.util.Predicate;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.ArrayUtils;
-import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
 public class TrainingActivity extends AppCompatActivity {
@@ -42,33 +38,28 @@ public class TrainingActivity extends AppCompatActivity {
     private static final int TRIAL_COUNT = 20;
 
     private TrainingActivityBinding binding;
-    private ConstraintLayout layout;
-    private Context context;
-    private Resources res;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-        layout = binding.trainingActivityRootLayout;
-        context = this;
-        res = getResources();
 
         // SETUP...
-        final Trial trial = new Trial(Paradigm.COLOR, 1, context);
+        final Trial trial = new Trial(Paradigm.COLOR, 1, this);
         final int totalStimCount = trial.getStimCount();
         final int perGridStimCount = totalStimCount / 2;
+
         final List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);
-
-        // stimuli number must be even
-        assert totalStimCount % 2 == 0;
-
-        final Drawable square = res.getDrawable(R.drawable.square);
+        final ConstraintLayout[] grids = new ConstraintLayout[]{binding.trainingActivityLeftGrid, binding.trainingActivityRightGrid};
+        // Two sets of stimuli corresponding to two grids (left and right)
+        final List<List<ImageView>> stimuli = new ArrayList<List<ImageView>>(2);
+        stimuli.add(new ArrayList<ImageView>(perGridStimCount));
+        stimuli.add(new ArrayList<ImageView>(perGridStimCount));
 
         // Setup stimuli/probe colors..
         // The color count covers entirely stimuli count even for hardest difficulty + 1 for color change.
-        final List<Integer> colors = ArrayUtils.toIntArrayList(res.getIntArray(R.array.trialColors));
+        final List<Integer> colors = ArrayUtils.toIntArrayList(getResources().getIntArray(R.array.trialColors));
         Collections.shuffle(colors);
         // take last (unreachable) color
         final int changeColor = colors.get(colors.size() - 1);
@@ -113,29 +104,19 @@ public class TrainingActivity extends AppCompatActivity {
                 // simulated with padding inside the cell.
                 final int padding = perGridStimCount <= 4 ? 40 : 20;
                 final int stimSize = (cellSize / 2) - padding;
-                final List<Rect> leftPositions = generateGridPositions(gridSize, cellSize);
-                // beware this is not a deep copy!
-                final List<Rect> rightPositions = new ArrayList<Rect>(leftPositions);
-                Collections.shuffle(leftPositions);
+                final List<Rect> positions = generateGridPositions(gridSize, cellSize);
+                // beware this is not a deep copy! it is only for shuffling
+                final List<Rect> rightPositions = new ArrayList<Rect>(positions);
+                Collections.shuffle(positions);
                 Collections.shuffle(rightPositions);
 
-                if (leftPositions.size() < perGridStimCount)
-                    throw new IllegalStateException("The grid is too small for the number of stimuli.");
+                for (ConstraintLayout grid : grids) {
+                    for (int i = 0; i < perGridStimCount; ++i) {
+                        ImageView v = createStimView();
 
+                        stimuli.add(v);
 
-                final List<ImageView> stimuli = new ArrayList<>(totalStimCount);
-                for (int i = 0; i < totalStimCount; ++i) {
-                    // 'clone' drawable so that we can alter color for each.
-                    Drawable drawable = res.getDrawable(R.drawable.square).mutate();
-                    ImageView v = new ImageView(context);
-                    v.setVisibility(View.INVISIBLE);
-                    v.setImageDrawable(drawable);
-                    v.setColorFilter(colors.get(i));
-                    // we need to set view's id to later find it in the layout..
-                    v.setId(View.generateViewId());
-                    stimuli.add(v);
-
-                    FrameLayout container = new FrameLayout(context);
+                    FrameLayout container = new FrameLayout(TrainingActivity.this);
                     FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(stimSize, stimSize);
                     int paddingEnd = cellSize - stimSize - padding;
                     params.topMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
@@ -144,11 +125,44 @@ public class TrainingActivity extends AppCompatActivity {
                     container.addView(v);
 
                     if (i < perGridStimCount) {
-                        addViewToGrid(container, binding.trainingActivityLeftGrid, leftPositions.get(i), cellSize);
+                        addViewToGrid(container, binding.trainingActivityLeftGrid, positions.get(i), cellSize);
                     } else {
                         addViewToGrid(container, binding.trainingActivityRightGrid, rightPositions.get(i % perGridStimCount), cellSize);
                     }
+                    }
                 }
+
+                if (positions.size() < perGridStimCount)
+                    throw new IllegalStateException("The grid is too small for the number of stimuli.");
+
+//                final List<ImageView> stimuli = new ArrayList<>(totalStimCount);
+//                for (int i = 0; i < totalStimCount; ++i) {
+//                    // 'clone' drawable so that we can alter color for each.
+//                    Drawable drawable = getResources().getDrawable(R.drawable.square).mutate();
+//                    ImageView v = new ImageView(TrainingActivity.this);
+//                    v.setVisibility(View.INVISIBLE);
+//                    v.setImageDrawable(drawable);
+//                    v.setColorFilter(colors.get(i));
+//                    // we need to set view's id to later find it in the layout..
+//                    v.setId(View.generateViewId());
+//                    stimuli.add(v);
+//
+//                    FrameLayout container = new FrameLayout(TrainingActivity.this);
+//                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(stimSize, stimSize);
+//                    int paddingEnd = cellSize - stimSize - padding;
+//                    params.topMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
+//                    params.leftMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
+//                    v.setLayoutParams(params);
+//                    container.addView(v);
+//
+//                    if (i < perGridStimCount) {
+//                        addViewToGrid(container, binding.trainingActivityLeftGrid, positions.get(i), cellSize);
+//                    } else {
+//                        addViewToGrid(container, binding.trainingActivityRightGrid, rightPositions.get(i % perGridStimCount), cellSize);
+//                    }
+//                }
+
+                // TODO: Set color filters
 
                 // Once the last view's layout is finished we can start setting up stimuli
                 final ImageView lastStim = stimuli.get(stimuli.size() - 1);
@@ -229,6 +243,18 @@ public class TrainingActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @NonNull
+    private ImageView createStimView() {
+        // 'clone' drawable so that we can alter color for each.
+        Drawable drawable = getResources().getDrawable(R.drawable.square).mutate();
+        ImageView v = new ImageView(TrainingActivity.this);
+        v.setVisibility(View.INVISIBLE);
+        v.setImageDrawable(drawable);
+        // we need to set view's id to later find it in the layout..
+        v.setId(View.generateViewId());
+        return v;
     }
 
     private static void setViewsVisible(boolean visible, View... views) {
