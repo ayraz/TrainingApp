@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ColorParadigmActivity"
+            android:name=".PositionParadigmActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,8 +33,8 @@
             <!-- </intent-filter> -->
         </activity>
         <!--<activity android:name=".ColorParadigmActivity" />-->
-        <activity android:name=".ShapeParadigmActivity" />
-        <activity android:name=".PositionParadigmActivity"></activity>
+        <!--<activity android:name=".ShapeParadigmActivity" />-->
+        <!--<activity android:name=".PositionParadigmActivity"></activity>-->
     </application>
 
 </manifest>

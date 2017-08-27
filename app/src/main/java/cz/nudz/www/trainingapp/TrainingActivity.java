@@ -2,10 +2,8 @@ package cz.nudz.www.trainingapp;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +14,12 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
-import cz.nudz.www.trainingapp.utils.ArrayUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
 public abstract class TrainingActivity extends AppCompatActivity {
-
-    protected List<Integer> colors;
 
     private static final String TAG = TrainingActivity.class.getSimpleName();
 
@@ -51,7 +44,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
 
         // SETUP...
-        final Trial trial = new Trial(Paradigm.COLOR, 3, this);
+        final Trial trial = new Trial(Paradigm.COLOR, 1, this);
         final int totalStimCount = trial.getStimCount();
         final int perGridStimCount = totalStimCount / 2;
 
@@ -61,11 +54,6 @@ public abstract class TrainingActivity extends AppCompatActivity {
         final List<List<ImageView>> stimuli = new ArrayList<List<ImageView>>(2);
         stimuli.add(new ArrayList<ImageView>(perGridStimCount));
         stimuli.add(new ArrayList<ImageView>(perGridStimCount));
-
-        // Setup stimuli/probe colors..
-        // The color count covers entirely stimuli count even for hardest difficulty + 1 for color change.
-        colors = ArrayUtils.toIntArrayList(getResources().getIntArray(R.array.trialColors));
-        Collections.shuffle(colors);
 
         // user answer handlers
         binding.trainingActivitySameBtn.setOnClickListener(new View.OnClickListener() {
@@ -138,11 +126,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
                 final List<ImageView> mergedStimuli = new ArrayList<ImageView>(stimuli.get(LEFT_INDEX));
                 mergedStimuli.addAll(stimuli.get(RIGHT_INDEX));
 
-                setStimuliColors(mergedStimuli);
-
-                setStimuliRotations(mergedStimuli);
-
-                setStimuliShapes(mergedStimuli);
+                initStimuli(mergedStimuli);
 
                 // Once the last view's layout is finished we can start setting up stimuli
                 final ImageView lastAddedStim = stimuli.get(RIGHT_INDEX).get(perGridStimCount - 1);
@@ -228,11 +212,8 @@ public abstract class TrainingActivity extends AppCompatActivity {
 
     protected abstract void performChange(ImageView changingStim);
 
-    protected abstract void setStimuliShapes(List<ImageView> stimuli);
+    protected abstract void initStimuli(List<ImageView> stimuli);
 
-    protected abstract void setStimuliColors(List<ImageView> stimuli);
-
-    protected abstract void setStimuliRotations(List<ImageView> stimuli);
 
     @NonNull
     private ImageView createStimView() {
@@ -269,9 +250,16 @@ public abstract class TrainingActivity extends AppCompatActivity {
 
     private void addViewToGrid(View v, ConstraintLayout grid, Rect position, int viewSize) {
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(viewSize, viewSize);
-        params.setMargins(position.left, position.top, position.right, position.bottom);
+        if (grid.getId() == binding.trainingActivityLeftGrid.getId()) {
+            params.setMargins(position.left, position.top, position.right, position.bottom);
+            params.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+        } else {
+            // reverse margins for right grid
+            params.setMargins(position.right, position.top, position.left, position.bottom);
+            params.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
+        }
         params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-        params.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+
         v.setLayoutParams(params);
         grid.addView(v);
     }
@@ -285,11 +273,13 @@ public abstract class TrainingActivity extends AppCompatActivity {
      */
     private static int optimalContainingSquareSize(int x, int y, int n) {
         double sx, sy;
+
         double px = Math.ceil(Math.sqrt(n * x / y));
         if (Math.floor(px * y / x) * px < n)  // does not fit, y/(x/px)=px*y/x
             sx = y / Math.ceil(px * y / x);
         else
             sx = x / px;
+
         double py = Math.ceil(Math.sqrt(n * y / x));
         if (Math.floor(py * x / y) * py < n)  // does not fit
             sy = x / Math.ceil(x * py / y);

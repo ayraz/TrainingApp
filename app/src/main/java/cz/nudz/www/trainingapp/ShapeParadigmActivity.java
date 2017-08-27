@@ -19,17 +19,7 @@ public class ShapeParadigmActivity extends TrainingActivity {
     }
 
     @Override
-    protected void setStimuliColors(List<ImageView> stimuli) {
-
-    }
-
-    @Override
-    protected void setStimuliRotations(List<ImageView> stimuli) {
-
-    }
-
-    @Override
-    protected void setStimuliShapes(List<ImageView> stimuli) {
+    protected void initStimuli(List<ImageView> stimuli) {
 
     }
 }
