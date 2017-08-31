@@ -38,7 +38,6 @@ public class PositionParadigmActivity extends TrainingActivity {
     @Override
     protected void initStimuli(List<ImageView> stimuli) {
         for (ImageView v : stimuli) {
-            // 'clone' drawable so that we can alter color for each.
             v.setImageDrawable(drawable);
             v.setColorFilter(ContextCompat.getColor(this, R.color.red));
             v.setRotation(angles[RandomUtils.nextIntExclusive(0, angles.length)]);
