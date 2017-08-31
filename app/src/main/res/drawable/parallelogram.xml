@@ -1,44 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <!-- Colored rectangle-->
-    <item>
-        <shape android:shape="rectangle">
-            <size
-                android:width="100dp"
-                android:height="50dp" />
-            <solid android:color="#000" />
-        </shape>
-    </item>
-
-    <!-- This rectangle for the left side -->
-    <!-- Its color should be the same as layout's background -->
-    <item
-        android:right="100dp"
-        android:left="-100dp"
-        android:top="-100dp"
-        android:bottom="-100dp">
-        <rotate
-            android:fromDegrees="45">
-            <shape android:shape="rectangle">
-                <solid android:color="#ffffff" />
-            </shape>
-        </rotate>
-    </item>
-
-    <!-- This rectangle for the right side -->
-    <!-- Their color should be the same as layout's background -->
-    <item
-        android:right="-100dp"
-        android:left="100dp"
-        android:top="-100dp"
-        android:bottom="-100dp">
-        <rotate
-            android:fromDegrees="45">
-            <shape android:shape="rectangle">
-                <solid android:color="#ffffff" />
-            </shape>
-        </rotate>
-    </item>
-
-</layer-list>
+<vector android:height="24dp" android:viewportHeight="26.458334"
+    android:viewportWidth="39.6875" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillAlpha="1" android:fillColor="#000000"
+        android:pathData="m0,26.524c13.097,-26.392 13.097,-26.392 13.097,-26.392l26.723,-0.066 -13.361,26.458z"
+        android:strokeAlpha="1" android:strokeColor="#000000"
+        android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeWidth="0.26458335"/>
+</vector>

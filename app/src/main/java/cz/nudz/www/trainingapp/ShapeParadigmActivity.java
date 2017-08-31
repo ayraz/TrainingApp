@@ -33,7 +33,7 @@ public class ShapeParadigmActivity extends TrainingActivity {
                 getResources().getDrawable(R.drawable.star).mutate(),
                 getResources().getDrawable(R.drawable.parallelogram).mutate(),
                 getResources().getDrawable(R.drawable.cross).mutate(),
-                getResources().getDrawable(R.drawable.diamond).mutate(),
+                getResources().getDrawable(R.drawable.rhombus).mutate(),
                 getResources().getDrawable(R.drawable.kite).mutate());
 
         super.onCreate(savedInstanceState);

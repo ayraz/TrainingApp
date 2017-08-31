@@ -44,7 +44,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
 
         // SETUP...
-        final Trial trial = new Trial(Paradigm.COLOR, 1, this);
+        final Trial trial = new Trial(Paradigm.COLOR, 5, this);
         final int totalStimCount = trial.getStimCount();
         final int perGridStimCount = totalStimCount / 2;
 
@@ -93,7 +93,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
                 final int cellSize = optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
                 // each cell can contain 4 actual stimuli; this excess space is for 'quasi-randomness'..
                 // simulated with padding inside the cell.
-                final int padding = perGridStimCount <= 4 ? 40 : 20;
+                final int padding = perGridStimCount <= 4 ? 30 : 15;
                 final int stimSize = (cellSize / 2) - padding;
 
                 final List<Rect> positions = generateGridPositions(gridSize, cellSize);
