@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -38,13 +39,15 @@ public abstract class TrainingActivity extends AppCompatActivity {
     private static final int LEFT_INDEX = 0;
     private static final int RIGHT_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
-    private static final int DEBUG_MODIFIER = 1;
+    private static final int DEBUG_MODIFIER = 0;
 
     private TrainingActivityBinding binding;
     private ConstraintLayout[] grids;
 
     private int difficulty;
+    // Unanswered trials are NULL
     private List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);;
+    private final SequenceRunner sequenceRunner = new SequenceRunner();;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
         grids = new ConstraintLayout[]{binding.trainingActivityLeftGrid, binding.trainingActivityRightGrid};
 
-        // TODO: get the difficulty from somewhere. this it temporary.
+        // TODO: Each session starts with lowest diff.
         difficulty = 4;
 
         /*
@@ -67,7 +70,6 @@ public abstract class TrainingActivity extends AppCompatActivity {
                 binding.trainingActivityRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 // START PARADIGM
-                SequenceRunner sequenceRunner = new SequenceRunner();
                 sequenceRunner.run();
             }
         });
@@ -75,71 +77,80 @@ public abstract class TrainingActivity extends AppCompatActivity {
 
     private class SequenceRunner implements Runnable {
 
-        private int i = 0;
+        // recursive loop counter
+        private int seqCount = 0;
 
         @Override
         public void run() {
-            final int totalStimCount = getStimCount(difficulty);
-            final int perGridStimCount = totalStimCount / 2;
+            if (seqCount < SEQUENCE_COUNT) {
+                // TODO remove after debug
+                binding.seqCount.setText(String.format("Seq. #: %s", Integer.toString(seqCount + 1)));
 
-            // Grids on both sides are identical so use whatever.
-            // They aren't true squares so take the minimum dimension as grid size.
-            final int gridSize = Math.min(binding.trainingActivityLeftGrid.getWidth(), binding.trainingActivityLeftGrid.getHeight());
-            final int cellSize = optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
-            // each cell can contain 4 actual stimuli; this excess space is for 'quasi-randomness'..
-            // simulated with padding inside the cell.
-            final int padding = perGridStimCount <= 4 ? 20 : 10;
-            final int stimSize = (cellSize / 2) - padding;
+                final int totalStimCount = getStimCount(difficulty);
+                final int perGridStimCount = totalStimCount / 2;
 
-            final List<Rect> positions = generateGridPositions(gridSize, cellSize);
-            if (positions.size() < perGridStimCount)
-                throw new IllegalStateException("The grid is too small for the number of stimuli.");
+                // Grids on both sides are identical so use whatever.
+                // They aren't true squares so take the minimum dimension as grid size.
+                final int gridSize = Math.min(binding.trainingActivityLeftGrid.getWidth(), binding.trainingActivityLeftGrid.getHeight());
+                final int cellSize = optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
 
-            // Two sets of stimuli corresponding to two grids (left and right)
-            final List<List<ImageView>> stimuli = new ArrayList<List<ImageView>>(2);
-            stimuli.add(new ArrayList<ImageView>(perGridStimCount));
-            stimuli.add(new ArrayList<ImageView>(perGridStimCount));
+                // Two sets of stimuli corresponding to two grids (left and right)
+                final List<List<ImageView>> stimuli = new ArrayList<List<ImageView>>(2);
+                stimuli.add(new ArrayList<ImageView>(perGridStimCount));
+                stimuli.add(new ArrayList<ImageView>(perGridStimCount));
 
-            // Prepare the grid cells..
-            for (int a = 0; a < 2; ++a) {
-                ConstraintLayout grid = grids[a];
-                // beware this is not a deep copy! it is only for shuffling
-                final List<Rect> rndPositions = new ArrayList<Rect>(positions);
-                Collections.shuffle(rndPositions);
+                // each cell can contain 4 actual stimuli; this excess space is for 'pseudo-randomness'..
+                // simulated with padding inside the cell.
+                final int paddingStart = perGridStimCount <= 4 ? 20 : 10;
+                final int stimSize = (cellSize / 2) - paddingStart;
 
-                for (int b = 0; b < perGridStimCount; ++b) {
-                    ImageView v = createStimView();
-                    stimuli.get(a).add(v);
+                final List<Rect> basePositions = generateGridPositions(gridSize, cellSize);
+                if (basePositions.size() < perGridStimCount)
+                    throw new IllegalStateException("The grid is too small for the number of stimuli.");
 
-                    FrameLayout container = new FrameLayout(TrainingActivity.this);
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(stimSize, stimSize);
-                    int paddingEnd = cellSize - stimSize - padding;
-                    params.topMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
-                    params.leftMargin = RandomUtils.nextIntInclusive(padding, paddingEnd);
-                    v.setLayoutParams(params);
-                    container.addView(v);
+                // Prepare the grid cells..
+                for (int i = 0; i < 2; ++i) {
+                    ConstraintLayout grid = grids[i];
+                    // this is not i deep copy! it is only for shuffling on different grids
+                    final List<Rect> gridPositions = new ArrayList<Rect>(basePositions);
+                    Collections.shuffle(gridPositions);
 
-                    addViewToGrid(container, grid, rndPositions.get(b), cellSize);
+                    for (int j = 0; j < perGridStimCount; ++j) {
+                        ImageView v = createStimView();
+                        stimuli.get(i).add(v);
+
+                        FrameLayout container = new FrameLayout(TrainingActivity.this);
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(stimSize, stimSize);
+
+                        int paddingEnd = cellSize - stimSize - paddingStart;
+                        params.topMargin = RandomUtils.nextIntInclusive(paddingStart, paddingEnd);
+                        params.leftMargin = RandomUtils.nextIntInclusive(paddingStart, paddingEnd);
+                        v.setLayoutParams(params);
+                        container.addView(v);
+
+                        addViewToGrid(container, grid, gridPositions.get(j), cellSize);
+                    }
                 }
+
+                // Once the last view's layout is finished we can start setting up stimuli
+                final ImageView lastAddedStim = stimuli.get(0).get(perGridStimCount - 1);
+                lastAddedStim.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        // prevent event loop
+                        lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        // START SEQUENCE
+                        TrialRunner trialRunner = new TrialRunner(stimuli);
+                        trialRunner.run();
+
+                        seqCount += 1;
+                    }
+                });
+            } else {
+                Intent intent = new Intent(getBaseContext(), ColorParadigmActivity.class);
+                startActivity(intent);
             }
-
-            // merge stimuli from both grids
-            final List<ImageView> allStimuli = new ArrayList<ImageView>(stimuli.get(LEFT_INDEX));
-            allStimuli.addAll(stimuli.get(RIGHT_INDEX));
-
-            // Once the last view's layout is finished we can start setting up stimuli
-            final ImageView lastAddedStim = allStimuli.get(allStimuli.size() - 1);
-            lastAddedStim.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    // prevent event loop
-                    lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                    // START SEQUENCE
-                    TrialRunner trialRunner = new TrialRunner(stimuli, allStimuli);
-                    trialRunner.run();
-                }
-            });
         }
     }
 
@@ -150,122 +161,138 @@ public abstract class TrainingActivity extends AppCompatActivity {
         private final Handler handler;
 
         // recursive loop counter
-        private int i = 0;
+        private int trialCount = 0;
 
-        public TrialRunner(List<List<ImageView>> stimuli, List<ImageView> allStimuli) {
+        public TrialRunner(List<List<ImageView>> stimuli) {
             this.stimuli = stimuli;
-            this.allStimuli = allStimuli;
             this.handler = new Handler(getMainLooper());
+
+            // merge stimuli from both grids
+            allStimuli = new ArrayList<ImageView>(stimuli.get(LEFT_INDEX));
+            allStimuli.addAll(stimuli.get(RIGHT_INDEX));
         }
 
         @Override
         public void run() {
-            final Trial trial = new Trial(difficulty);
+            if (trialCount < TRIAL_COUNT) {
+                final Trial trial = new Trial(difficulty);
 
-            // user answer handlers have to be set trial-wise
-            binding.trainingActivitySameBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    answers.add(!trial.isChanging());
+                // TODO remove after debug
+                binding.trialCount.setText(String.format("Trial #: %s", Integer.toString(trialCount + 1)));
 
-                    // allow only one answer
-                    v.setClickable(false);
+                // user answer handlers have to be set trial-wise
+                binding.trainingActivitySameBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        answers.add(!trial.isChanging());
+                        // allow only one answer
+                        disableAnswerBtns();
+                    }
+                });
+
+                binding.trainingActivityDifferentBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        answers.add(trial.isChanging());
+                        disableAnswerBtns();
+                    }
+                });
+
+                initStimuli(allStimuli);
+
+                // START THE TRIAL...
+                final View cue;
+                switch (trial.getCueSide()) {
+                    case LEFT:
+                        cue = binding.trainingActivityCueLeft;
+                        break;
+                    case RIGHT:
+                        cue = binding.trainingActivityCueRight;
+                        break;
+                    default:
+                        throw new IllegalStateException(String.format("Trials's cueSide state is invalid: {0}", trial.getCueSide().toString()));
                 }
-            });
+                cue.setVisibility(View.VISIBLE);
 
-            binding.trainingActivityDifferentBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    answers.add(trial.isChanging());
+                // CUE PAUSE
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        cue.setVisibility(View.INVISIBLE);
 
-                    // allow only one answer
-                    v.setClickable(false);
-                }
-            });
+                        // MEMORY ARRAY
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
+                                setViewsVisible(true, views);
 
-            initStimuli(allStimuli);
+                                // RETENTION INTERVAL
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        setViewsVisible(false, views);
 
-            // START THE TRIAL...
-            // CUE
-            final View cue;
-            switch (trial.getCueSide()) {
-                case LEFT:
-                    cue = binding.trainingActivityCueLeft;
-                    break;
-                case RIGHT:
-                    cue = binding.trainingActivityCueRight;
-                    break;
-                default:
-                    throw new IllegalStateException(String.format("Trials's cueSide state is invalid: {0}", trial.getCueSide().toString()));
-            }
-            cue.setVisibility(View.VISIBLE);
+                                        if (trial.isChanging()) {
+                                            // pick random stim in cued grid
+                                            int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
 
-            // CUE PAUSE
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    cue.setVisibility(View.INVISIBLE);
+                                            final ImageView changingStim = trial.getCueSide() == LEFT
+                                                    ? stimuli.get(LEFT_INDEX).get(index)
+                                                    : stimuli.get(RIGHT_INDEX).get(index);
 
-                    // MEMORY ARRAY
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                            setViewsVisible(true, views);
+                                            performChange(changingStim);
+                                        }
 
-                            // RETENTION INTERVAL
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setViewsVisible(false, views);
+                                        // TEST ARRAY
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                setViewsVisible(true, views);
+                                                setViewsVisible(true,
+                                                        binding.trainingActivitySameBtn,
+                                                        binding.trainingActivityDifferentBtn);
 
-                                    if (trial.isChanging()) {
-                                        // pick random stim in cued grid
-                                        int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
-
-                                        final ImageView changingStim = trial.getCueSide() == LEFT
-                                                ? stimuli.get(LEFT_INDEX).get(index)
-                                                : stimuli.get(RIGHT_INDEX).get(index);
-
-                                        performChange(changingStim);
-                                    }
-
-                                    // TEST ARRAY
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            setViewsVisible(true, views);
-                                            setViewsVisible(true,
-                                                    binding.trainingActivitySameBtn,
-                                                    binding.trainingActivityDifferentBtn);
-
-                                            // TRIAL END
-                                            handler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    // START NEXT TRIAL
-                                                    if (i < TRIAL_COUNT) {
-                                                        ++i;
-
+                                                // TRIAL END
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
                                                         setViewsVisible(false, views);
+                                                        disableAnswerBtns();
+
+                                                        // insert null if user did not answer this trial
+                                                        if (answers.size() == trialCount)
+                                                            answers.add(null);
+
+                                                        // START NEXT TRIAL
                                                         handler.postDelayed(
                                                                 TrialRunner.this,
                                                                 POST_TRIAL_PAUSE * DEBUG_MODIFIER);
+
+                                                        trialCount += 1;
                                                     }
-                                                }
-                                            }, TEST_INTERVAL * DEBUG_MODIFIER);
+                                                }, TEST_INTERVAL * DEBUG_MODIFIER);
 
-                                        }
-                                    }, RETENTION_INTERVAL * DEBUG_MODIFIER);
+                                            }
+                                        }, RETENTION_INTERVAL * DEBUG_MODIFIER);
 
-                                }
-                            }, MEMORIZATION_INTERVAL * DEBUG_MODIFIER);
+                                    }
+                                }, MEMORIZATION_INTERVAL * DEBUG_MODIFIER);
 
-                        }
-                    }, CUE_INTERVAL * DEBUG_MODIFIER);
+                            }
+                        }, CUE_INTERVAL * DEBUG_MODIFIER);
 
-                }
-            }, POST_CUE_PAUSE * DEBUG_MODIFIER);
+                    }
+                }, POST_CUE_PAUSE * DEBUG_MODIFIER);
+            }
+            // START NEXT SEQUENCE
+            else {
+                handler.post(sequenceRunner);
+            }
+        }
+
+        private void disableAnswerBtns() {
+            binding.trainingActivityDifferentBtn.setClickable(false);
+            binding.trainingActivitySameBtn.setClickable(false);
         }
     }
 

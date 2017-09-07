@@ -32,9 +32,9 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <!--<activity android:name=".ColorParadigmActivity" />-->
+        <activity android:name=".ColorParadigmActivity" />
         <!--<activity android:name=".ShapeParadigmActivity" />-->
-        <!--<activity android:name=".PositionParadigmActivity"></activity>-->
+        <activity android:name=".PositionParadigmActivity"></activity>
     </application>
 
 </manifest>
