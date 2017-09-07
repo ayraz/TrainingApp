@@ -41,8 +41,7 @@
                 android:layout_height="56dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:paddingLeft="16dp"
-                app:srcCompat="@drawable/arrow_right_black"/>
+                android:paddingLeft="16dp" />
         </LinearLayout>
 
 
@@ -63,8 +62,7 @@
                 android:adjustViewBounds="true"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:paddingRight="16dp"
-                app:srcCompat="@drawable/arrow_left_black" />
+                android:paddingRight="16dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

@@ -37,6 +37,8 @@ public abstract class TrainingActivity extends AppCompatActivity {
     private static final int SEQUENCE_COUNT = 7;
     private static final int LEFT_INDEX = 0;
     private static final int RIGHT_INDEX = 1;
+    // Do not set to 0, unless you want to nullify other intervals..
+    private static final int DEBUG_MODIFIER = 1;
 
     private TrainingActivityBinding binding;
     private ConstraintLayout[] grids;
@@ -86,7 +88,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
             final int cellSize = optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
             // each cell can contain 4 actual stimuli; this excess space is for 'quasi-randomness'..
             // simulated with padding inside the cell.
-            final int padding = perGridStimCount <= 4 ? 30 : 15;
+            final int padding = perGridStimCount <= 4 ? 20 : 10;
             final int stimSize = (cellSize / 2) - padding;
 
             final List<Rect> positions = generateGridPositions(gridSize, cellSize);
@@ -246,20 +248,24 @@ public abstract class TrainingActivity extends AppCompatActivity {
                                                         ++i;
 
                                                         setViewsVisible(false, views);
-                                                        handler.postDelayed(TrialRunner.this, POST_TRIAL_PAUSE);
+                                                        handler.postDelayed(
+                                                                TrialRunner.this,
+                                                                POST_TRIAL_PAUSE * DEBUG_MODIFIER);
                                                     }
                                                 }
-                                            }, TEST_INTERVAL);
+                                            }, TEST_INTERVAL * DEBUG_MODIFIER);
 
                                         }
-                                    }, RETENTION_INTERVAL);
+                                    }, RETENTION_INTERVAL * DEBUG_MODIFIER);
+
                                 }
-                            }, MEMORIZATION_INTERVAL);
+                            }, MEMORIZATION_INTERVAL * DEBUG_MODIFIER);
 
                         }
-                    }, CUE_INTERVAL);
+                    }, CUE_INTERVAL * DEBUG_MODIFIER);
+
                 }
-            }, POST_CUE_PAUSE);
+            }, POST_CUE_PAUSE * DEBUG_MODIFIER);
         }
     }
 

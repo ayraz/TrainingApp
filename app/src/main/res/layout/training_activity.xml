@@ -11,6 +11,15 @@
         tools:context="cz.nudz.www.trainingapp.TrainingActivity">
 
         <android.support.constraint.Guideline
+            android:id="@+id/trainingActivityGuideTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.03"
+            tools:layout_editor_absoluteY="113dp"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <android.support.constraint.Guideline
             android:id="@+id/trainingActivityGuideCenter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,54 +51,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85"
-            tools:layout_editor_absoluteY="504dp"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintGuide_percent="0.87"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="504dp" />
 
         <ImageView
             android:id="@+id/trainingActivityFixationPoint"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/fixation" />
+            app:layout_constraintTop_toTopOf="@id/trainingActivityGuideTop"
+            app:layout_constraintBottom_toTopOf="@+id/trainingActivityGuideBottom"
+            app:srcCompat="@drawable/fixation"
+            android:layout_marginBottom="8dp" />
 
         <ImageView
             android:id="@+id/trainingActivityCueLeft"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
-            app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
-            app:srcCompat="@drawable/arrow_left_black"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/trainingActivityFixationPoint" />
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/trainingActivityFixationPoint"
+            app:layout_constraintLeft_toRightOf="@+id/trainingActivityLeftGrid"
+            app:layout_constraintRight_toLeftOf="@+id/trainingActivityRightGrid"
+            app:srcCompat="@drawable/ic_arrow_left"
+            android:layout_marginBottom="16dp" />
 
         <ImageView
             android:id="@+id/trainingActivityCueRight"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/arrow_right_black"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/trainingActivityFixationPoint" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/trainingActivityGuideTop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05"
-            tools:layout_editor_absoluteY="113dp"
-            tools:layout_editor_absoluteX="0dp" />
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toTopOf="@+id/trainingActivityFixationPoint"
+            app:layout_constraintLeft_toRightOf="@+id/trainingActivityLeftGrid"
+            app:layout_constraintRight_toLeftOf="@+id/trainingActivityRightGrid"
+            android:layout_marginBottom="16dp" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/trainingActivityLeftGrid"
@@ -118,6 +120,7 @@
         </android.support.constraint.ConstraintLayout>
 
         <View
+            android:id="@+id/trainingActivityBtnSeparator"
             android:layout_width="1229dp"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
@@ -127,9 +130,9 @@
             tools:layout_editor_absoluteY="89dp"
             tools:layout_editor_absoluteX="0dp" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/trainingActivityDifferentBtn"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -138,17 +141,23 @@
             app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
             app:layout_constraintTop_toTopOf="@+id/trainingActivityGuideBottom"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/stimuli_different_btn" />
+            app:srcCompat="@drawable/btn_cancel"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="32dp" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/trainingActivitySameBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/stimuli_same_btn"
+            app:srcCompat="@drawable/btn_checked"
+            android:scaleType="fitCenter"
             app:layout_constraintTop_toBottomOf="@+id/trainingActivityLeftGrid"
             app:layout_constraintRight_toLeftOf="@+id/trainingActivityDifferentBtn"
             app:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
             app:layout_constraintHorizontal_bias="0.0" />
 
 
