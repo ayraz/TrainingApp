@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import java.util.Collections;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.ArrayUtils;
 
 public class ColorParadigmActivity extends TrainingActivity {

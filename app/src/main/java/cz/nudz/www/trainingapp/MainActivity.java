@@ -8,6 +8,8 @@ import android.support.v7.view.menu.ActionMenuItemView;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
+import cz.nudz.www.trainingapp.training.Paradigm;
+import cz.nudz.www.trainingapp.training.TrainingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
+        binding.mainActivityTrainingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TrainingActivity.startActivity(MainActivity.this, Paradigm.COLOR);
+            }
+        });
 
         //
         // EVENT HANDLERS

@@ -1,8 +1,6 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
@@ -13,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 

@@ -1,5 +1,6 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
@@ -17,14 +18,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
-import static cz.nudz.www.trainingapp.Side.LEFT;
+import static cz.nudz.www.trainingapp.training.Side.LEFT;
 
 public abstract class TrainingActivity extends AppCompatActivity {
 
     public static final String TAG = TrainingActivity.class.getSimpleName();
+
+    private static final String KEY_PARADIGM = "KEY_PARADIGM";
 
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
@@ -43,14 +48,32 @@ public abstract class TrainingActivity extends AppCompatActivity {
 
     private TrainingActivityBinding binding;
     private ConstraintLayout[] grids;
+    private final Handler handler = new Handler();
 
     private int difficulty;
     // Unanswered trials are NULL
     private List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);;
+    private Paradigm currentParadigm;
+
+    public static void startActivity(Context context, Paradigm paradigm) {
+        Intent intent = new Intent(context, Paradigm.toTrainingClass(paradigm))
+                .putExtra(KEY_PARADIGM, paradigm.toString());
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        // TODO fix unregistering of handlers
+        handler.removeCallbacksAndMessages(null);
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentParadigm = Paradigm.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
+
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
         grids = new ConstraintLayout[]{binding.trainingActivityLeftGrid, binding.trainingActivityRightGrid};
 
@@ -108,10 +131,6 @@ public abstract class TrainingActivity extends AppCompatActivity {
             return cellSize;
         }
 
-        public int getSeqCount() {
-            return seqCount;
-        }
-
         @Override
         public void run() {
             if (seqCount < SEQUENCE_COUNT) {
@@ -123,15 +142,16 @@ public abstract class TrainingActivity extends AppCompatActivity {
 
                 seqCount += 1;
             } else {
-                Intent intent = new Intent(getBaseContext(), ColorParadigmActivity.class);
-                startActivity(intent);
+                Paradigm paradigm = TrainingApp.nextParadigmActivity(currentParadigm);
+                if (paradigm != null) {
+                    startActivity(TrainingActivity.this, paradigm);
+                }
             }
         }
     }
 
     private class TrialRunner implements Runnable {
 
-        private final Handler handler;
         private final int perGridStimCount;
         private final int cellSize;
         private final int gridSize;
@@ -144,7 +164,6 @@ public abstract class TrainingActivity extends AppCompatActivity {
 
         public TrialRunner(SequenceRunner parentSequence) {
             this.parentSequence = parentSequence;
-            this.handler = new Handler(getMainLooper());
             this.perGridStimCount = parentSequence.getPerGridStimCount();
             this.gridSize = parentSequence.getGridSize();
             this.cellSize = parentSequence.getCellSize();
@@ -255,8 +274,8 @@ public abstract class TrainingActivity extends AppCompatActivity {
                                                         @Override
                                                         public void run() {
                                                             setViewsVisible(false, views);
-                                                            disableAnswerBtns();
 
+                                                            disableAnswerBtns();
                                                             // insert null if user did not answer this trial
                                                             if (answers.size() == trialCount)
                                                                 answers.add(null);

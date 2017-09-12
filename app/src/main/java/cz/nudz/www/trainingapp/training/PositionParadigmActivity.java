@@ -1,14 +1,14 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.IntentCompat;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
 public class PositionParadigmActivity extends TrainingActivity {
