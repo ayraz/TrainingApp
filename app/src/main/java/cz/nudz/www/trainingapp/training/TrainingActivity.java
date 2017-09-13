@@ -20,12 +20,13 @@ import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.TrainingApp;
+import cz.nudz.www.trainingapp.databinding.CountDownFragmentBinding;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
 import static cz.nudz.www.trainingapp.training.Side.LEFT;
 
-public abstract class TrainingActivity extends AppCompatActivity {
+public abstract class TrainingActivity extends AppCompatActivity implements CountDownFragment.OnSequenceExpiredListener {
 
     public static final String TAG = TrainingActivity.class.getSimpleName();
 
@@ -44,7 +45,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
     private static final int LEFT_INDEX = 0;
     private static final int RIGHT_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
-    private static final int DEBUG_MODIFIER = 0;
+    private static final int DEBUG_MODIFIER = 1;
 
     private TrainingActivityBinding binding;
     private ConstraintLayout[] grids;
@@ -138,6 +139,7 @@ public abstract class TrainingActivity extends AppCompatActivity {
                 binding.seqCount.setText(String.format("Seq. #: %s", Integer.toString(seqCount + 1)));
 
                 // START SEQUENCE
+                showDialog();
                 new TrialRunner(this).run();
 
                 seqCount += 1;
@@ -439,5 +441,15 @@ public abstract class TrainingActivity extends AppCompatActivity {
      */
     private static int getStimCount(int difficulty) {
         return (1 + difficulty) * 2;
+    }
+
+    private void showDialog() {
+        CountDownFragment fragment = new CountDownFragment();
+        fragment.show(getSupportFragmentManager(), fragment.getTag());
+    }
+
+    @Override
+    public void callback() {
+
     }
 }
