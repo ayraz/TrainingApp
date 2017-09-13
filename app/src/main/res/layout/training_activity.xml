@@ -139,14 +139,14 @@
             android:layout_height="0dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideCenter"
             app:layout_constraintRight_toLeftOf="@+id/trainingActivityGuideRight"
             app:layout_constraintTop_toTopOf="@+id/trainingActivityGuideBottom"
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/btn_cancel"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="64dp" />
+            android:layout_marginRight="0dp" />
 
         <ImageButton
             android:id="@+id/trainingActivitySameBtn"
@@ -158,7 +158,7 @@
             app:layout_constraintTop_toBottomOf="@+id/trainingActivityLeftGrid"
             app:layout_constraintRight_toLeftOf="@+id/trainingActivityDifferentBtn"
             app:layout_constraintVertical_bias="0.0"
-            android:layout_marginLeft="64dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginRight="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/trainingActivityGuideLeft"
             app:layout_constraintHorizontal_bias="0.0" />

@@ -62,10 +62,10 @@ public abstract class TrainingActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        // TODO fix unregistering of handlers
+    public void onBackPressed() {
+        // Unregister all handler callbacks to prevent unwanted navigation.
         handler.removeCallbacksAndMessages(null);
-        super.onStop();
+        super.onBackPressed();
     }
 
     @Override
