@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -20,13 +21,13 @@ import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.TrainingApp;
-import cz.nudz.www.trainingapp.databinding.CountDownFragmentBinding;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
+import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
 import static cz.nudz.www.trainingapp.training.Side.LEFT;
 
-public abstract class TrainingActivity extends AppCompatActivity implements CountDownFragment.OnSequenceExpiredListener {
+public abstract class TrainingActivity extends AppCompatActivity implements CountDownFragment.OnCountDownListener {
 
     public static final String TAG = TrainingActivity.class.getSimpleName();
 
@@ -45,7 +46,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
     private static final int LEFT_INDEX = 0;
     private static final int RIGHT_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
-    private static final int DEBUG_MODIFIER = 1;
+    private static final int DEBUG_SLOW = 0;
 
     private TrainingActivityBinding binding;
     private ConstraintLayout[] grids;
@@ -55,6 +56,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
     // Unanswered trials are NULL
     private List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);;
     private Paradigm currentParadigm;
+    private SequenceRunner sequenceRunner;
 
     public static void startActivity(Context context, Paradigm paradigm) {
         Intent intent = new Intent(context, Paradigm.toTrainingClass(paradigm))
@@ -78,11 +80,11 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
         grids = new ConstraintLayout[]{binding.trainingActivityLeftGrid, binding.trainingActivityRightGrid};
 
-        // TODO: Each session starts with lowest diff.
+        // TODO: Each session/paradigm starts with lowest difficulty.
         difficulty = 4;
 
         /*
-         * Using this callback as an indicator that layout has finished...
+         * Using this onCountDownExpired as an indicator that layout has finished...
          * meaning that we can use views' measures, etc. at this point.
          * see: https://stackoverflow.com/questions/7733813/how-can-you-tell-when-a-layout-has-been-drawn
          */
@@ -93,7 +95,8 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                 binding.trainingActivityRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 // START PARADIGM
-                new SequenceRunner().run();
+                sequenceRunner = new SequenceRunner();
+                sequenceRunner.run();
             }
         });
     }
@@ -101,7 +104,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
     private class SequenceRunner implements Runnable {
 
         // Difficulty may change on per-sequence basis
-        private final int totalStimCount = getStimCount(difficulty);
+        private final int totalStimCount = TrainingUtils.getStimCount(difficulty);
         private final int perGridStimCount = totalStimCount / 2;
 
         // Grids on both sides are identical so use whatever.
@@ -110,11 +113,10 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                 binding.trainingActivityLeftGrid.getWidth(),
                 binding.trainingActivityLeftGrid.getHeight());
 
-        private final int cellSize = optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
+        private final int cellSize = TrainingUtils.optimalContainingSquareSize(gridSize, gridSize, perGridStimCount);
 
         // recursive loop counter
-        private int seqCount = 0;
-
+        private int count = 0;
 
         public int getTotalStimCount() {
             return totalStimCount;
@@ -134,21 +136,30 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
 
         @Override
         public void run() {
-            if (seqCount < SEQUENCE_COUNT) {
+            if (count < SEQUENCE_COUNT) {
                 // TODO remove after debug
-                binding.seqCount.setText(String.format("Seq. #: %s", Integer.toString(seqCount + 1)));
+                binding.seqCount.setText(String.format("Seq. #: %s", Integer.toString(count + 1)));
 
-                // START SEQUENCE
-                showDialog();
-                new TrialRunner(this).run();
-
-                seqCount += 1;
-            } else {
+                if (count == 0) {
+                    // START FIRST SEQUENCE
+                    runNextSequence();
+                } else {
+                    CountDownFragment countDownFragment = new CountDownFragment();
+                    showDialog(countDownFragment);
+                }
+            }
+            // MOVE TO NEXT PARADIGM
+            else {
                 Paradigm paradigm = TrainingApp.nextParadigmActivity(currentParadigm);
                 if (paradigm != null) {
                     startActivity(TrainingActivity.this, paradigm);
                 }
             }
+        }
+
+        private void runNextSequence() {
+            new TrialRunner(this).run();
+            count += 1;
         }
     }
 
@@ -160,7 +171,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
         private final SequenceRunner parentSequence;
 
         // recursive loop counter
-        private int trialCount = 0;
+        private int count = 0;
         private final int paddingStart;
         private final int stimSize;
 
@@ -178,7 +189,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
 
         @Override
         public void run() {
-            if (trialCount < TRIAL_COUNT) {
+            if (count < TRIAL_COUNT) {
                 final List<List<ImageView>> stimuli = setupGridViews();
 
                 // merge stimuli from both grids
@@ -196,7 +207,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                     final Trial trial = new Trial(difficulty);
 
                     // TODO remove after debug
-                    binding.trialCount.setText(String.format("Trial #: %s", Integer.toString(trialCount + 1)));
+                    binding.trialCount.setText(String.format("Trial #: %s", Integer.toString(count + 1)));
 
                     // user answer handlers have to be set trial-wise
                     binding.trainingActivitySameBtn.setOnClickListener(new View.OnClickListener() {
@@ -243,13 +254,13 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                                 @Override
                                 public void run() {
                                     final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                                    setViewsVisible(true, views);
+                                    TrainingUtils.setViewsVisible(true, views);
 
                                     // RETENTION INTERVAL
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            setViewsVisible(false, views);
+                                            TrainingUtils.setViewsVisible(false, views);
 
                                             if (trial.isChanging()) {
                                                 // pick random stim in cued grid
@@ -266,8 +277,8 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                                             handler.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    setViewsVisible(true, views);
-                                                    setViewsVisible(true,
+                                                    TrainingUtils.setViewsVisible(true, views);
+                                                    TrainingUtils.setViewsVisible(true,
                                                             binding.trainingActivitySameBtn,
                                                             binding.trainingActivityDifferentBtn);
 
@@ -275,34 +286,34 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                                                     handler.postDelayed(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            setViewsVisible(false, views);
+                                                            TrainingUtils.setViewsVisible(false, views);
 
                                                             disableAnswerBtns();
                                                             // insert null if user did not answer this trial
-                                                            if (answers.size() == trialCount)
+                                                            if (answers.size() == count)
                                                                 answers.add(null);
 
                                                             // START NEXT TRIAL
                                                             handler.postDelayed(
                                                                     TrialRunner.this,
-                                                                    POST_TRIAL_PAUSE * DEBUG_MODIFIER);
+                                                                    POST_TRIAL_PAUSE * DEBUG_SLOW);
 
-                                                            trialCount += 1;
+                                                            count += 1;
 
                                                         }
-                                                    }, TEST_INTERVAL * DEBUG_MODIFIER);
+                                                    }, TEST_INTERVAL * DEBUG_SLOW);
 
                                                 }
-                                            }, RETENTION_INTERVAL * DEBUG_MODIFIER);
+                                            }, RETENTION_INTERVAL * DEBUG_SLOW);
 
                                         }
-                                    }, MEMORIZATION_INTERVAL * DEBUG_MODIFIER);
+                                    }, MEMORIZATION_INTERVAL * DEBUG_SLOW);
 
                                 }
-                            }, CUE_INTERVAL * DEBUG_MODIFIER);
+                            }, CUE_INTERVAL * DEBUG_SLOW);
 
                         }
-                    }, POST_CUE_PAUSE * DEBUG_MODIFIER);
+                    }, POST_CUE_PAUSE * DEBUG_SLOW);
                     }
                 });
             }
@@ -319,7 +330,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
             stimuli.add(new ArrayList<ImageView>(perGridStimCount));
             stimuli.add(new ArrayList<ImageView>(perGridStimCount));
 
-            final List<Rect> basePositions = generateGridPositions(gridSize, cellSize);
+            final List<Rect> basePositions = TrainingUtils.generateGridPositions(gridSize, cellSize);
             if (basePositions.size() < perGridStimCount)
                 throw new IllegalStateException("The grid is too small for the number of stimuli.");
 
@@ -331,7 +342,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                 Collections.shuffle(gridPositions);
 
                 for (int j = 0; j < perGridStimCount; ++j) {
-                    ImageView v = createStimView();
+                    ImageView v = TrainingUtils.createStimView(TrainingActivity.this);
                     stimuli.get(i).add(v);
 
                     FrameLayout container = new FrameLayout(TrainingActivity.this);
@@ -359,40 +370,6 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
 
     protected abstract void initStimuli(List<ImageView> stimuli);
 
-
-    @NonNull
-    private ImageView createStimView() {
-        ImageView v = new ImageView(TrainingActivity.this);
-        v.setVisibility(View.INVISIBLE);
-        // we need to set view's id to later find it in the layout..
-        v.setId(View.generateViewId());
-        return v;
-    }
-
-    private static void setViewsVisible(boolean visible, View... views) {
-        for (View v : views) {
-            v.setVisibility(visible ? View.VISIBLE: View.INVISIBLE);
-        }
-    }
-
-    private List<Rect> generateGridPositions(int gridSize, int cellSize) {
-        List<Rect> positions = new ArrayList<>();
-        int col = 0;
-        while (col * cellSize + cellSize <= gridSize) {
-            int row = 0;
-            while (row * cellSize + cellSize <= gridSize) {
-                positions.add(new Rect(
-                        col * cellSize,
-                        row * cellSize,
-                        col * cellSize + cellSize,
-                        row * cellSize + cellSize));
-                ++row;
-            }
-            ++col;
-        }
-        return positions;
-    }
-
     private void addViewToGrid(View v, ConstraintLayout grid, Rect position, int viewSize) {
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(viewSize, viewSize);
         if (grid.getId() == binding.trainingActivityLeftGrid.getId()) {
@@ -409,47 +386,17 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
         grid.addView(v);
     }
 
-    /**
-     * See: https://math.stackexchange.com/questions/466198/algorithm-to-get-the-maximum-size-of-n-squares-that-fit-into-a-rectangle-with-a
-     * @param x Width of containing grid.
-     * @param y Height of containing grid.
-     * @param n Number of rectangles to be contained within the grid.
-     * @return Optimal containing square size.
-     */
-    private static int optimalContainingSquareSize(int x, int y, int n) {
-        double sx, sy;
-
-        double px = Math.ceil(Math.sqrt(n * x / y));
-        if (Math.floor(px * y / x) * px < n)  // does not fit, y/(x/px)=px*y/x
-            sx = y / Math.ceil(px * y / x);
-        else
-            sx = x / px;
-
-        double py = Math.ceil(Math.sqrt(n * y / x));
-        if (Math.floor(py * x / y) * py < n)  // does not fit
-            sy = x / Math.ceil(x * py / y);
-        else
-            sy = y / py;
-
-        return (int) Math.max(sx, sy);
-    }
-
-    /**
-     * Calculates stimuli count based on sequence's difficulty.
-     * @param difficulty
-     * @return
-     */
-    private static int getStimCount(int difficulty) {
-        return (1 + difficulty) * 2;
-    }
-
-    private void showDialog() {
-        CountDownFragment fragment = new CountDownFragment();
+    private void showDialog(DialogFragment fragment) {
         fragment.show(getSupportFragmentManager(), fragment.getTag());
     }
 
     @Override
-    public void callback() {
+    public void onCountDownExpired() {
+        finish();
+    }
 
+    @Override
+    public void onContinueClicked() {
+        sequenceRunner.runNextSequence();
     }
 }

@@ -18,12 +18,10 @@ import cz.nudz.www.trainingapp.databinding.TutorialFragmentBinding;
  * create an instance of this fragment.
  */
 public class TutorialFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String TUTORIAL_TOP_TEXT_ID = "param1";
     private static final String TUTORIAL_BOTTOM_TEXT_ID = "param2";
 
-    // TODO: Rename and change types of parameters
     private Integer topTextId;
     private Integer bottomTextId;
     private TutorialFragmentBinding binding;
