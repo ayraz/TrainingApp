@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,12 @@ import cz.nudz.www.trainingapp.databinding.CountDownFragmentBinding;
 
 public class CountDownFragment extends DialogFragment {
 
-    private static final int SEQUENCE_TIMEOUT = 10000;
+    public static final String TAG = CountDownFragment.class.getSimpleName();
+
+    private static final String KEY_COUNT_DOWN_TYPE = "KEY_COUNT_DOWN_TYPE";
+
+    private static final int SEQUENCE_TIMEOUT = 10000; // 10 sec
+    private static final int PARADIGM_TIMEOUT = 3000 * 60; // 3 min
 
     private OnCountDownListener listener;
     private CountDownFragmentBinding binding;
@@ -24,15 +30,27 @@ public class CountDownFragment extends DialogFragment {
         // Required empty public constructor
     }
 
+    public static CountDownFragment newInstance(boolean isSequenceCountDown) {
+        CountDownFragment countDownFragment = new CountDownFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_COUNT_DOWN_TYPE, isSequenceCountDown);
+        countDownFragment.setArguments(bundle);
+        return countDownFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.count_down_fragment, container, false);
 
+        if (getArguments() == null || getArguments().isEmpty())
+            throw new IllegalStateException("Count down type must be set.");
+        boolean isSequenceCountDown = getArguments().getBoolean(KEY_COUNT_DOWN_TYPE);
+
         // Start countdown
         // TODO: if this fragment is every reused in activity which is not locked to landscape, handle fragment rotation.
-        countDownTimer = new CountDownTimer(SEQUENCE_TIMEOUT, 1000) {
+        countDownTimer = new CountDownTimer(isSequenceCountDown ? SEQUENCE_TIMEOUT : PARADIGM_TIMEOUT, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long minutes = millisUntilFinished / (60 * 1000);

@@ -24,4 +24,6 @@
     <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
+
+    <string name="genericErrorMessage">Jejda, bohužel něco nefungovalo.</string>
 </resources>

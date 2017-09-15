@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.tutorial;
 
 
 import android.databinding.DataBindingUtil;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialFragmentBinding;
 
 /**

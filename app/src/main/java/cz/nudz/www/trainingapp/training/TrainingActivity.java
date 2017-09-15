@@ -26,12 +26,12 @@ import cz.nudz.www.trainingapp.utils.RandomUtils;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
 import static cz.nudz.www.trainingapp.training.Side.LEFT;
+import static java.lang.Enum.valueOf;
 
 public abstract class TrainingActivity extends AppCompatActivity implements CountDownFragment.OnCountDownListener {
 
     public static final String TAG = TrainingActivity.class.getSimpleName();
-
-    private static final String KEY_PARADIGM = "KEY_PARADIGM";
+    public static final String KEY_PARADIGM = "KEY_PARADIGM";
 
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
@@ -59,8 +59,10 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
     private SequenceRunner sequenceRunner;
 
     public static void startActivity(Context context, Paradigm paradigm) {
-        Intent intent = new Intent(context, Paradigm.toTrainingClass(paradigm))
-                .putExtra(KEY_PARADIGM, paradigm.toString());
+        Intent intent = new Intent(context, Paradigm.toTrainingClass(paradigm));
+        intent.putExtra(KEY_PARADIGM, paradigm.toString());
+        // do not add activity to navigation stack
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
@@ -144,7 +146,7 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
                     // START FIRST SEQUENCE
                     runNextSequence();
                 } else {
-                    CountDownFragment countDownFragment = new CountDownFragment();
+                    CountDownFragment countDownFragment = CountDownFragment.newInstance(true);
                     showDialog(countDownFragment);
                 }
             }
@@ -152,7 +154,8 @@ public abstract class TrainingActivity extends AppCompatActivity implements Coun
             else {
                 Paradigm paradigm = TrainingApp.nextParadigmActivity(currentParadigm);
                 if (paradigm != null) {
-                    startActivity(TrainingActivity.this, paradigm);
+                    PauseActivity.startActivity(TrainingActivity.this, paradigm, false, null);
+                    //startActivity(TrainingActivity.this, paradigm);
                 }
             }
         }

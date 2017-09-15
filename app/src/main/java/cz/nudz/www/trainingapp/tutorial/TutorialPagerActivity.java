@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.tutorial;
 
 import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
 
 public class TutorialPagerActivity extends AppCompatActivity {

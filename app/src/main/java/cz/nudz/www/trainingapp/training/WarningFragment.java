@@ -3,7 +3,6 @@ package cz.nudz.www.trainingapp.training;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +23,6 @@ public class WarningFragment extends Fragment {
     private static final String KEY_HELP_TEXT_ID = "param1";
     private WarningParadigmFragmentBinding binding;
     private int helpTextId;
-    private WarningFragmentListener listener;
 
     public WarningFragment() {
         // Required empty public constructor
@@ -36,23 +34,6 @@ public class WarningFragment extends Fragment {
         args.putInt(KEY_HELP_TEXT_ID, helpTextId);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof WarningFragmentListener) {
-            listener = (WarningFragmentListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                + "must implement WarningFragmentListener interface.");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        listener = null;
-        super.onDetach();
     }
 
     @Override
@@ -73,18 +54,6 @@ public class WarningFragment extends Fragment {
         if (helpTextId != 0) {
             binding.warningFragmentExplanation.setText(Html.fromHtml(getString(helpTextId)));
         }
-
-        binding.warningFragmentContinueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onContinue();
-            }
-        });
-
         return binding.getRoot();
-    }
-
-    public interface WarningFragmentListener {
-        void onContinue();
     }
 }
