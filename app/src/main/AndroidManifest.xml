@@ -38,8 +38,6 @@
         <activity
             android:name=".training.PositionParadigmActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".training.PauseActivity">
-        </activity>
     </application>
 
 </manifest>

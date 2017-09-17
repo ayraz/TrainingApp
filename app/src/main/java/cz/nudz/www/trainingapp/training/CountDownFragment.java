@@ -4,8 +4,8 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.media.MediaBrowserCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +17,7 @@ public class CountDownFragment extends DialogFragment {
 
     public static final String TAG = CountDownFragment.class.getSimpleName();
 
-    private static final String KEY_COUNT_DOWN_TYPE = "KEY_COUNT_DOWN_TYPE";
-
-    private static final int SEQUENCE_TIMEOUT = 10000; // 10 sec
-    private static final int PARADIGM_TIMEOUT = 3000 * 60; // 3 min
+    private static final String KEY_COUNT_DOWN_MILLIS = "KEY_COUNT_DOWN_MILLIS";
 
     private OnCountDownListener listener;
     private CountDownFragmentBinding binding;
@@ -30,10 +27,10 @@ public class CountDownFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static CountDownFragment newInstance(boolean isSequenceCountDown) {
+    public static CountDownFragment newInstance(int millisCountDown) {
         CountDownFragment countDownFragment = new CountDownFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(KEY_COUNT_DOWN_TYPE, isSequenceCountDown);
+        bundle.putInt(KEY_COUNT_DOWN_MILLIS, millisCountDown);
         countDownFragment.setArguments(bundle);
         return countDownFragment;
     }
@@ -44,13 +41,13 @@ public class CountDownFragment extends DialogFragment {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.count_down_fragment, container, false);
 
-        if (getArguments() == null || getArguments().isEmpty())
+        if (getArguments() == null || !getArguments().containsKey(KEY_COUNT_DOWN_MILLIS))
             throw new IllegalStateException("Count down type must be set.");
-        boolean isSequenceCountDown = getArguments().getBoolean(KEY_COUNT_DOWN_TYPE);
+        int millisToCountDown = getArguments().getInt(KEY_COUNT_DOWN_MILLIS);
 
-        // Start countdown
         // TODO: if this fragment is every reused in activity which is not locked to landscape, handle fragment rotation.
-        countDownTimer = new CountDownTimer(isSequenceCountDown ? SEQUENCE_TIMEOUT : PARADIGM_TIMEOUT, 1000) {
+        // Start countdown
+        countDownTimer = new CountDownTimer(millisToCountDown, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long minutes = millisUntilFinished / (60 * 1000);

@@ -6,10 +6,11 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="cz.nudz.www.trainingapp.training.PauseActivity">
+        tools:context="cz.nudz.www.trainingapp.training.PauseFragment"
+        android:background="@color/grey">
 
         <FrameLayout
-            android:id="@+id/pauseActivityMessageContainer"
+            android:id="@+id/pauseFragmentMessageContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -18,7 +19,7 @@
             app:layout_constraintRight_toRightOf="@+id/pauseActivityFragmentSeparator"></FrameLayout>
 
         <FrameLayout
-            android:id="@+id/pauseActivityCountDownContainer"
+            android:id="@+id/pauseFragmentCountDownContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
