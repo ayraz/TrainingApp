@@ -163,31 +163,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintHorizontal_bias="0.0" />
 
-        <TextView
-            android:id="@+id/seqCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="0dp"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentLeftGrid"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="@+id/trainingFragmentRightGrid"
-            app:layout_constraintTop_toBottomOf="@+id/trialCount" />
-
-        <TextView
-            android:id="@+id/trialCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentLeftGrid"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="@+id/trainingFragmentRightGrid" />
-
-
     </android.support.constraint.ConstraintLayout>
 </layout>
 

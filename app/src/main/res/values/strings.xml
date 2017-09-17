@@ -30,4 +30,10 @@
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
     <string name="difficultyLoweredMessage">VEDETE SE DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
+
+    <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
+    <string name="quitTrainingDialogTitle">Uzavření tréninku</string>
+
+    <string name="yes">ano</string>
+    <string name="no">ne</string>
 </resources>

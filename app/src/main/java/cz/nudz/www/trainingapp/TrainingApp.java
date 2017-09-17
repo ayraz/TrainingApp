@@ -14,10 +14,14 @@ import cz.nudz.www.trainingapp.training.Paradigm;
 
 public class TrainingApp extends Application {
 
-    private final static List<Paradigm> paradigms = new ArrayList<>(Arrays.asList(
+    private final static List<Paradigm> paradigmSet = new ArrayList<>(Arrays.asList(
             Paradigm.COLOR,
             Paradigm.POSITION,
             Paradigm.SHAPE));
+
+    public static int indexOfParadigm(Paradigm paradigm) {
+        return paradigmSet.indexOf(paradigm);
+    }
 
     /**
      *
@@ -25,11 +29,12 @@ public class TrainingApp extends Application {
      * @return Returns next paradigm in a fixed sequence or null if there are no more.
      */
     public static Paradigm nextParadigm(Paradigm currentParadigm) {
-        int i = paradigms.lastIndexOf(currentParadigm);
-        // no paradigms left
-        if (i == paradigms.size() - 1)
+        int i = paradigmSet.indexOf(currentParadigm);
+        // no paradigmSet left
+        if (i == paradigmSet.size() - 1) {
             return null;
-        else
-            return paradigms.get(i + 1);
+        } else {
+            return paradigmSet.get(i + 1);
+        }
     }
 }

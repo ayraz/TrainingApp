@@ -8,12 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.databinding.PauseFragmentBinding;
+import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
@@ -84,11 +87,16 @@ public class PauseFragment extends DialogFragment {
             isSequencePause = false;
         }
 
+        if (isFirstParadigm() && !isSequencePause) {
+            TrainingUtils.setViewsVisible(true, binding.pauseFragmentWarning);
+        } else {
+            TrainingUtils.setViewsVisible(false, binding.pauseFragmentWarning);
+        }
+
+        binding.pauseFragmentExplanation.setText(Html.fromHtml(getString(getHelpTextForParadigm())));
+
         FragmentManager manager = getChildFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-
-        WarningFragment warningFragment = WarningFragment.newInstance(getHelpTextForParadigm());
-        transaction.add(R.id.pauseFragmentMessageContainer, warningFragment);
 
         CountDownFragment countDownFragment = CountDownFragment.newInstance(isSequencePause ? SEQUENCE_TIMEOUT : PARADIGM_TIMEOUT);
         transaction.add(R.id.pauseFragmentCountDownContainer, countDownFragment);
@@ -96,5 +104,9 @@ public class PauseFragment extends DialogFragment {
         transaction.commit();
 
         return binding.getRoot();
+    }
+
+    private boolean isFirstParadigm() {
+        return TrainingApp.indexOfParadigm(currentParadigm) == 0;
     }
 }

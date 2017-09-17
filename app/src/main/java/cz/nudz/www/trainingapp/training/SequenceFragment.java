@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.databinding.TrainingFragmentBinding;
+import cz.nudz.www.trainingapp.databinding.SequenceFragmentBinding;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
@@ -46,7 +46,7 @@ public abstract class SequenceFragment extends Fragment {
     // Do not set to 0, unless you want to nullify other intervals..
     private static final int DEBUG_SLOW = 0;
 
-    private TrainingFragmentBinding binding;
+    private SequenceFragmentBinding binding;
     private ConstraintLayout[] grids;
     private SequenceFragmentListener listener;
     private final Handler handler = new Handler();
@@ -60,6 +60,7 @@ public abstract class SequenceFragment extends Fragment {
     private int totalStimCount;
     private int paddingStart;
     private int stimSize;
+    private TrialRunner trialRunner;
 
     public static SequenceFragment newInstance(Paradigm paradigm, int difficulty) {
         SequenceFragment fragment = Paradigm.toTrainingFragment(paradigm);
@@ -86,7 +87,7 @@ public abstract class SequenceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.training_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.sequence_fragment, container, false);
 
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = getArguments().getInt(KEY_DIFFICULTY);
@@ -118,7 +119,8 @@ public abstract class SequenceFragment extends Fragment {
                 paddingStart = halfStimCount <= 4 ? 20 : 10;
                 stimSize = (cellSize / 2) - paddingStart;
 
-                new TrialRunner().run();
+                trialRunner = new TrialRunner();
+                trialRunner.run();
 
             }
         });
@@ -156,9 +158,6 @@ public abstract class SequenceFragment extends Fragment {
                 lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 final Trial trial = new Trial(difficulty);
-
-                // TODO remove after debug
-                binding.trialCount.setText(String.format("Trial #: %s", Integer.toString(count + 1)));
 
                 // user answer handlers have to be set trial-wise
                 binding.trainingFragmentSameBtn.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +248,7 @@ public abstract class SequenceFragment extends Fragment {
                                                                 TrialRunner.this,
                                                                 POST_TRIAL_PAUSE * DEBUG_SLOW);
 
+                                                        listener.onTrialFinished(count);
                                                         count += 1;
 
                                                     }
@@ -334,5 +334,7 @@ public abstract class SequenceFragment extends Fragment {
 
     public interface SequenceFragmentListener {
         void onSequenceFinished(List<Boolean> answers);
+
+        void onTrialFinished(int trialCount);
     }
 }
