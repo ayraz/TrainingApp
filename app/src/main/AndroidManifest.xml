@@ -30,14 +30,15 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".training.ColorParadigmActivity"
+            android:name=".training.ColorParadigmFragment"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".training.ShapeParadigmActivity"
+            android:name=".training.ShapeParadigmFragment"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".training.PositionParadigmActivity"
+            android:name=".training.PositionParadigmFragment"
             android:screenOrientation="landscape" />
+        <activity android:name=".training.TrainingActivity"></activity>
     </application>
 
 </manifest>

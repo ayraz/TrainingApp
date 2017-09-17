@@ -9,14 +9,14 @@ public enum Paradigm {
     SHAPE,
     POSITION;
 
-    public static Class<? extends TrainingActivity> toTrainingClass(Paradigm paradigm) {
+    public static SequenceFragment toTrainingFragment(Paradigm paradigm) {
         switch (paradigm) {
             case COLOR:
-                return ColorParadigmActivity.class;
+                return new ColorParadigmFragment();
             case SHAPE:
-                return ShapeParadigmActivity.class;
+                return new ShapeParadigmFragment();
             case POSITION:
-                return PositionParadigmActivity.class;
+                return new PositionParadigmFragment();
             default:
                 throw new IllegalArgumentException("No matching paradigm class exists.");
         }

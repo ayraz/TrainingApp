@@ -2,7 +2,11 @@ package cz.nudz.www.trainingapp.training;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -11,15 +15,17 @@ import java.util.List;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
-public class PositionParadigmActivity extends TrainingActivity {
+public class PositionParadigmFragment extends SequenceFragment {
 
     private Drawable drawable;
     private int[] angles = new int[] {0, 45, 90, 135, 225, 315};
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         drawable = getResources().getDrawable(R.drawable.rect).mutate();
-        super.onCreate(savedInstanceState);
+
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -39,7 +45,7 @@ public class PositionParadigmActivity extends TrainingActivity {
     protected void initStimuli(List<ImageView> stimuli) {
         for (ImageView v : stimuli) {
             v.setImageDrawable(drawable);
-            v.setColorFilter(ContextCompat.getColor(this, R.color.red));
+            v.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red));
             v.setRotation(angles[RandomUtils.nextIntExclusive(0, angles.length)]);
         }
     }

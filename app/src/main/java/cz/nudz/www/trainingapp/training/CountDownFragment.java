@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.media.MediaBrowserCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ public class CountDownFragment extends DialogFragment {
 
     private static final String KEY_COUNT_DOWN_MILLIS = "KEY_COUNT_DOWN_MILLIS";
 
-    private OnCountDownListener listener;
+    private CountDownListener listener;
     private CountDownFragmentBinding binding;
     private CountDownTimer countDownTimer;
 
@@ -57,7 +56,7 @@ public class CountDownFragment extends DialogFragment {
 
             @Override
             public void onFinish() {
-                listener.onCountDownExpired();
+                listener.onExpired();
                 dismiss();
             }
         };
@@ -66,7 +65,7 @@ public class CountDownFragment extends DialogFragment {
         binding.countDownFragmentContinueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onContinueClicked();
+                listener.onContinue();
                 dismiss();
             }
         });
@@ -84,12 +83,11 @@ public class CountDownFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        if (context instanceof OnCountDownListener) {
-            listener = (OnCountDownListener) context;
+        if (context instanceof CountDownListener) {
+            listener = (CountDownListener) context;
         } else {
             throw new ClassCastException(context.toString()
-                    + "must implement OnCountDownListener interface.");
+                    + "must implement CountDownListener interface.");
         }
     }
 
@@ -103,8 +101,9 @@ public class CountDownFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnCountDownListener {
-        void onCountDownExpired();
-        void onContinueClicked();
+    public interface CountDownListener {
+        void onExpired();
+
+        void onContinue();
     }
 }

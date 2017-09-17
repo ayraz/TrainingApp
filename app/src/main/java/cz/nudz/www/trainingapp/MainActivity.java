@@ -1,10 +1,8 @@
 package cz.nudz.www.trainingapp;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;

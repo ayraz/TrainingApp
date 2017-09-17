@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.training;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,11 +17,12 @@ import cz.nudz.www.trainingapp.databinding.PauseFragmentBinding;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
-public class PauseFragment extends DialogFragment implements CountDownFragment.OnCountDownListener {
+public class PauseFragment extends DialogFragment {
+
+    public static final String TAG = PauseFragment.class.getSimpleName();
 
     private static final String KEY_DIFFICULTY_STATE = "KEY_DIFFICULTY_STATE";
     private static final String KEY_PAUSE_TYPE = "KEY_PAUSE_TYPE";
-
     private static final int SEQUENCE_TIMEOUT = 10000; // 10 sec
     private static final int PARADIGM_TIMEOUT = 3000 * 60; // 3 min
 
@@ -29,11 +31,16 @@ public class PauseFragment extends DialogFragment implements CountDownFragment.O
     private boolean isSequencePause;
     private Adjustment adjustment;
 
-    public static PauseFragment newInstance(@NonNull Paradigm paradigm, boolean isSequencePause, @Nullable Adjustment adjustment) {
+    /**
+     *
+     * @param paradigm
+     * @param adjustment Adjustment must only be passed for sequence pause, otherwise it has to be null signaling paradigm pause.
+     * @return
+     */
+    public static PauseFragment newInstance(@NonNull Paradigm paradigm, @Nullable Adjustment adjustment) {
         PauseFragment pauseFragment = new PauseFragment();
         Bundle bundle = new Bundle();
         bundle.putString(KEY_PARADIGM, paradigm.toString());
-        bundle.putBoolean(KEY_PAUSE_TYPE, isSequencePause);
         if (adjustment != null) {
             bundle.putString(KEY_DIFFICULTY_STATE, adjustment.toString());
         }
@@ -69,16 +76,13 @@ public class PauseFragment extends DialogFragment implements CountDownFragment.O
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.pause_fragment, container, false);
 
-        if (!getArguments().containsKey(KEY_PAUSE_TYPE))
-            throw new IllegalStateException("Pause type must be present.");
-
         currentParadigm = Paradigm.valueOf(getArguments().getString(KEY_PARADIGM));
-        isSequencePause = getArguments().getBoolean(KEY_PAUSE_TYPE, false);
-
-        if (getArguments().containsKey(KEY_DIFFICULTY_STATE))
+        if (getArguments().containsKey(KEY_DIFFICULTY_STATE)) {
             adjustment = Adjustment.valueOf(getArguments().getString(KEY_DIFFICULTY_STATE));
-        else if (isSequencePause)
-            throw new IllegalStateException("Difficulty state must be present during sequence pause.");
+            isSequencePause = true;
+        } else {
+            isSequencePause = false;
+        }
 
         FragmentManager manager = getChildFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -92,15 +96,5 @@ public class PauseFragment extends DialogFragment implements CountDownFragment.O
         transaction.commit();
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onCountDownExpired() {
-        dismiss();
-    }
-
-    @Override
-    public void onContinueClicked() {
-        TrainingActivity.startActivity(getActivity(), currentParadigm);
     }
 }
