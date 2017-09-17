@@ -6,7 +6,6 @@
 
     <string name="tutorialFragmentNextHelp">Pro pokračování na instrukce stiskněte šipku.</string>
     <string name="tutorialFragmentNextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>
-    <string name="tutorialFragmentStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="tutorialFragmentCueHelp">Šipka určuje stranu pro zapamatování tvaru podnětů na daných pozicích.</string>
     <string name="tutorialFragmentSmallPause">Krátká pauza.</string>
     <string name="tutorialFragmentMemorizeHelp">Snažte si zapamatovat tvary podnětů na daných pozicích a straně určené šipkou.</string>
@@ -15,4 +14,20 @@
 
     <string name="tutorialActivityNextBtnText">Další</string>
     <string name="tutorialActivityPrevBtnText">Předchozí</string>
+
+    <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
+    <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
+
+    <string name="warningFragmentWarningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
+    <string name="warningFragmentContinueBtnText">Rozumím, přejit k trenínku.</string>
+
+    <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
+
+    <string name="genericErrorMessage">Jejda, bohužel něco nefungovalo.</string>
+
+    <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
+    <string name="difficultyLoweredMessage">VEDETE SE DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
+    <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
 </resources>

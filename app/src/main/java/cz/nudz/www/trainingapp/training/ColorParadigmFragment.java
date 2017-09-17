@@ -1,26 +1,32 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.Collections;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.ArrayUtils;
 
-public class ColorParadigmActivity extends TrainingActivity {
+public class ColorParadigmFragment extends SequenceFragment {
 
     private List<Integer> colors;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Setup stimuli/probe colors..
         // The color count covers entirely stimuli count even for hardest difficulty + 1 for color change.
         colors = ArrayUtils.toIntArrayList(getResources().getIntArray(R.array.trialColors));
         Collections.shuffle(colors);
 
-        super.onCreate(savedInstanceState);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

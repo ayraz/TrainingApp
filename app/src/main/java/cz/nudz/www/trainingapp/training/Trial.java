@@ -1,17 +1,6 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import cz.nudz.www.trainingapp.utils.ArrayUtils;
-import cz.nudz.www.trainingapp.utils.RandomUtils;
+import cz.nudz.www.trainingapp.training.Side;
 
 /**
  * Created by artem on 05-Jun-17.

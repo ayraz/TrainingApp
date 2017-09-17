@@ -1,10 +1,12 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.internal.util.Predicate;
@@ -13,15 +15,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
-public class ShapeParadigmActivity extends TrainingActivity {
+public class ShapeParadigmFragment extends SequenceFragment {
 
     private List<Drawable> drawables;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         drawables = Arrays.asList(
                 getResources().getDrawable(R.drawable.circle).mutate(),
                 getResources().getDrawable(R.drawable.ellipse).mutate(),
@@ -36,7 +40,7 @@ public class ShapeParadigmActivity extends TrainingActivity {
                 getResources().getDrawable(R.drawable.rhombus).mutate(),
                 getResources().getDrawable(R.drawable.kite).mutate());
 
-        super.onCreate(savedInstanceState);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class ShapeParadigmActivity extends TrainingActivity {
             Drawable drawable = drawables.get(i % drawables.size());
 
             v.setImageDrawable(drawable);
-            v.setColorFilter(ContextCompat.getColor(this, R.color.black));
+            v.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
         }
     }
 }

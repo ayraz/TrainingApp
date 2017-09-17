@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/trainingFragmentRootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/trainingBackground"
+        tools:context="cz.nudz.www.trainingapp.training.SequenceFragment">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/trainingFragmentGuideTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.03"
+            tools:layout_editor_absoluteY="113dp"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/trainingFragmentGuideCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            tools:layout_editor_absoluteY="89dp"
+            tools:layout_editor_absoluteX="614dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/trainingFragmentGuideLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04"
+            tools:layout_editor_absoluteY="89dp"
+            tools:layout_editor_absoluteX="49dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/trainingFragmentGuideRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96"
+            tools:layout_editor_absoluteY="89dp"
+            tools:layout_editor_absoluteX="1179dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/trainingFragmentGuideBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.87"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="504dp" />
+
+        <ImageView
+            android:id="@+id/trainingFragmentFixationPoint"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/trainingFragmentGuideTop"
+            app:layout_constraintBottom_toTopOf="@+id/trainingFragmentGuideBottom"
+            app:srcCompat="@drawable/fixation"
+            android:layout_marginBottom="8dp" />
+
+        <ImageView
+            android:id="@+id/trainingFragmentCueLeft"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/trainingFragmentFixationPoint"
+            app:layout_constraintLeft_toRightOf="@+id/trainingFragmentLeftGrid"
+            app:layout_constraintRight_toLeftOf="@+id/trainingFragmentRightGrid"
+            app:srcCompat="@drawable/ic_arrow_left"
+            android:layout_marginBottom="16dp" />
+
+        <ImageView
+            android:id="@+id/trainingFragmentCueRight"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toTopOf="@+id/trainingFragmentFixationPoint"
+            app:layout_constraintLeft_toRightOf="@+id/trainingFragmentLeftGrid"
+            app:layout_constraintRight_toLeftOf="@+id/trainingFragmentRightGrid"
+            android:layout_marginBottom="16dp" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/trainingFragmentLeftGrid"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/trainingFragmentGuideBottom"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentGuideLeft"
+            app:layout_constraintRight_toLeftOf="@+id/trainingFragmentFixationPoint"
+            app:layout_constraintTop_toTopOf="@+id/trainingFragmentGuideTop"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginRight="16dp">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/trainingFragmentRightGrid"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/trainingFragmentGuideBottom"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/trainingFragmentFixationPoint"
+            app:layout_constraintRight_toLeftOf="@+id/trainingFragmentGuideRight"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toTopOf="@+id/trainingFragmentGuideTop"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="16dp">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:id="@+id/trainingFragmentBtnSeparator"
+            android:layout_width="1229dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/trainingFragmentGuideBottom"
+            tools:layout_editor_absoluteY="89dp"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <ImageButton
+            android:id="@+id/trainingFragmentDifferentBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentGuideCenter"
+            app:layout_constraintTop_toTopOf="@+id/trainingFragmentGuideBottom"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/btn_cancel"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageButton
+            android:id="@+id/trainingFragmentSameBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/btn_checked"
+            android:scaleType="fitCenter"
+            app:layout_constraintTop_toBottomOf="@+id/trainingFragmentLeftGrid"
+            app:layout_constraintRight_toLeftOf="@+id/trainingFragmentDifferentBtn"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" />
+
+        <TextView
+            android:id="@+id/seqCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentLeftGrid"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="@+id/trainingFragmentRightGrid"
+            app:layout_constraintTop_toBottomOf="@+id/trialCount" />
+
+        <TextView
+            android:id="@+id/trialCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentLeftGrid"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="@+id/trainingFragmentRightGrid" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
+
