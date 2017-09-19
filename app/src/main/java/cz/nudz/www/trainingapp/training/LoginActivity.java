@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.contracts.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
@@ -43,7 +44,8 @@ public class LoginActivity extends AppCompatActivity {
                     })
                     .create().show();
         } else {
-
+            TrainingAppDbHelper dbHelper = new TrainingAppDbHelper(this);
+            dbHelper.toString();
         }
     }
 }

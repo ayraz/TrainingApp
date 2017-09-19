@@ -16,30 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".tutorial.TutorialPagerActivity">
+        </activity>
+        <activity
+            android:name=".training.TrainingActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".training.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".tutorial.TutorialPagerActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".training.ColorParadigmFragment"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".training.ShapeParadigmFragment"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".training.PositionParadigmFragment"
-            android:screenOrientation="landscape" />
-        <activity android:name=".training.TrainingActivity" />
-        <activity android:name=".training.LoginActivity"></activity>
     </application>
 
 </manifest>
