@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.nudz.www.trainingapp">
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <application
         android:name=".TrainingApp"
         android:allowBackup="true"
@@ -23,9 +18,11 @@
         </activity>
         <activity android:name=".tutorial.TutorialPagerActivity">
         </activity>
+        <!--Training mustn't be interrupted by rotation/keyboard/etc.-->
         <activity
             android:name=".training.TrainingActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|mcc|mnc" />
         <activity android:name=".training.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

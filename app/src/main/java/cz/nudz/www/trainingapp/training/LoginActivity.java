@@ -5,12 +5,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.contracts.TrainingAppDbHelper;
+import cz.nudz.www.trainingapp.store.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 

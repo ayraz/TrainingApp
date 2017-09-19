@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.contracts;
+package cz.nudz.www.trainingapp.store;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,9 +21,7 @@ public class TrainingAppDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.setForeignKeyConstraintsEnabled(false);
-
-        for (Class<?> clazz : TrainingAppContract.class.getDeclaredClasses()) {
+        for (Class<?> clazz : TrainingAppTables.class.getDeclaredClasses()) {
             try {
                 String sql = clazz.getField("CREATE_TABLE").get(null).toString();
                 db.execSQL(sql);
@@ -33,14 +31,12 @@ public class TrainingAppDbHelper extends SQLiteOpenHelper {
                 Log.e(TAG, e.getMessage(), e);
             }
         }
-
-        db.setForeignKeyConstraintsEnabled(true);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO: potentially dangerous update...
-        for (Class<?> clazz : TrainingAppContract.class.getDeclaredClasses()) {
+        for (Class<?> clazz : TrainingAppTables.class.getDeclaredClasses()) {
             try {
                 String table = clazz.getField("TABLE_NAME").get(null).toString();
                 db.execSQL("DROP TABLE IF EXISTS " + table);
