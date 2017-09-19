@@ -38,7 +38,8 @@
         <activity
             android:name=".training.PositionParadigmFragment"
             android:screenOrientation="landscape" />
-        <activity android:name=".training.TrainingActivity"></activity>
+        <activity android:name=".training.TrainingActivity" />
+        <activity android:name=".training.LoginActivity"></activity>
     </application>
 
 </manifest>

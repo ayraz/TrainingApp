@@ -80,4 +80,11 @@ public class TrainingUtils {
             v.setVisibility(visible ? View.VISIBLE: View.INVISIBLE);
         }
     }
+
+    public static boolean isNullOrEmpty(String text) {
+        return (text == null
+                || text.isEmpty()
+                || text.trim().equals("null")
+                || text.trim().length() <= 0);
+    }
 }
