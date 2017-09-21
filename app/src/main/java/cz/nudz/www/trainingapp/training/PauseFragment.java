@@ -1,6 +1,5 @@
 package cz.nudz.www.trainingapp.training;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,20 +31,20 @@ public class PauseFragment extends DialogFragment {
     private PauseFragmentBinding binding;
     private Paradigm currentParadigm;
     private boolean isSequencePause;
-    private Adjustment adjustment;
+    private Difficulty difficulty;
 
     /**
      *
      * @param paradigm
-     * @param adjustment Adjustment must only be passed for sequence pause, otherwise it has to be null signaling paradigm pause.
+     * @param difficulty Difficulty must only be passed for sequence pause, otherwise it has to be null signaling paradigm pause.
      * @return
      */
-    public static PauseFragment newInstance(@NonNull Paradigm paradigm, @Nullable Adjustment adjustment) {
+    public static PauseFragment newInstance(@NonNull Paradigm paradigm, @Nullable Difficulty difficulty) {
         PauseFragment pauseFragment = new PauseFragment();
         Bundle bundle = new Bundle();
         bundle.putString(KEY_PARADIGM, paradigm.toString());
-        if (adjustment != null) {
-            bundle.putString(KEY_DIFFICULTY_STATE, adjustment.toString());
+        if (difficulty != null) {
+            bundle.putString(KEY_DIFFICULTY_STATE, difficulty.toString());
         }
         pauseFragment.setArguments(bundle);
         return pauseFragment;
@@ -53,7 +52,7 @@ public class PauseFragment extends DialogFragment {
 
     private int getHelpTextForParadigm() {
         if (isSequencePause) {
-            switch (adjustment) {
+            switch (difficulty) {
                 case LOWERED:
                     return R.string.difficultyLoweredMessage;
                 case SAME:
@@ -81,7 +80,7 @@ public class PauseFragment extends DialogFragment {
 
         currentParadigm = Paradigm.valueOf(getArguments().getString(KEY_PARADIGM));
         if (getArguments().containsKey(KEY_DIFFICULTY_STATE)) {
-            adjustment = Adjustment.valueOf(getArguments().getString(KEY_DIFFICULTY_STATE));
+            difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY_STATE));
             isSequencePause = true;
         } else {
             isSequencePause = false;

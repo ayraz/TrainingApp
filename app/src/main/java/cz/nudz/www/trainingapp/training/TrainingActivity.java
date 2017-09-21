@@ -109,7 +109,7 @@ public class TrainingActivity extends AppCompatActivity
             runSequence();
         } else {
             if (sequenceCount < SEQUENCE_COUNT) {
-                showFragment(PauseFragment.newInstance(currentParadigm, Adjustment.SAME), PauseFragment.TAG);
+                showFragment(PauseFragment.newInstance(currentParadigm, Difficulty.SAME), PauseFragment.TAG);
             } else if (isTrainingFinished()) {
                 // TODO: handle end of training..
             } else if (isParadigmFinished()) {

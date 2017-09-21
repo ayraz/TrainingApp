@@ -1,0 +1,106 @@
+package cz.nudz.www.trainingapp.database;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import java.sql.SQLException;
+
+import cz.nudz.www.trainingapp.database.tables.Paradigm;
+import cz.nudz.www.trainingapp.database.tables.Sequence;
+import cz.nudz.www.trainingapp.database.tables.TrainingSession;
+import cz.nudz.www.trainingapp.database.tables.TrialAnswer;
+import cz.nudz.www.trainingapp.database.tables.User;
+
+/**
+ * Created by artem on 19-Sep-17.
+ */
+
+public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
+
+    private static final String TAG = TrainingAppDbHelper.class.getSimpleName();
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "TrainingApp.db";
+
+    public TrainingAppDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
+        try {
+            logger.info(TAG, "onCreate");
+            TableUtils.createTable(connectionSource, User.class);
+            TableUtils.createTable(connectionSource, TrainingSession.class);
+            TableUtils.createTable(connectionSource, Paradigm.class);
+            TableUtils.createTable(connectionSource, Sequence.class);
+            TableUtils.createTable(connectionSource, TrialAnswer.class);
+        } catch (SQLException e) {
+            logger.error(TAG, "Couldn't create a table", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
+        try {
+            logger.info(TAG, "onUpgrade");
+            TableUtils.dropTable(connectionSource, User.class, true);
+            TableUtils.dropTable(connectionSource, TrainingSession.class, true);
+            TableUtils.dropTable(connectionSource, Paradigm.class, true);
+            TableUtils.dropTable(connectionSource, Sequence.class, true);
+            TableUtils.dropTable(connectionSource, TrialAnswer.class, true);
+            // after we drop the old databases, we create the new ones
+            onCreate(sqLiteDatabase, connectionSource);
+        } catch (SQLException e) {
+            logger.error(TAG, "Couldn't drop table", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // DAOs
+    private RuntimeExceptionDao<User, String> userDao;
+    private RuntimeExceptionDao<TrainingSession, Integer> trainingSessionDao;
+    private RuntimeExceptionDao<Paradigm, Integer> paradigmDao;
+    private RuntimeExceptionDao<Sequence, Integer> sequenceDao;
+    private RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao;
+
+    public RuntimeExceptionDao<User, String> getUserDao() throws SQLException {
+        if (userDao == null){
+            userDao = getRuntimeExceptionDao(User.class);
+        }
+        return userDao;
+    }
+
+    public RuntimeExceptionDao<TrainingSession, Integer> getTrainingSessionDao() throws SQLException {
+        if (trainingSessionDao == null) {
+            trainingSessionDao = getRuntimeExceptionDao(TrainingSession.class);
+        }
+        return trainingSessionDao;
+    }
+
+    public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() throws SQLException {
+        if (paradigmDao == null) {
+            paradigmDao = getRuntimeExceptionDao(Paradigm.class);
+        }
+        return paradigmDao;
+    }
+
+    public RuntimeExceptionDao<Sequence, Integer> getSequenceDao() throws SQLException {
+        if (sequenceDao == null) {
+            sequenceDao = getRuntimeExceptionDao(Sequence.class);
+        }
+        return sequenceDao;
+    }
+
+    public RuntimeExceptionDao<TrialAnswer, Integer> getTrialAnswerDao() throws SQLException {
+        if (trialAnswerDao == null) {
+            trialAnswerDao = getRuntimeExceptionDao(TrialAnswer.class);
+        }
+        return trialAnswerDao;
+    }
+}

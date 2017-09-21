@@ -1,13 +1,18 @@
 package cz.nudz.www.trainingapp.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.nudz.www.trainingapp.R;
 
 /**
  * Created by aa250602 on 14/9/2017.
@@ -86,5 +91,48 @@ public class TrainingUtils {
                 || text.isEmpty()
                 || text.trim().equals("null")
                 || text.trim().length() <= 0);
+    }
+
+    /**
+     * Shows a generic error dialog with a single 'OK' button.
+     * @param context
+     * @param message Message to display.
+     */
+    public static void showError(Context context, String message) {
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.error)
+                .setMessage(message)
+                .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create().show();
+    }
+
+    public static void showYesNoDialog(
+            Context context,
+            @Nullable String title,
+            @NonNull String message,
+            @NonNull DialogInterface.OnClickListener yesAction,
+            @Nullable DialogInterface.OnClickListener noAction) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (!isNullOrEmpty(title)) {
+            builder.setTitle(title);
+        }
+        builder
+            .setMessage(message)
+            .setPositiveButton(R.string.yes, yesAction)
+            .setNegativeButton(R.string.no, noAction != null
+                ? noAction
+                : new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+            })
+            .create().show();
     }
 }

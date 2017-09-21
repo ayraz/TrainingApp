@@ -36,4 +36,9 @@
 
     <string name="yes">ano</string>
     <string name="no">ne</string>
+    <string name="error">Chyba</string>
+    <string name="ok">ok</string>
+
+    <string name="createUserTitle">Vytvořit uživatele?</string>
+    <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
 </resources>
