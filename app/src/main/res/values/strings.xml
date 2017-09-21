@@ -20,11 +20,15 @@
 
     <string name="warningFragmentWarningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
     <string name="warningFragmentContinueBtnText">Rozumím, přejit k trenínku.</string>
+    <string name="goBackBtnText">Vrátit se</string>
+    <string name="startTrainingBtnText">Začít trénink</string>
 
     <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
 
+    <string name="errorTitle">Chyba</string>
+    <string name="errorNoParadigmsLeft">Žádné další paradigmy odešly.</string>
     <string name="genericErrorMessage">Jejda, bohužel něco nefungovalo.</string>
 
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
@@ -36,13 +40,9 @@
 
     <string name="yes">ano</string>
     <string name="no">ne</string>
-    <string name="error">Chyba</string>
     <string name="ok">ok</string>
 
     <string name="createUserTitle">Vytvořit uživatele?</string>
     <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
     <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

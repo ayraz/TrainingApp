@@ -51,7 +51,7 @@ public abstract class SequenceFragment extends Fragment {
     private SequenceFragmentListener listener;
     private final Handler handler = new Handler();
 
-    private int difficulty;
+    private Difficulty difficulty;
     // Unanswered trials are NULL
     private List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);;
     private int gridSize;
@@ -62,10 +62,10 @@ public abstract class SequenceFragment extends Fragment {
     private int stimSize;
     private TrialRunner trialRunner;
 
-    public static SequenceFragment newInstance(Paradigm paradigm, int difficulty) {
+    public static SequenceFragment newInstance(@NonNull Paradigm paradigm, @NonNull Difficulty difficulty) {
         SequenceFragment fragment = Paradigm.toTrainingFragment(paradigm);
         Bundle args = new Bundle();
-        args.putInt(KEY_DIFFICULTY , difficulty);
+        args.putString(KEY_DIFFICULTY , difficulty.toString());
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,7 +90,7 @@ public abstract class SequenceFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.sequence_fragment, container, false);
 
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
-        difficulty = getArguments().getInt(KEY_DIFFICULTY);
+        difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
 
         /*
          * Using this onExpired as an indicator that layout has finished...
@@ -103,7 +103,7 @@ public abstract class SequenceFragment extends Fragment {
                 // prevent infinite event loop
                 binding.trainingFragmentRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                // Difficulty may change on per-sequence basis
+                // Adjustment may change on per-sequence basis
                 totalStimCount = TrainingUtils.getStimCount(difficulty);
                 halfStimCount = totalStimCount / 2;
 

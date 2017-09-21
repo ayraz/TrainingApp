@@ -23,7 +23,7 @@ import cz.nudz.www.trainingapp.database.tables.User;
 public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String TAG = TrainingAppDbHelper.class.getSimpleName();
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "TrainingApp.db";
 
     public TrainingAppDbHelper(Context context) {

@@ -9,18 +9,16 @@ import cz.nudz.www.trainingapp.training.Side;
 public class Trial {
 
     private final Side cueSide;
-    private final int difficulty;
+    private final Difficulty difficulty;
     private final int stimCount;
     private final boolean changing;
 
     /**
      * @param difficulty: one-based, range: 1 to 6.
      */
-    public Trial(int difficulty) {
-        assert difficulty >= 1 && difficulty <= 6;
-
+    public Trial(Difficulty difficulty) {
         this.difficulty = difficulty;
-        this.stimCount = (1 + difficulty) * 2;
+        this.stimCount = (1 + Difficulty.toInteger(difficulty)) * 2;
         this.cueSide = Math.random() < 0.5 ? Side.LEFT : Side.RIGHT;
         this.changing = Math.random() < 0.5 ? false : true;
     }
@@ -37,7 +35,7 @@ public class Trial {
         return changing;
     }
 
-    public int getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 }

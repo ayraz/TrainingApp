@@ -14,11 +14,15 @@ import android.os.Bundle;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
+import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
-public class TrainingActivity extends AppCompatActivity
-        implements SequenceFragment.SequenceFragmentListener, CountDownFragment.CountDownListener {
+public class TrainingActivity extends AppCompatActivity implements
+        SequenceFragment.SequenceFragmentListener,
+        CountDownFragment.CountDownListener,
+        WarningFragment.WarningFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
 
@@ -27,6 +31,8 @@ public class TrainingActivity extends AppCompatActivity
     private TrainingActivityBinding binding;
     private Paradigm currentParadigm;
     private int sequenceCount;
+    private SessionManager sessionManager;
+    private String username;
 
     public static void startActivity(Context context, @NonNull Paradigm paradigm) {
         Intent intent = new Intent(context, TrainingActivity.class);
@@ -40,10 +46,13 @@ public class TrainingActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
+        sessionManager = new SessionManager(this);
+        sessionManager.checkLogin();
+        username = sessionManager.getUserDetails().get(SessionManager.KEY_USERNAME);
 
         currentParadigm = Paradigm.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         // TODO: Each session/paradigm starts with lowest difficulty.
-        showFragment(PauseFragment.newInstance(currentParadigm, null), PauseFragment.TAG);
+        showFragment(WarningFragment.newInstance(currentParadigm, null), WarningFragment.TAG);
 
         // TODO remove after debug
         binding.paradigm.setText(currentParadigm.toString());
@@ -87,17 +96,25 @@ public class TrainingActivity extends AppCompatActivity
     }
 
     @Override
+    public void startTraining() {
+        nextSequence();
+    }
+
+    @Override
+    public void goBack() {
+        super.onBackPressed();
+    }
+
+    @Override
     public void onExpired() {
         finish();
     }
 
     @Override
     public void onContinue() {
-        // NEXT SEQUENCE
         if (sequenceCount < SEQUENCE_COUNT) {
-            runSequence();
+            nextSequence();
         }
-        // NEXT PARADIGM
         else if (isParadigmFinished()) {
             nextParadigm();
         }
@@ -105,16 +122,15 @@ public class TrainingActivity extends AppCompatActivity
 
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
-        if (isFirstSequence()) {
-            runSequence();
-        } else {
-            if (sequenceCount < SEQUENCE_COUNT) {
-                showFragment(PauseFragment.newInstance(currentParadigm, Difficulty.SAME), PauseFragment.TAG);
-            } else if (isTrainingFinished()) {
-                // TODO: handle end of training..
-            } else if (isParadigmFinished()) {
-                showFragment(PauseFragment.newInstance(TrainingApp.nextParadigm(currentParadigm), null), PauseFragment.TAG);
-            }
+        sequenceCount += 1;
+
+        if (sequenceCount < SEQUENCE_COUNT) {
+            showFragment(PauseFragment.newInstance(currentParadigm, Adjustment.SAME), PauseFragment.TAG);
+        } else if (isTrainingFinished()) {
+            // TODO: handle end of training..
+        } else if (isParadigmFinished()) {
+            // next cannot be null because end of training is handled above..
+            showFragment(PauseFragment.newInstance(TrainingApp.nextParadigm(currentParadigm), null), PauseFragment.TAG);
         }
     }
 
@@ -122,10 +138,6 @@ public class TrainingActivity extends AppCompatActivity
     public void onTrialFinished(int trialCount) {
         // TODO remove after debug
         binding.trialCount.setText(String.format("Trial #: %s", String.valueOf(trialCount+1)));
-    }
-
-    private boolean isFirstSequence() {
-        return sequenceCount == 0 && TrainingApp.indexOfParadigm(currentParadigm) == 0;
     }
 
     private boolean isTrainingFinished() {
@@ -136,12 +148,10 @@ public class TrainingActivity extends AppCompatActivity
         return sequenceCount == SEQUENCE_COUNT;
     }
 
-    private void runSequence() {
-        showFragment(SequenceFragment.newInstance(currentParadigm, 1), SequenceFragment.TAG);
-        sequenceCount += 1;
-
+    private void nextSequence() {
+        showFragment(SequenceFragment.newInstance(currentParadigm, Difficulty.ONE), SequenceFragment.TAG);
         // TODO remove after debug
-        binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount)));
+        binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
     }
 
     private void nextParadigm() {
@@ -150,10 +160,12 @@ public class TrainingActivity extends AppCompatActivity
             // reset counter
             sequenceCount = 0;
             currentParadigm = next;
-            runSequence();
+            nextSequence();
 
             // TODO remove after debug
             binding.paradigm.setText(currentParadigm.toString());
+        } else {
+            TrainingUtils.showErrorDialog(this, null, getString(R.string.errorNoParadigmsLeft));
         }
     }
 }

@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.training;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -30,6 +31,15 @@ public class LoginActivity extends AppCompatActivity implements YesNoDialogFragm
     private TrainingAppDbHelper dbHelper;
     private SessionManager sessionManager;
     private String enteredUsername;
+
+    public static void startActivity(Context context) {
+        Intent i = new Intent(context, LoginActivity.class);
+        // Closing all activities on top this one
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // Start new app task history
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
 
     @Override
     protected void onDestroy() {

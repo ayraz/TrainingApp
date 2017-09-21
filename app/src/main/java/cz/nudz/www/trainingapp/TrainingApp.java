@@ -1,9 +1,11 @@
 package cz.nudz.www.trainingapp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +19,11 @@ import cz.nudz.www.trainingapp.training.Paradigm;
 
 public class TrainingApp extends Application {
 
+    // this should not be leaking since it is a self pointer...
+    // edit: made a weak reference to be sure.
+    private static WeakReference<Context> context;
+
+    // TODO: move this paradigm stuff to another singleton..
     private final static List<Paradigm> paradigmSet = new ArrayList<>(Arrays.asList(
             Paradigm.COLOR,
             Paradigm.POSITION,
@@ -24,8 +31,14 @@ public class TrainingApp extends Application {
 
     private TrainingAppDbHelper dbHelper;
 
-    public static int indexOfParadigm(Paradigm paradigm) {
-        return paradigmSet.indexOf(paradigm);
+    public static WeakReference<Context> getContext() {
+        return context;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        TrainingApp.context = new WeakReference<Context>(this);
     }
 
     /**
@@ -55,5 +68,9 @@ public class TrainingApp extends Application {
             OpenHelperManager.releaseHelper();
             dbHelper = null;
         }
+    }
+
+    public static int indexOfParadigm(Paradigm paradigm) {
+        return paradigmSet.indexOf(paradigm);
     }
 }

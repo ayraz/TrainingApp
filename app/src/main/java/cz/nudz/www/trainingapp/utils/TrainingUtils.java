@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.training.Difficulty;
 
 /**
  * Created by aa250602 on 14/9/2017.
@@ -69,8 +70,8 @@ public class TrainingUtils {
      * @param difficulty
      * @return
      */
-    public static int getStimCount(int difficulty) {
-        return (1 + difficulty) * 2;
+    public static int getStimCount(Difficulty difficulty) {
+        return (1 + Difficulty.toInteger(difficulty)) * 2;
     }
 
     @NonNull
