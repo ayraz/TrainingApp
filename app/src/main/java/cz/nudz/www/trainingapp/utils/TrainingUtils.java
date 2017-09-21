@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -96,43 +98,24 @@ public class TrainingUtils {
     /**
      * Shows a generic error dialog with a single 'OK' button.
      * @param context
-     * @param message Message to display.
+     * @param title
+     * @param message
      */
-    public static void showError(Context context, @Nullable String title, @NonNull String message) {
-        new AlertDialog.Builder(context)
-                .setTitle(title != null ? title : context.getString(R.string.error))
-                .setMessage(message)
-                .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create().show();
+    public static void showErrorDialog(AppCompatActivity context, @Nullable String title, @NonNull String message) {
+        FragmentManager fragmentManager = context.getSupportFragmentManager();
+        AlertDialogFragment errorDialogFragment = ErrorDialogFragment.newInstance(title, message);
+        errorDialogFragment.show(fragmentManager, ErrorDialogFragment.TAG);
     }
 
-    public static void showYesNoDialog(
-            Context context,
-            @Nullable String title,
-            @NonNull String message,
-            @NonNull DialogInterface.OnClickListener yesAction,
-            @Nullable DialogInterface.OnClickListener noAction) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        if (!isNullOrEmpty(title)) {
-            builder.setTitle(title);
-        }
-        builder
-            .setMessage(message)
-            .setPositiveButton(R.string.yes, yesAction)
-            .setNegativeButton(R.string.no, noAction != null
-                ? noAction
-                : new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-            })
-            .create().show();
+    /**
+     * Shows a generic YesNo dialog, caller must implement YesNoDialogFragmentListener interface.
+     * @param context
+     * @param title
+     * @param message
+     */
+    public static void showYesNoDialog(AppCompatActivity context, @Nullable String title, @NonNull String message) {
+        FragmentManager fragmentManager = context.getSupportFragmentManager();
+        AlertDialogFragment yesNoDialogFragment = YesNoDialogFragment.newInstance(title, message);
+        yesNoDialogFragment.show(fragmentManager, YesNoDialogFragment.TAG);
     }
 }

@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,14 +20,16 @@ import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.database.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
+import cz.nudz.www.trainingapp.utils.YesNoDialogFragment;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements YesNoDialogFragment.YesNoDialogFragmentListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private TrainingApp applicationContext;
     private LoginActivityBinding binding;
     private TrainingAppDbHelper dbHelper;
     private SessionManager sessionManager;
+    private String enteredUsername;
 
     @Override
     protected void onDestroy() {
@@ -52,30 +53,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        final String username = binding.loginActivityUserName.getText().toString();
-        if (TrainingUtils.isNullOrEmpty(username)) {
-            TrainingUtils.showError(this, null, getString(R.string.createUserEmptyUsernameMessage));
+        enteredUsername = binding.loginActivityUserName.getText().toString();
+        if (TrainingUtils.isNullOrEmpty(enteredUsername)) {
+            TrainingUtils.showErrorDialog(this, null, getString(R.string.createUserEmptyUsernameMessage));
         } else {
             try {
                 final RuntimeExceptionDao<User, String> userDao = dbHelper.getUserDao();
-                final User user = userDao.queryForId(username);
+                final User user = userDao.queryForId(enteredUsername);
                 if (user == null) {
-                    TrainingUtils.showYesNoDialog(this, getString(R.string.createUserTitle), getString(R.string.createUserMessage),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    User newUser = new User();
-                                    newUser.setUsername(username);
-                                    userDao.create(newUser);
-                                    startUserSession(newUser);
-                                }
-                            }, null);
+                    TrainingUtils.showYesNoDialog(this, getString(R.string.createUserTitle), getString(R.string.createUserMessage));
                 } else {
                     startUserSession(user);
                 }
-            } catch (SQLException e) {
+            } catch (RuntimeException e) {
                 Log.e(TAG, "Couldn't query for user", e);
-                TrainingUtils.showError(this, null, e.getMessage());
+                TrainingUtils.showErrorDialog(this, null, e.getMessage());
             }
 
         }
@@ -84,5 +76,13 @@ public class LoginActivity extends AppCompatActivity {
     private void startUserSession(User user) {
         sessionManager.createSession(user.getUsername());
         startActivity(new Intent(this, MainActivity.class));
+    }
+
+    @Override
+    public void onYes() {
+        User newUser = new User();
+        newUser.setUsername(enteredUsername);
+        dbHelper.getUserDao().create(newUser);
+        startUserSession(newUser);
     }
 }

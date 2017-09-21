@@ -69,35 +69,35 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
     private RuntimeExceptionDao<Sequence, Integer> sequenceDao;
     private RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao;
 
-    public RuntimeExceptionDao<User, String> getUserDao() throws SQLException {
+    public RuntimeExceptionDao<User, String> getUserDao() {
         if (userDao == null){
             userDao = getRuntimeExceptionDao(User.class);
         }
         return userDao;
     }
 
-    public RuntimeExceptionDao<TrainingSession, Integer> getTrainingSessionDao() throws SQLException {
+    public RuntimeExceptionDao<TrainingSession, Integer> getTrainingSessionDao() {
         if (trainingSessionDao == null) {
             trainingSessionDao = getRuntimeExceptionDao(TrainingSession.class);
         }
         return trainingSessionDao;
     }
 
-    public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() throws SQLException {
+    public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() {
         if (paradigmDao == null) {
             paradigmDao = getRuntimeExceptionDao(Paradigm.class);
         }
         return paradigmDao;
     }
 
-    public RuntimeExceptionDao<Sequence, Integer> getSequenceDao() throws SQLException {
+    public RuntimeExceptionDao<Sequence, Integer> getSequenceDao() {
         if (sequenceDao == null) {
             sequenceDao = getRuntimeExceptionDao(Sequence.class);
         }
         return sequenceDao;
     }
 
-    public RuntimeExceptionDao<TrialAnswer, Integer> getTrialAnswerDao() throws SQLException {
+    public RuntimeExceptionDao<TrialAnswer, Integer> getTrialAnswerDao() {
         if (trialAnswerDao == null) {
             trialAnswerDao = getRuntimeExceptionDao(TrialAnswer.class);
         }
