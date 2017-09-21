@@ -1,6 +1,7 @@
 package cz.nudz.www.trainingapp.training;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +13,9 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.sql.SQLException;
 
+import cz.nudz.www.trainingapp.MainActivity;
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.database.tables.User;
@@ -25,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private TrainingApp applicationContext;
     private LoginActivityBinding binding;
     private TrainingAppDbHelper dbHelper;
+    private SessionManager sessionManager;
 
     @Override
     protected void onDestroy() {
@@ -38,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
         applicationContext = (TrainingApp) getApplicationContext();
         dbHelper = applicationContext.getDbHelper();
-
+        sessionManager = new SessionManager(applicationContext);
         binding.loginActivityLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,15 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         final String username = binding.loginActivityUserName.getText().toString();
         if (TrainingUtils.isNullOrEmpty(username)) {
-            new AlertDialog.Builder(this)
-                    .setMessage("The username field mustn't be empty!")
-                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
+            TrainingUtils.showError(this, null, getString(R.string.createUserEmptyUsernameMessage));
         } else {
             try {
                 final RuntimeExceptionDao<User, String> userDao = dbHelper.getUserDao();
@@ -71,14 +67,22 @@ public class LoginActivity extends AppCompatActivity {
                                     User newUser = new User();
                                     newUser.setUsername(username);
                                     userDao.create(newUser);
+                                    startUserSession(newUser);
                                 }
                             }, null);
+                } else {
+                    startUserSession(user);
                 }
             } catch (SQLException e) {
                 Log.e(TAG, "Couldn't query for user", e);
-                TrainingUtils.showError(this, e.getMessage());
+                TrainingUtils.showError(this, null, e.getMessage());
             }
 
         }
+    }
+
+    private void startUserSession(User user) {
+        sessionManager.createSession(user.getUsername());
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

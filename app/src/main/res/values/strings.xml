@@ -32,7 +32,7 @@
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
 
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
-    <string name="quitTrainingDialogTitle">Uzavření tréninku</string>
+    <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
 
     <string name="yes">ano</string>
     <string name="no">ne</string>
@@ -41,4 +41,5 @@
 
     <string name="createUserTitle">Vytvořit uživatele?</string>
     <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
+    <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
 </resources>

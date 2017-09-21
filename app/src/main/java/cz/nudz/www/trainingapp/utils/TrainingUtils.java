@@ -98,9 +98,9 @@ public class TrainingUtils {
      * @param context
      * @param message Message to display.
      */
-    public static void showError(Context context, String message) {
+    public static void showError(Context context, @Nullable String title, @NonNull String message) {
         new AlertDialog.Builder(context)
-                .setTitle(R.string.error)
+                .setTitle(title != null ? title : context.getString(R.string.error))
                 .setMessage(message)
                 .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
