@@ -25,8 +25,28 @@ public enum Difficulty {
      *
      * @param difficulty
      * @return Returns next difficulty in order; ONE > TWO, etc.
+     * Or null if there isn't one.
      */
     public static Difficulty next(Difficulty difficulty) {
-        return Difficulty.values()[difficulty.ordinal() + 1];
+        int i = difficulty.ordinal() + 1;
+        Difficulty[] values = Difficulty.values();
+        if (i < values.length)
+            return values[i];
+        else
+            return null;
+    }
+
+    /**
+     *
+     * @param difficulty
+     * @return Returns previous difficulty in order; TWO > ONE, etc.
+     * Or null if there isn't one.
+     */
+    public static Difficulty prev(Difficulty difficulty) {
+        int i = difficulty.ordinal() - 1;
+        if (i >= 0)
+            return Difficulty.values()[i];
+        else
+            return null;
     }
 }

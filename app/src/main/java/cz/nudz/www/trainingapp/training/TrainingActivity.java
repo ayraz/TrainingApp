@@ -30,7 +30,8 @@ public class TrainingActivity extends AppCompatActivity implements
 
     private TrainingActivityBinding binding;
     private Paradigm currentParadigm;
-    private int sequenceCount;
+    private Difficulty currentDifficulty = Difficulty.ONE;
+    private int sequenceCount = 0;
     private SessionManager sessionManager;
     private String username;
 
@@ -56,8 +57,6 @@ public class TrainingActivity extends AppCompatActivity implements
 
         // TODO remove after debug
         binding.paradigm.setText(currentParadigm.toString());
-        binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(0)));
-        binding.trialCount.setText(String.format("Trial #: %s", String.valueOf(0)));
     }
 
     @Override
@@ -125,7 +124,20 @@ public class TrainingActivity extends AppCompatActivity implements
         sequenceCount += 1;
 
         if (sequenceCount < SEQUENCE_COUNT) {
-            showFragment(PauseFragment.newInstance(currentParadigm, Adjustment.SAME), PauseFragment.TAG);
+            Difficulty newDifficulty = TrainingUtils.adjustDifficulty(answers, currentDifficulty);
+            Adjustment adjustment = Adjustment.SAME;
+            if (newDifficulty != null) {
+                if (newDifficulty.ordinal() > currentDifficulty.ordinal()) {
+                    adjustment = Adjustment.RAISED;
+                }
+                else if (newDifficulty.ordinal() < currentDifficulty.ordinal()) {
+                    adjustment = Adjustment.LOWERED;
+                }
+                currentDifficulty = newDifficulty;
+            } else {
+                // TODO: handle max level
+            }
+            showFragment(PauseFragment.newInstance(currentParadigm, adjustment), PauseFragment.TAG);
         } else if (isTrainingFinished()) {
             // TODO: handle end of training..
         } else if (isParadigmFinished()) {
@@ -149,7 +161,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void nextSequence() {
-        showFragment(SequenceFragment.newInstance(currentParadigm, Difficulty.ONE), SequenceFragment.TAG);
+        showFragment(SequenceFragment.newInstance(currentParadigm, currentDifficulty), SequenceFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
     }
@@ -160,6 +172,7 @@ public class TrainingActivity extends AppCompatActivity implements
             // reset counter
             sequenceCount = 0;
             currentParadigm = next;
+            currentDifficulty = Difficulty.ONE;
             nextSequence();
 
             // TODO remove after debug

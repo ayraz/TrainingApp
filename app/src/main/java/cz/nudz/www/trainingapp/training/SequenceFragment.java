@@ -31,7 +31,12 @@ public abstract class SequenceFragment extends Fragment {
 
     public static final String TAG = SequenceFragment.class.getSimpleName();
 
+    public static int getTrialCount() {
+        return TRIAL_COUNT;
+    }
+
     private static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
+    private static final int TRIAL_COUNT = 20;
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
     private static final int POST_CUE_PAUSE = 100;
@@ -40,11 +45,10 @@ public abstract class SequenceFragment extends Fragment {
     private static final int TEST_INTERVAL = 2000;
 
     private static final int POST_TRIAL_PAUSE = 2000;
-    private static final int TRIAL_COUNT = 20;
-    private static final int LEFT_INDEX = 0;
-    private static final int RIGHT_INDEX = 1;
+    private static final int LEFT_GRID_INDEX = 0;
+    private static final int RIGHT_GRID_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
-    private static final int DEBUG_SLOW = 0;
+    private static final double DEBUG_SLOW = 0.2;
 
     private SequenceFragmentBinding binding;
     private ConstraintLayout[] grids;
@@ -146,8 +150,8 @@ public abstract class SequenceFragment extends Fragment {
             final List<List<ImageView>> stimuli = setupGridViews();
 
             // merge stimuli from both grids
-            final List<ImageView> allStimuli = new ArrayList<ImageView>(stimuli.get(LEFT_INDEX));
-            allStimuli.addAll(stimuli.get(RIGHT_INDEX));
+            final List<ImageView> allStimuli = new ArrayList<ImageView>(stimuli.get(LEFT_GRID_INDEX));
+            allStimuli.addAll(stimuli.get(RIGHT_GRID_INDEX));
 
             // Once the last view's layout is finished we can start setting up stimuli
             final ImageView lastAddedStim = allStimuli.get(allStimuli.size() - 1);
@@ -217,8 +221,8 @@ public abstract class SequenceFragment extends Fragment {
                                             int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
 
                                             final ImageView changingStim = trial.getCueSide() == LEFT
-                                                    ? stimuli.get(LEFT_INDEX).get(index)
-                                                    : stimuli.get(RIGHT_INDEX).get(index);
+                                                    ? stimuli.get(LEFT_GRID_INDEX).get(index)
+                                                    : stimuli.get(RIGHT_GRID_INDEX).get(index);
 
                                             performChange(changingStim);
                                         }
@@ -246,25 +250,25 @@ public abstract class SequenceFragment extends Fragment {
                                                         // START NEXT TRIAL
                                                         handler.postDelayed(
                                                                 TrialRunner.this,
-                                                                POST_TRIAL_PAUSE * DEBUG_SLOW);
+                                                                (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
 
                                                         listener.onTrialFinished(count);
                                                         count += 1;
 
                                                     }
-                                                }, TEST_INTERVAL * DEBUG_SLOW);
+                                                }, (int) (TEST_INTERVAL * DEBUG_SLOW));
 
                                             }
-                                        }, RETENTION_INTERVAL * DEBUG_SLOW);
+                                        }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
 
                                     }
-                                }, MEMORIZATION_INTERVAL * DEBUG_SLOW);
+                                }, (int) (MEMORIZATION_INTERVAL * DEBUG_SLOW));
 
                             }
-                        }, CUE_INTERVAL * DEBUG_SLOW);
+                        }, (int) (CUE_INTERVAL * DEBUG_SLOW));
 
                     }
-                }, POST_CUE_PAUSE * DEBUG_SLOW);
+                }, (int) (POST_CUE_PAUSE * DEBUG_SLOW));
                 }
             });
         }
@@ -333,6 +337,7 @@ public abstract class SequenceFragment extends Fragment {
     }
 
     public interface SequenceFragmentListener {
+
         void onSequenceFinished(List<Boolean> answers);
 
         void onTrialFinished(int trialCount);

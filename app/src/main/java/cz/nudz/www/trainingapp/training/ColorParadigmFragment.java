@@ -24,7 +24,6 @@ public class ColorParadigmFragment extends SequenceFragment {
         // Setup stimuli/probe colors..
         // The color count covers entirely stimuli count even for hardest difficulty + 1 for color change.
         colors = ArrayUtils.toIntArrayList(getResources().getIntArray(R.array.trialColors));
-        Collections.shuffle(colors);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -38,12 +37,11 @@ public class ColorParadigmFragment extends SequenceFragment {
 
     @Override
     protected void initStimuli(List<ImageView> stimuli) {
+        Collections.shuffle(colors);
         for (int i = 0; i < stimuli.size(); ++i) {
             ImageView v = stimuli.get(i);
-
             // 'clone' drawable so that we can alter color for each.
             Drawable drawable = getResources().getDrawable(R.drawable.square).mutate();
-
             v.setImageDrawable(drawable);
             v.setColorFilter(colors.get(i));
         }

@@ -16,6 +16,8 @@ import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.training.Difficulty;
+import cz.nudz.www.trainingapp.training.SequenceFragment;
+import cz.nudz.www.trainingapp.training.TrainingActivity;
 
 /**
  * Created by aa250602 on 14/9/2017.
@@ -72,6 +74,31 @@ public class TrainingUtils {
      */
     public static int getStimCount(Difficulty difficulty) {
         return (1 + Difficulty.toInteger(difficulty)) * 2;
+    }
+
+    /**
+     *
+     * @param answers
+     * @param currentDifficulty
+     * @return Returns difficulty adjusted according to answers.
+     * Null if user has reached max difficulty and threshold for it being raised.
+     */
+    public static Difficulty adjustDifficulty(List<Boolean> answers, Difficulty currentDifficulty) {
+        int raiseThreshold = (int) (answers.size() * 0.9);
+        int lowerThreshold = (int) (answers.size() * 0.5);
+        int correctCount = 0;
+        for (Boolean answer : answers) {
+            if (answer != null && answer) {
+                correctCount += 1;
+            }
+        }
+        Difficulty adjustment = currentDifficulty;
+        if (correctCount >= raiseThreshold) {
+            adjustment = Difficulty.next(currentDifficulty);
+        } else if (correctCount < lowerThreshold && currentDifficulty.ordinal() != 0) {
+            adjustment = Difficulty.prev(currentDifficulty);
+        }
+        return adjustment;
     }
 
     @NonNull
