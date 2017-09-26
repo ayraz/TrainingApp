@@ -5,6 +5,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
+import cz.nudz.www.trainingapp.training.ParadigmType;
+
 /**
  * Created by artem on 21-Sep-17.
  */
@@ -19,7 +21,7 @@ public class Paradigm {
     private TrainingSession trainingSession;
 
     @DatabaseField(canBeNull = false)
-    private cz.nudz.www.trainingapp.training.Paradigm paradigmType;
+    private ParadigmType paradigmType;
 
     @DatabaseField(canBeNull = false)
     private Date startDate;
@@ -51,11 +53,11 @@ public class Paradigm {
         this.trainingSession = trainingSession;
     }
 
-    public cz.nudz.www.trainingapp.training.Paradigm getParadigmType() {
+    public ParadigmType getParadigmType() {
         return paradigmType;
     }
 
-    public void setParadigmType(cz.nudz.www.trainingapp.training.Paradigm paradigmType) {
+    public void setParadigmType(ParadigmType paradigmType) {
         this.paradigmType = paradigmType;
     }
 

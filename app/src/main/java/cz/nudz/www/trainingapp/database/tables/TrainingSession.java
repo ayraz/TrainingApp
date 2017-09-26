@@ -24,6 +24,9 @@ public class TrainingSession {
     @DatabaseField(canBeNull = false)
     private boolean isFinished;
 
+    @DatabaseField(canBeNull = false, foreign = true)
+    private User user;
+
     public TrainingSession() {};
 
     public int getId() {
@@ -56,5 +59,13 @@ public class TrainingSession {
 
     public void setFinished(boolean finished) {
         isFinished = finished;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

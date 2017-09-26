@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.training.Paradigm;
+import cz.nudz.www.trainingapp.training.ParadigmType;
 
 /**
  * Created by artem on 12-Sep-17.
@@ -24,10 +24,10 @@ public class TrainingApp extends Application {
     private static WeakReference<Context> context;
 
     // TODO: move this paradigm stuff to another singleton..
-    private final static List<Paradigm> paradigmSet = new ArrayList<>(Arrays.asList(
-            Paradigm.COLOR,
-            Paradigm.POSITION,
-            Paradigm.SHAPE));
+    private final static List<ParadigmType> PARADIGM_TYPE_SET = new ArrayList<>(Arrays.asList(
+            ParadigmType.COLOR,
+            ParadigmType.POSITION,
+            ParadigmType.SHAPE));
 
     private TrainingAppDbHelper dbHelper;
 
@@ -43,16 +43,16 @@ public class TrainingApp extends Application {
 
     /**
      *
-     * @param currentParadigm
+     * @param currentParadigmType
      * @return Returns next paradigm in a fixed sequence or null if there are no more.
      */
-    public static Paradigm nextParadigm(Paradigm currentParadigm) {
-        int i = paradigmSet.indexOf(currentParadigm);
+    public static ParadigmType nextParadigm(ParadigmType currentParadigmType) {
+        int i = PARADIGM_TYPE_SET.indexOf(currentParadigmType);
         // no paradigmSet left
-        if (i == paradigmSet.size() - 1) {
+        if (i == PARADIGM_TYPE_SET.size() - 1) {
             return null;
         } else {
-            return paradigmSet.get(i + 1);
+            return PARADIGM_TYPE_SET.get(i + 1);
         }
     }
 
@@ -70,7 +70,7 @@ public class TrainingApp extends Application {
         }
     }
 
-    public static int indexOfParadigm(Paradigm paradigm) {
-        return paradigmSet.indexOf(paradigm);
+    public static int indexOfParadigm(ParadigmType paradigmType) {
+        return PARADIGM_TYPE_SET.indexOf(paradigmType);
     }
 }

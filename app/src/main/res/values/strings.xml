@@ -29,7 +29,8 @@
 
     <string name="errorTitle">Chyba</string>
     <string name="errorNoParadigmsLeft">Žádné další paradigmy odešly.</string>
-    <string name="genericErrorMessage">Jejda, bohužel něco nefungovalo.</string>
+    <string name="errorGenericMessage">Jejda, bohužel něco nefungovalo.</string>
+    <string name="errorNotLoggedIn">Nejste přihlášeni a budete přesměrováni na přihlašovací obrazovku.</string>
 
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
     <string name="difficultyLoweredMessage">VEDETE SE DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>

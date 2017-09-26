@@ -4,18 +4,31 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import java.util.Date;
 import java.util.List;
+
+import javax.security.auth.login.LoginException;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.TrainingApp;
+import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
+import cz.nudz.www.trainingapp.database.TrainingSessionRepository;
+import cz.nudz.www.trainingapp.database.tables.Paradigm;
+import cz.nudz.www.trainingapp.database.tables.Sequence;
+import cz.nudz.www.trainingapp.database.tables.TrainingSession;
+import cz.nudz.www.trainingapp.database.tables.User;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
@@ -29,15 +42,21 @@ public class TrainingActivity extends AppCompatActivity implements
     private static final int SEQUENCE_COUNT = 7;
 
     private TrainingActivityBinding binding;
-    private Paradigm currentParadigm;
-    private Difficulty currentDifficulty = Difficulty.ONE;
     private int sequenceCount = 0;
     private SessionManager sessionManager;
     private String username;
+    private TrainingApp applicationContext;
+    private TrainingAppDbHelper dbHelper;
 
-    public static void startActivity(Context context, @NonNull Paradigm paradigm) {
+    private ParadigmType currentParadigmType;
+    private Difficulty currentDifficulty = Difficulty.ONE;
+    private TrainingSession currentSession;
+    private Paradigm currentParadigm;
+    private Sequence currentSequence;
+
+    public static void startActivity(Context context, @NonNull ParadigmType paradigmType) {
         Intent intent = new Intent(context, TrainingActivity.class);
-        intent.putExtra(KEY_PARADIGM, paradigm.toString());
+        intent.putExtra(KEY_PARADIGM, paradigmType.toString());
         // do not add activity to navigation stack
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
@@ -51,12 +70,21 @@ public class TrainingActivity extends AppCompatActivity implements
         sessionManager.checkLogin();
         username = sessionManager.getUserDetails().get(SessionManager.KEY_USERNAME);
 
-        currentParadigm = Paradigm.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
+        applicationContext = (TrainingApp) getApplicationContext();
+        dbHelper = applicationContext.getDbHelper();
+
+        currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         // TODO: Each session/paradigm starts with lowest difficulty.
-        showFragment(WarningFragment.newInstance(currentParadigm, null), WarningFragment.TAG);
+        showFragment(WarningFragment.newInstance(currentParadigmType, null), WarningFragment.TAG);
 
         // TODO remove after debug
-        binding.paradigm.setText(currentParadigm.toString());
+        binding.paradigm.setText(currentParadigmType.toString());
+    }
+
+    @Override
+    protected void onDestroy() {
+        applicationContext.releaseHelper();
+        super.onDestroy();
     }
 
     @Override
@@ -96,7 +124,40 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void startTraining() {
-        nextSequence();
+        try {
+            currentSession = initTainingSession();
+            currentParadigm = initParadigm(currentSession);
+            nextSequence();
+        } catch (LoginException e) {
+            Log.e(TrainingActivity.class.getSimpleName(), e.getMessage());
+            TrainingUtils.showErrorDialog(this, null, getString(R.string.errorNotLoggedIn));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LoginActivity.startActivity(TrainingActivity.this);
+                }
+            }, 3000);
+        }
+    }
+
+    private Paradigm initParadigm(TrainingSession trainingSession) {
+        RuntimeExceptionDao<Paradigm, Integer> paradigmDao = dbHelper.getParadigmDao();
+        Paradigm paradigm = new Paradigm();
+        paradigm.setTrainingSession(trainingSession);
+        paradigm.setStartDate(new Date());
+        paradigm.setParadigmType(currentParadigmType);
+        paradigmDao.create(paradigm);
+        return paradigm;
+    }
+
+    private TrainingSession initTainingSession() throws LoginException {
+        RuntimeExceptionDao<User, String> userDao = dbHelper.getUserDao();
+        User user = userDao.queryForId(username);
+        if (user == null) {
+            throw new LoginException("User is not logged in yet on training screen!");
+        } else {
+            return new TrainingSessionRepository(this, dbHelper).createTrainingSession(user);
+        }
     }
 
     @Override
@@ -137,12 +198,13 @@ public class TrainingActivity extends AppCompatActivity implements
             } else {
                 // TODO: handle max level
             }
-            showFragment(PauseFragment.newInstance(currentParadigm, adjustment), PauseFragment.TAG);
+            showFragment(PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
         } else if (isTrainingFinished()) {
             // TODO: handle end of training..
+
         } else if (isParadigmFinished()) {
             // next cannot be null because end of training is handled above..
-            showFragment(PauseFragment.newInstance(TrainingApp.nextParadigm(currentParadigm), null), PauseFragment.TAG);
+            showFragment(PauseFragment.newInstance(TrainingApp.nextParadigm(currentParadigmType), null), PauseFragment.TAG);
         }
     }
 
@@ -153,7 +215,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private boolean isTrainingFinished() {
-        return TrainingApp.nextParadigm(currentParadigm) == null;
+        return TrainingApp.nextParadigm(currentParadigmType) == null;
     }
 
     private boolean isParadigmFinished() {
@@ -161,24 +223,44 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void nextSequence() {
-        showFragment(SequenceFragment.newInstance(currentParadigm, currentDifficulty), SequenceFragment.TAG);
+        currentSequence = initSequence();
+
+        showFragment(SequenceFragment.newInstance(currentParadigmType, currentDifficulty), SequenceFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
     }
 
+    private Sequence initSequence() {
+        RuntimeExceptionDao<Sequence, Integer> sequenceDao = dbHelper.getSequenceDao();
+        Sequence sequence = new Sequence();
+        sequence.setParadigm(currentParadigm);
+        sequence.setStartDate(new Date());
+        sequence.setDifficulty(currentDifficulty);
+        sequenceDao.create(sequence);
+        return sequence;
+    }
+
     private void nextParadigm() {
-        Paradigm next = TrainingApp.nextParadigm(currentParadigm);
+        ParadigmType next = TrainingApp.nextParadigm(currentParadigmType);
         if (next != null) {
             // reset counter
             sequenceCount = 0;
-            currentParadigm = next;
+            currentParadigmType = next;
             currentDifficulty = Difficulty.ONE;
             nextSequence();
 
             // TODO remove after debug
-            binding.paradigm.setText(currentParadigm.toString());
+            binding.paradigm.setText(currentParadigmType.toString());
         } else {
             TrainingUtils.showErrorDialog(this, null, getString(R.string.errorNoParadigmsLeft));
         }
+    }
+
+    public Sequence getCurrentSequence() {
+        return currentSequence;
+    }
+
+    public TrainingAppDbHelper getDbHelper() {
+        return dbHelper;
     }
 }

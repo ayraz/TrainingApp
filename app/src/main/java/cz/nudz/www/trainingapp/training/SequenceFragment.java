@@ -16,11 +16,14 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.database.tables.TrialAnswer;
 import cz.nudz.www.trainingapp.databinding.SequenceFragmentBinding;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
@@ -30,6 +33,7 @@ import static cz.nudz.www.trainingapp.training.Side.LEFT;
 public abstract class SequenceFragment extends Fragment {
 
     public static final String TAG = SequenceFragment.class.getSimpleName();
+    private TrainingActivity parentActivity;
 
     public static int getTrialCount() {
         return TRIAL_COUNT;
@@ -66,8 +70,8 @@ public abstract class SequenceFragment extends Fragment {
     private int stimSize;
     private TrialRunner trialRunner;
 
-    public static SequenceFragment newInstance(@NonNull Paradigm paradigm, @NonNull Difficulty difficulty) {
-        SequenceFragment fragment = Paradigm.toTrainingFragment(paradigm);
+    public static SequenceFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty) {
+        SequenceFragment fragment = ParadigmType.toTrainingFragment(paradigmType);
         Bundle args = new Bundle();
         args.putString(KEY_DIFFICULTY , difficulty.toString());
         fragment.setArguments(args);
@@ -82,6 +86,8 @@ public abstract class SequenceFragment extends Fragment {
         } else {
             throw new ClassCastException("Parent must implement SequenceFragmentListener interface.");
         }
+        // TODO: remove this hardcoded dependency
+        parentActivity = (TrainingActivity) context;
     }
 
     public void removePendingCallbacks() {
@@ -136,6 +142,7 @@ public abstract class SequenceFragment extends Fragment {
 
         // recursive loop counter
         private int count = 0;
+        private Trial currentTrial;
 
         @Override
         public void run() {
@@ -161,23 +168,23 @@ public abstract class SequenceFragment extends Fragment {
                 // prevent event loop
                 lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                final Trial trial = new Trial(difficulty);
+                currentTrial = new Trial(difficulty);
 
                 // user answer handlers have to be set trial-wise
                 binding.trainingFragmentSameBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        answers.add(!trial.isChanging());
+                        answers.add(!currentTrial.isChanging());
                         // allow only one answer
-                        disableAnswerBtns();
+                        handleAnswerSubmission();
                     }
                 });
 
                 binding.trainingFragmentDifferentBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        answers.add(trial.isChanging());
-                        disableAnswerBtns();
+                        answers.add(currentTrial.isChanging());
+                        handleAnswerSubmission();
                     }
                 });
 
@@ -185,7 +192,7 @@ public abstract class SequenceFragment extends Fragment {
 
                 // START THE TRIAL...
                 final View cue;
-                switch (trial.getCueSide()) {
+                switch (currentTrial.getCueSide()) {
                     case LEFT:
                         cue = binding.trainingFragmentCueLeft;
                         break;
@@ -194,7 +201,7 @@ public abstract class SequenceFragment extends Fragment {
                         break;
                     default:
                         throw new IllegalStateException(String.format(
-                                "Trials's cueSide state is invalid: {0}", trial.getCueSide().toString()));
+                                "Trials's cueSide state is invalid: {0}", currentTrial.getCueSide().toString()));
                 }
                 cue.setVisibility(View.VISIBLE);
 
@@ -216,11 +223,11 @@ public abstract class SequenceFragment extends Fragment {
                                     public void run() {
                                         TrainingUtils.setViewsVisible(false, views);
 
-                                        if (trial.isChanging()) {
+                                        if (currentTrial.isChanging()) {
                                             // pick random stim in cued grid
                                             int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
 
-                                            final ImageView changingStim = trial.getCueSide() == LEFT
+                                            final ImageView changingStim = currentTrial.getCueSide() == LEFT
                                                     ? stimuli.get(LEFT_GRID_INDEX).get(index)
                                                     : stimuli.get(RIGHT_GRID_INDEX).get(index);
 
@@ -271,6 +278,17 @@ public abstract class SequenceFragment extends Fragment {
                 }, (int) (POST_CUE_PAUSE * DEBUG_SLOW));
                 }
             });
+        }
+
+        private void handleAnswerSubmission() {
+            disableAnswerBtns();
+            // TODO: handle millis response, consider storing cue side...
+            RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao = parentActivity.getDbHelper().getTrialAnswerDao();
+            TrialAnswer trialAnswer = new TrialAnswer();
+            trialAnswer.setSequence(parentActivity.getCurrentSequence());
+            trialAnswer.setCorrect(answers.get(answers.size() - 1));
+            trialAnswer.setChangingTrial(currentTrial.isChanging());
+            trialAnswerDao.create(trialAnswer);
         }
 
         @NonNull

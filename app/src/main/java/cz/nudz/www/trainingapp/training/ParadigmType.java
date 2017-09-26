@@ -4,13 +4,13 @@ package cz.nudz.www.trainingapp.training;
  * Created by artem on 27-May-17.
  */
 
-public enum Paradigm {
+public enum ParadigmType {
     COLOR,
     SHAPE,
     POSITION;
 
-    public static SequenceFragment toTrainingFragment(Paradigm paradigm) {
-        switch (paradigm) {
+    public static SequenceFragment toTrainingFragment(ParadigmType paradigmType) {
+        switch (paradigmType) {
             case COLOR:
                 return new ColorParadigmFragment();
             case SHAPE:

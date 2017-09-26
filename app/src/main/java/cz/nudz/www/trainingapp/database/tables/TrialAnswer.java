@@ -20,6 +20,9 @@ public class TrialAnswer {
     private boolean isCorrect;
 
     @DatabaseField(canBeNull = false)
+    private boolean isChangingTrial;
+
+    @DatabaseField(canBeNull = false)
     private int responseTimeMillis;
 
     public TrialAnswer() {};
@@ -54,5 +57,13 @@ public class TrialAnswer {
 
     public void setResponseTimeMillis(int responseTimeMillis) {
         this.responseTimeMillis = responseTimeMillis;
+    }
+
+    public boolean isChangingTrial() {
+        return isChangingTrial;
+    }
+
+    public void setChangingTrial(boolean changingTrial) {
+        isChangingTrial = changingTrial;
     }
 }

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
-import cz.nudz.www.trainingapp.training.Paradigm;
+import cz.nudz.www.trainingapp.training.ParadigmType;
 import cz.nudz.www.trainingapp.training.TrainingActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         binding.mainActivityTrainingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TrainingActivity.startActivity(MainActivity.this, Paradigm.COLOR);
+                TrainingActivity.startActivity(MainActivity.this, ParadigmType.COLOR);
             }
         });
 
