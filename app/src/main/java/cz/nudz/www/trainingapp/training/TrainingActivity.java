@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.j256.ormlite.dao.RuntimeExceptionDao;
-
 import java.util.Date;
 import java.util.List;
 
@@ -24,11 +22,10 @@ import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.database.TrainingSessionRepository;
+import cz.nudz.www.trainingapp.database.TrainingRepository;
 import cz.nudz.www.trainingapp.database.tables.Paradigm;
 import cz.nudz.www.trainingapp.database.tables.Sequence;
 import cz.nudz.www.trainingapp.database.tables.TrainingSession;
-import cz.nudz.www.trainingapp.database.tables.User;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
@@ -47,12 +44,14 @@ public class TrainingActivity extends AppCompatActivity implements
     private String username;
     private TrainingApp applicationContext;
     private TrainingAppDbHelper dbHelper;
+    private TrainingRepository trainingRepository;
 
     private ParadigmType currentParadigmType;
     private Difficulty currentDifficulty = Difficulty.ONE;
     private TrainingSession currentSession;
     private Paradigm currentParadigm;
     private Sequence currentSequence;
+    private Date paradigmPauseStartTime;
 
     public static void startActivity(Context context, @NonNull ParadigmType paradigmType) {
         Intent intent = new Intent(context, TrainingActivity.class);
@@ -72,6 +71,7 @@ public class TrainingActivity extends AppCompatActivity implements
 
         applicationContext = (TrainingApp) getApplicationContext();
         dbHelper = applicationContext.getDbHelper();
+        trainingRepository = new TrainingRepository(this, dbHelper);
 
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         // TODO: Each session/paradigm starts with lowest difficulty.
@@ -125,8 +125,8 @@ public class TrainingActivity extends AppCompatActivity implements
     @Override
     public void startTraining() {
         try {
-            currentSession = initTainingSession();
-            currentParadigm = initParadigm(currentSession);
+            currentSession = trainingRepository.startAndStoreTrainingSession(username);
+            currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
             nextSequence();
         } catch (LoginException e) {
             Log.e(TrainingActivity.class.getSimpleName(), e.getMessage());
@@ -137,26 +137,6 @@ public class TrainingActivity extends AppCompatActivity implements
                     LoginActivity.startActivity(TrainingActivity.this);
                 }
             }, 3000);
-        }
-    }
-
-    private Paradigm initParadigm(TrainingSession trainingSession) {
-        RuntimeExceptionDao<Paradigm, Integer> paradigmDao = dbHelper.getParadigmDao();
-        Paradigm paradigm = new Paradigm();
-        paradigm.setTrainingSession(trainingSession);
-        paradigm.setStartDate(new Date());
-        paradigm.setParadigmType(currentParadigmType);
-        paradigmDao.create(paradigm);
-        return paradigm;
-    }
-
-    private TrainingSession initTainingSession() throws LoginException {
-        RuntimeExceptionDao<User, String> userDao = dbHelper.getUserDao();
-        User user = userDao.queryForId(username);
-        if (user == null) {
-            throw new LoginException("User is not logged in yet on training screen!");
-        } else {
-            return new TrainingSessionRepository(this, dbHelper).createTrainingSession(user);
         }
     }
 
@@ -176,6 +156,10 @@ public class TrainingActivity extends AppCompatActivity implements
             nextSequence();
         }
         else if (isParadigmFinished()) {
+            long paradigmPauseDuration = (new Date()).getTime() - paradigmPauseStartTime.getTime();
+            currentParadigm.setPauseDurationMillis(paradigmPauseDuration);
+            trainingRepository.updateParadigm(currentParadigm);
+
             nextParadigm();
         }
     }
@@ -183,6 +167,7 @@ public class TrainingActivity extends AppCompatActivity implements
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
         sequenceCount += 1;
+        trainingRepository.finishAndUpdateSequence(currentSequence);
 
         if (sequenceCount < SEQUENCE_COUNT) {
             Difficulty newDifficulty = TrainingUtils.adjustDifficulty(answers, currentDifficulty);
@@ -190,8 +175,7 @@ public class TrainingActivity extends AppCompatActivity implements
             if (newDifficulty != null) {
                 if (newDifficulty.ordinal() > currentDifficulty.ordinal()) {
                     adjustment = Adjustment.RAISED;
-                }
-                else if (newDifficulty.ordinal() < currentDifficulty.ordinal()) {
+                } else if (newDifficulty.ordinal() < currentDifficulty.ordinal()) {
                     adjustment = Adjustment.LOWERED;
                 }
                 currentDifficulty = newDifficulty;
@@ -200,9 +184,11 @@ public class TrainingActivity extends AppCompatActivity implements
             }
             showFragment(PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
         } else if (isTrainingFinished()) {
+            trainingRepository.finishAndUpdateSession(currentSession);
             // TODO: handle end of training..
-
         } else if (isParadigmFinished()) {
+            trainingRepository.finishAndUpdateParadigm(currentParadigm);
+            paradigmPauseStartTime = new Date();
             // next cannot be null because end of training is handled above..
             showFragment(PauseFragment.newInstance(TrainingApp.nextParadigm(currentParadigmType), null), PauseFragment.TAG);
         }
@@ -223,21 +209,11 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void nextSequence() {
-        currentSequence = initSequence();
+        currentSequence = trainingRepository.startAndStoreSequence(currentParadigm, currentDifficulty);
 
         showFragment(SequenceFragment.newInstance(currentParadigmType, currentDifficulty), SequenceFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
-    }
-
-    private Sequence initSequence() {
-        RuntimeExceptionDao<Sequence, Integer> sequenceDao = dbHelper.getSequenceDao();
-        Sequence sequence = new Sequence();
-        sequence.setParadigm(currentParadigm);
-        sequence.setStartDate(new Date());
-        sequence.setDifficulty(currentDifficulty);
-        sequenceDao.create(sequence);
-        return sequence;
     }
 
     private void nextParadigm() {

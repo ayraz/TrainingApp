@@ -26,7 +26,7 @@ public class Sequence {
     @DatabaseField(canBeNull = false)
     private Date startDate;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     private Date endDate;
 
     public Sequence() {};

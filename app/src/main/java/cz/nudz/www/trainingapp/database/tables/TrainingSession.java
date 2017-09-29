@@ -18,7 +18,7 @@ public class TrainingSession {
     @DatabaseField(canBeNull = false)
     private Date startDate;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     private Date endDate;
 
     @DatabaseField(canBeNull = false)

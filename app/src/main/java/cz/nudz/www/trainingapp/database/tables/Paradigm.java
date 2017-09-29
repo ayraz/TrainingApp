@@ -26,14 +26,11 @@ public class Paradigm {
     @DatabaseField(canBeNull = false)
     private Date startDate;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     private Date endDate;
 
     @DatabaseField
-    private Date pauseStartDate;
-
-    @DatabaseField
-    private Date pauseEndDate;
+    private long pauseDurationMillis;
 
     public Paradigm() {};
 
@@ -77,19 +74,12 @@ public class Paradigm {
         this.endDate = endDate;
     }
 
-    public Date getPauseStartDate() {
-        return pauseStartDate;
+    public long getPauseDurationMillis() {
+        return pauseDurationMillis;
     }
 
-    public void setPauseStartDate(Date pauseStartDate) {
-        this.pauseStartDate = pauseStartDate;
+    public void setPauseDurationMillis(long pauseDurationMillis) {
+        this.pauseDurationMillis = pauseDurationMillis;
     }
 
-    public Date getPauseEndDate() {
-        return pauseEndDate;
-    }
-
-    public void setPauseEndDate(Date pauseEndDate) {
-        this.pauseEndDate = pauseEndDate;
-    }
 }

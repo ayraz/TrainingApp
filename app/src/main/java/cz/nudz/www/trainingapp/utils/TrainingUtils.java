@@ -116,6 +116,12 @@ public class TrainingUtils {
         }
     }
 
+    public static void enableViews(boolean enable, View... views) {
+        for (View v : views) {
+            v.setEnabled(enable);
+        }
+    }
+
     public static boolean isNullOrEmpty(String text) {
         return (text == null
                 || text.isEmpty()

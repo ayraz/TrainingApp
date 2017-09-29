@@ -23,7 +23,7 @@ public class TrialAnswer {
     private boolean isChangingTrial;
 
     @DatabaseField(canBeNull = false)
-    private int responseTimeMillis;
+    private long responseTimeMillis;
 
     public TrialAnswer() {};
 
@@ -51,11 +51,11 @@ public class TrialAnswer {
         isCorrect = correct;
     }
 
-    public int getResponseTimeMillis() {
+    public long getResponseTimeMillis() {
         return responseTimeMillis;
     }
 
-    public void setResponseTimeMillis(int responseTimeMillis) {
+    public void setResponseTimeMillis(long responseTimeMillis) {
         this.responseTimeMillis = responseTimeMillis;
     }
 

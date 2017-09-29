@@ -20,6 +20,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
@@ -143,6 +144,7 @@ public abstract class SequenceFragment extends Fragment {
         // recursive loop counter
         private int count = 0;
         private Trial currentTrial;
+        private Date responseStartTime;
 
         @Override
         public void run() {
@@ -170,21 +172,19 @@ public abstract class SequenceFragment extends Fragment {
 
                 currentTrial = new Trial(difficulty);
 
-                // user answer handlers have to be set trial-wise
+                TrainingUtils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                    // user answer handlers have to be set trial-wise
                 binding.trainingFragmentSameBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        answers.add(!currentTrial.isChanging());
-                        // allow only one answer
-                        handleAnswerSubmission();
+                        handleAnswerSubmission(!currentTrial.isChanging());
                     }
                 });
 
                 binding.trainingFragmentDifferentBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        answers.add(currentTrial.isChanging());
-                        handleAnswerSubmission();
+                        handleAnswerSubmission(currentTrial.isChanging());
                     }
                 });
 
@@ -238,10 +238,9 @@ public abstract class SequenceFragment extends Fragment {
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
+                                                responseStartTime = new Date();
                                                 TrainingUtils.setViewsVisible(true, views);
-                                                TrainingUtils.setViewsVisible(true,
-                                                        binding.trainingFragmentSameBtn,
-                                                        binding.trainingFragmentDifferentBtn);
+                                                TrainingUtils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
 
                                                 // TRIAL END
                                                 handler.postDelayed(new Runnable() {
@@ -280,14 +279,19 @@ public abstract class SequenceFragment extends Fragment {
             });
         }
 
-        private void handleAnswerSubmission() {
+        private void handleAnswerSubmission(Boolean answer) {
+            // allow only one answer per trial
             disableAnswerBtns();
-            // TODO: handle millis response, consider storing cue side...
+            answers.add(answer);
+            // response time in millis
+            long trialResponseTime = (new Date()).getTime() - responseStartTime.getTime();
+
             RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao = parentActivity.getDbHelper().getTrialAnswerDao();
             TrialAnswer trialAnswer = new TrialAnswer();
             trialAnswer.setSequence(parentActivity.getCurrentSequence());
             trialAnswer.setCorrect(answers.get(answers.size() - 1));
             trialAnswer.setChangingTrial(currentTrial.isChanging());
+            trialAnswer.setResponseTimeMillis(trialResponseTime);
             trialAnswerDao.create(trialAnswer);
         }
 
