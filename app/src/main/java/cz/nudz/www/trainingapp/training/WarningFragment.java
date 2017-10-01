@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.databinding.WarningFragmentBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
@@ -130,7 +130,7 @@ public class WarningFragment extends Fragment {
     }
 
     private boolean isFirstParadigm() {
-        return TrainingApp.indexOfParadigm(currentParadigmType) == 0;
+        return ParadigmSet.indexOf(currentParadigmType) == 0;
     }
 
     public interface WarningFragmentListener {

@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
+import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.TrainingApp;
@@ -190,7 +191,7 @@ public class TrainingActivity extends AppCompatActivity implements
             trainingRepository.finishAndUpdateParadigm(currentParadigm);
             paradigmPauseStartTime = new Date();
             // next cannot be null because end of training is handled above..
-            showFragment(PauseFragment.newInstance(TrainingApp.nextParadigm(currentParadigmType), null), PauseFragment.TAG);
+            showFragment(PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null), PauseFragment.TAG);
         }
     }
 
@@ -201,7 +202,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private boolean isTrainingFinished() {
-        return TrainingApp.nextParadigm(currentParadigmType) == null;
+        return ParadigmSet.getNext(currentParadigmType) == null;
     }
 
     private boolean isParadigmFinished() {
@@ -217,7 +218,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void nextParadigm() {
-        ParadigmType next = TrainingApp.nextParadigm(currentParadigmType);
+        ParadigmType next = ParadigmSet.getNext(currentParadigmType);
         if (next != null) {
             // reset counter
             sequenceCount = 0;
