@@ -46,4 +46,6 @@
     <string name="createUserTitle">Vytvořit uživatele?</string>
     <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
     <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
+
+    <string name="selectParadigmTypeForTrialTitle">Vyberte si paradigmu pro vyzkoušení:</string>
 </resources>

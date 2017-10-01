@@ -24,14 +24,11 @@ public class MainActivity extends AppCompatActivity {
                 TrainingActivity.startActivity(MainActivity.this, ParadigmType.COLOR);
             }
         });
-
-        //
-        // EVENT HANDLERS
-        //
         binding.mainActivityTrialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                TrialSelectionFragment trialSelectionFragment = new TrialSelectionFragment();
+                trialSelectionFragment.show(getSupportFragmentManager(), "");
             }
         });
     }
