@@ -15,10 +15,10 @@ import cz.nudz.www.trainingapp.databinding.TutorialFragmentBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TutorialFragment#newInstance} factory method to
+ * Use the {@link TutorialImageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TutorialFragment extends Fragment {
+public class TutorialImageFragment extends Fragment {
 
     private static final String TUTORIAL_TOP_TEXT_ID = "param1";
     private static final String TUTORIAL_BOTTOM_TEXT_ID = "param2";
@@ -28,7 +28,7 @@ public class TutorialFragment extends Fragment {
     private TutorialFragmentBinding binding;
 
 
-    public TutorialFragment() {
+    public TutorialImageFragment() {
         // Required empty public constructor
     }
 
@@ -41,8 +41,8 @@ public class TutorialFragment extends Fragment {
      * @return A new instance of fragment TutorialFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TutorialFragment newInstance(@Nullable Integer topTextId, @Nullable Integer bottomTextId) {
-        TutorialFragment fragment = new TutorialFragment();
+    public static TutorialImageFragment newInstance(@Nullable Integer topTextId, @Nullable Integer bottomTextId) {
+        TutorialImageFragment fragment = new TutorialImageFragment();
         Bundle args = new Bundle();
 
         args.putInt(TUTORIAL_TOP_TEXT_ID, topTextId != null ? topTextId : 0);
@@ -64,7 +64,7 @@ public class TutorialFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_image_fragment, container, false);
 
         if (topTextId != null && !topTextId.equals(0))
             binding.tutorialFragmentTopText.setText(Html.fromHtml(getString(topTextId)));

@@ -11,6 +11,7 @@ import android.view.View;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
+import cz.nudz.www.trainingapp.training.ParadigmType;
 
 public class TutorialPagerActivity extends AppCompatActivity {
 
@@ -83,22 +84,8 @@ public class TutorialPagerActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new TutorialFragment().newInstance(
-                            (R.string.shapeParadigmStartHelp),
-                            (R.string.tutorialFragmentNextHelp));
-                case 1:
-                    return new TutorialFragment().newInstance(
-                            (R.string.tutorialFragmentCueHelp),
-                            (R.string.tutorialFragmentNextPreviousHelp));
-                case 2:
-                    return new TutorialFragment().newInstance(
-                            (R.string.tutorialFragmentSmallPause),
-                            (R.string.tutorialFragmentNextPreviousHelp));
-
-            }
-            return new TutorialFragment();
+            // TODO: remove hardcoded paradigm type
+            return TutorialFragmentFactory.createTutorialFragment(ParadigmType.SHAPE, position);
         }
 
         @Override
