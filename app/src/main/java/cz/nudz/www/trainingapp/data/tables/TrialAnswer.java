@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.database.tables;
+package cz.nudz.www.trainingapp.data.tables;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -16,8 +16,8 @@ public class TrialAnswer {
     @DatabaseField(canBeNull = false, foreign = true)
     private Sequence sequence;
 
-    @DatabaseField(canBeNull = false)
-    private boolean isCorrect;
+    @DatabaseField()
+    private Boolean isCorrect;
 
     @DatabaseField(canBeNull = false)
     private boolean isChangingTrial;
@@ -43,11 +43,11 @@ public class TrialAnswer {
         this.sequence = sequence;
     }
 
-    public boolean isCorrect() {
+    public Boolean isCorrect() {
         return isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
+    public void setCorrect(Boolean correct) {
         isCorrect = correct;
     }
 

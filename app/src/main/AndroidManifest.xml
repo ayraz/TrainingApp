@@ -23,7 +23,7 @@
             android:name=".training.TrainingActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|mcc|mnc"
             android:screenOrientation="landscape" />
-        <activity android:name=".training.LoginActivity">
+        <activity android:name=".LoginActivity">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->

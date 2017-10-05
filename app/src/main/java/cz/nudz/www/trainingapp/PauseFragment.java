@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,11 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.PauseFragmentBinding;
+import cz.nudz.www.trainingapp.training.ParadigmType;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
-import static cz.nudz.www.trainingapp.training.WarningFragment.KEY_DIFFICULTY_STATE;
 
 public class PauseFragment extends DialogFragment {
 
@@ -48,8 +47,8 @@ public class PauseFragment extends DialogFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.pause_fragment, container, false);
 
         currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
-        if (getArguments().containsKey(KEY_DIFFICULTY_STATE)) {
-            adjustment = Adjustment.valueOf(getArguments().getString(KEY_DIFFICULTY_STATE));
+        if (getArguments().containsKey(WarningFragment.KEY_DIFFICULTY_STATE)) {
+            adjustment = Adjustment.valueOf(getArguments().getString(WarningFragment.KEY_DIFFICULTY_STATE));
             isSequencePause = true;
         } else {
             isSequencePause = false;

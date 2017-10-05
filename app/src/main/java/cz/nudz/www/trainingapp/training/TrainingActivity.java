@@ -18,15 +18,20 @@ import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
+import cz.nudz.www.trainingapp.Adjustment;
+import cz.nudz.www.trainingapp.CountDownFragment;
+import cz.nudz.www.trainingapp.LoginActivity;
 import cz.nudz.www.trainingapp.ParadigmSet;
+import cz.nudz.www.trainingapp.PauseFragment;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.TrainingApp;
-import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.database.TrainingRepository;
-import cz.nudz.www.trainingapp.database.tables.Paradigm;
-import cz.nudz.www.trainingapp.database.tables.Sequence;
-import cz.nudz.www.trainingapp.database.tables.TrainingSession;
+import cz.nudz.www.trainingapp.WarningFragment;
+import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
+import cz.nudz.www.trainingapp.data.TrainingRepository;
+import cz.nudz.www.trainingapp.data.tables.Paradigm;
+import cz.nudz.www.trainingapp.data.tables.Sequence;
+import cz.nudz.www.trainingapp.data.tables.TrainingSession;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
@@ -83,12 +88,6 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onDestroy() {
-        applicationContext.releaseHelper();
-        super.onDestroy();
-    }
-
-    @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.quitTrainingDialogTitle)
@@ -137,7 +136,7 @@ public class TrainingActivity extends AppCompatActivity implements
                 public void run() {
                     LoginActivity.startActivity(TrainingActivity.this);
                 }
-            }, 3000);
+            }, 2500);
         }
     }
 

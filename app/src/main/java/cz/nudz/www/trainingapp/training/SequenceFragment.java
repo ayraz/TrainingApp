@@ -24,12 +24,13 @@ import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.database.tables.TrialAnswer;
+import cz.nudz.www.trainingapp.Trial;
+import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
 import cz.nudz.www.trainingapp.databinding.SequenceFragmentBinding;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
-import static cz.nudz.www.trainingapp.training.Side.LEFT;
+import static cz.nudz.www.trainingapp.Side.LEFT;
 
 public abstract class SequenceFragment extends Fragment {
 

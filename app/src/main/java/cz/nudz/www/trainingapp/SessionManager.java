@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import cz.nudz.www.trainingapp.training.LoginActivity;
-
 /**
  * Created by artem on 21-Sep-17.
  */

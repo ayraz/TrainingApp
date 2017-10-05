@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
 /**
  * Created by artem on 09-Jul-17.

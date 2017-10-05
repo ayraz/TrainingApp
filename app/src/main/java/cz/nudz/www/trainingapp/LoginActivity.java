@@ -1,7 +1,6 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,14 +10,8 @@ import android.view.View;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import java.sql.SQLException;
-
-import cz.nudz.www.trainingapp.MainActivity;
-import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.SessionManager;
-import cz.nudz.www.trainingapp.TrainingApp;
-import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.database.tables.User;
+import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
+import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 import cz.nudz.www.trainingapp.utils.YesNoDialogFragment;

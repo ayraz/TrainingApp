@@ -6,12 +6,8 @@ import android.content.Context;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 
 /**
  * Created by artem on 12-Sep-17.

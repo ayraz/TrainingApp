@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.database.tables;
+package cz.nudz.www.trainingapp.data.tables;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

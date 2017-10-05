@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
 
 import android.content.Context;
@@ -12,9 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.nudz.www.trainingapp.ParadigmSet;
-import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.WarningFragmentBinding;
+import cz.nudz.www.trainingapp.training.ParadigmType;
 import cz.nudz.www.trainingapp.utils.TrainingUtils;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;

@@ -1,6 +1,6 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
-import cz.nudz.www.trainingapp.training.Side;
+import cz.nudz.www.trainingapp.training.Difficulty;
 
 /**
  * Created by artem on 05-Jun-17.

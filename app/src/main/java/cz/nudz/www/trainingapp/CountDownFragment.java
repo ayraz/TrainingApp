@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.CountDownFragmentBinding;
 
 public class CountDownFragment extends DialogFragment {
@@ -44,7 +43,7 @@ public class CountDownFragment extends DialogFragment {
             throw new IllegalStateException("Count down type must be set.");
         int millisToCountDown = getArguments().getInt(KEY_COUNT_DOWN_MILLIS);
 
-        // TODO: if this fragment is every reused in activity which is not locked to landscape, handle fragment rotation.
+        // TODO: if this fragment is ever reused in activity which is not locked to landscape, handle fragment rotation.
         // Start countdown
         countDownTimer = new CountDownTimer(millisToCountDown, 1000) {
             @Override
