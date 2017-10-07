@@ -1,5 +1,7 @@
 package cz.nudz.www.trainingapp.tutorial;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +22,11 @@ public class TutorialPagerActivity extends AppCompatActivity {
     private ViewPager pager;
     private TutorialPagerAdapter pagerAdapter;
     private TutorialPagerActivityBinding binding;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, TutorialPagerActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

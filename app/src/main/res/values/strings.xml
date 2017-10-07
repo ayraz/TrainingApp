@@ -7,10 +7,12 @@
     <string name="tutorialFragmentNextHelp">Pro pokračování na instrukce stiskněte šipku.</string>
     <string name="tutorialFragmentNextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>
     <string name="tutorialFragmentCueHelp">Šipka určuje stranu pro zapamatování tvaru podnětů na daných pozicích.</string>
-    <string name="tutorialFragmentSmallPause">Krátká pauza.</string>
+    <string name="tutorialFragmentShortPause">Krátká pauza.</string>
+    <string name="tutorialFragmentLongerPause">Delší pauza.</string>
     <string name="tutorialFragmentMemorizeHelp">Snažte si zapamatovat tvary podnětů na daných pozicích a straně určené šipkou.</string>
     <string name="tutorialFragmentIdentificationHelp"><b>Identifikace změny</b> – stejné či rozdílné?</string>
-    <string name="tutorialFragmentIntertrialPauseHelp">Pauza – krátký odpočinek před dalším úkolem.</string>
+    <string name="tutorialFragmentInterTrialPauseHelp">Pauza – krátký odpočinek před dalším úkolem.</string>
+    <string name="tutorialFragmentNowYouTryMessage"><![CDATA[<b>NYNÍ, KDYŽ UŽ VÍTE, JAK NA TO,\nMŮŽETE SI VYZKOUŠET PÁR ZÁCVIČNÝCH ÚKOLŮ</b>]]></string>
 
     <string name="tutorialActivityNextBtnText">Další</string>
     <string name="tutorialActivityPrevBtnText">Předchozí</string>

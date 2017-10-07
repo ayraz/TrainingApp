@@ -10,20 +10,84 @@ import cz.nudz.www.trainingapp.training.ParadigmType;
 public class TutorialFragmentFactory {
 
     public static TutorialImageFragment createTutorialFragment(ParadigmType type, int tutorialPosition) {
+        int drawableResId = 0;
         switch (tutorialPosition) {
+            // start help
             case 0:
                 return TutorialImageFragment.newInstance(
-                        (R.string.shapeParadigmStartHelp),
-                        (R.string.tutorialFragmentNextHelp));
+                        R.string.shapeParadigmStartHelp,
+                        R.string.tutorialFragmentNextHelp,
+                        null);
+            // cue help
             case 1:
+                switch (type) {
+                    case SHAPE:
+                        drawableResId = R.drawable.test_pic_cue;
+                        break;
+                    case COLOR:
+                        break;
+                    case POSITION:
+                        break;
+                }
                 return TutorialImageFragment.newInstance(
-                        (R.string.tutorialFragmentCueHelp),
-                        (R.string.tutorialFragmentNextPreviousHelp));
+                        R.string.tutorialFragmentCueHelp,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        drawableResId);
+            // short pause
             case 2:
                 return TutorialImageFragment.newInstance(
-                        (R.string.tutorialFragmentSmallPause),
-                        (R.string.tutorialFragmentNextPreviousHelp));
-
+                        R.string.tutorialFragmentShortPause,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.drawable.test_pic_pause);
+            // memory help
+            case 3:
+                switch (type) {
+                    case SHAPE:
+                        drawableResId = R.drawable.test_pic_items;
+                        break;
+                    case COLOR:
+                        break;
+                    case POSITION:
+                        break;
+                }
+                return TutorialImageFragment.newInstance(
+                        R.string.tutorialFragmentMemorizeHelp,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        drawableResId
+                );
+            // longer pause
+            case 4:
+                return TutorialImageFragment.newInstance(
+                        R.string.tutorialFragmentLongerPause,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.drawable.test_pic_pause);
+            // change detection
+            case 5:
+                switch (type) {
+                    case SHAPE:
+                        drawableResId = R.drawable.test_pic_change;
+                        break;
+                    case COLOR:
+                        break;
+                    case POSITION:
+                        break;
+                }
+                return TutorialImageFragment.newInstance(
+                        R.string.tutorialFragmentIdentificationHelp,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        drawableResId);
+            // inter-trial pause
+            case 6:
+                return TutorialImageFragment.newInstance(
+                        R.string.tutorialFragmentInterTrialPauseHelp,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.drawable.test_pic_pause);
+            // now you try
+            case 7:
+                return TutorialImageFragment.newInstance(
+                        R.string.tutorialFragmentNowYouTryMessage,
+                        R.string.tutorialFragmentNextPreviousHelp,
+                        null);
         }
         return new TutorialImageFragment();
     }

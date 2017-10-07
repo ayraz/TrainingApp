@@ -2,7 +2,9 @@ package cz.nudz.www.trainingapp.tutorial;
 
 
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -11,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.databinding.TutorialFragmentBinding;
+import cz.nudz.www.trainingapp.databinding.TutorialImageFragmentBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,13 +22,14 @@ import cz.nudz.www.trainingapp.databinding.TutorialFragmentBinding;
  */
 public class TutorialImageFragment extends Fragment {
 
-    private static final String TUTORIAL_TOP_TEXT_ID = "param1";
-    private static final String TUTORIAL_BOTTOM_TEXT_ID = "param2";
+    private static final String TUTORIAL_TOP_TEXT_ID = "TUTORIAL_TOP_TEXT_ID";
+    private static final String TUTORIAL_BOTTOM_TEXT_ID = "TUTORIAL_BOTTOM_TEXT_ID";
+    private static final String TUTORIAL_DRAWABLE_ID = "TUTORIAL_DRAWABLE_ID";
 
-    private Integer topTextId;
-    private Integer bottomTextId;
-    private TutorialFragmentBinding binding;
-
+    private int topTextId;
+    private int bottomTextId;
+    private Integer drawableId;
+    private TutorialImageFragmentBinding binding;
 
     public TutorialImageFragment() {
         // Required empty public constructor
@@ -36,17 +39,24 @@ public class TutorialImageFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param topTextId Parameter 1.
-     * @param bottomTextId Parameter 2.
+     * @param topTextId Must be a valid string id.
+     * @param bottomTextId Must be a valid string id.
+     * @param drawableId Optional center image drawable resource id.
      * @return A new instance of fragment TutorialFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TutorialImageFragment newInstance(@Nullable Integer topTextId, @Nullable Integer bottomTextId) {
+    public static TutorialImageFragment newInstance(
+            int topTextId,
+            int bottomTextId,
+            @Nullable Integer drawableId) {
+
         TutorialImageFragment fragment = new TutorialImageFragment();
         Bundle args = new Bundle();
 
-        args.putInt(TUTORIAL_TOP_TEXT_ID, topTextId != null ? topTextId : 0);
-        args.putInt(TUTORIAL_BOTTOM_TEXT_ID, bottomTextId != null ? bottomTextId : 0);
+        args.putInt(TUTORIAL_TOP_TEXT_ID, topTextId);
+        args.putInt(TUTORIAL_BOTTOM_TEXT_ID, bottomTextId);
+        if (drawableId != null)
+            args.putInt(TUTORIAL_DRAWABLE_ID, drawableId);
 
         fragment.setArguments(args);
         return fragment;
@@ -55,9 +65,10 @@ public class TutorialImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            topTextId = getArguments().getInt(TUTORIAL_TOP_TEXT_ID);
-            bottomTextId = getArguments().getInt(TUTORIAL_BOTTOM_TEXT_ID);
+        topTextId = getArguments().getInt(TUTORIAL_TOP_TEXT_ID);
+        bottomTextId = getArguments().getInt(TUTORIAL_BOTTOM_TEXT_ID);
+        if (getArguments().containsKey(TUTORIAL_DRAWABLE_ID)){
+            drawableId = getArguments().getInt(TUTORIAL_DRAWABLE_ID);
         }
     }
 
@@ -66,10 +77,14 @@ public class TutorialImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_image_fragment, container, false);
 
-        if (topTextId != null && !topTextId.equals(0))
-            binding.tutorialFragmentTopText.setText(Html.fromHtml(getString(topTextId)));
-        if (bottomTextId != null && !bottomTextId.equals(0))
-            binding.tutorialFragmentBottomText.setText(Html.fromHtml(getString(bottomTextId)));
+        binding.tutorialFragmentTopText.setText(Html.fromHtml(getString(topTextId)));
+        binding.tutorialFragmentBottomText.setText(Html.fromHtml(getString(bottomTextId)));
+        if (drawableId != null && !drawableId.equals(0)) {
+            Drawable drawable = getResources().getDrawable(drawableId);
+            binding.tutorialFragmentImage.setImageDrawable(drawable);
+        } else {
+            binding.tutorialFragmentImage.setVisibility(View.GONE);
+        }
 
         return binding.getRoot();
     }
