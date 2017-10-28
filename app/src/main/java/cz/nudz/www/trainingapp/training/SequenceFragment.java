@@ -312,7 +312,7 @@ public abstract class SequenceFragment extends Fragment {
                 trialAnswer.setSequence(parentActivity.getCurrentSequence());
                 trialAnswer.setCorrect(answers.get(answers.size() - 1));
                 trialAnswer.setChangingTrial(currentTrial.isChanging());
-                trialAnswer.setResponseTimeMillis(trialResponseTime);
+                trialAnswer.setResponseTimeMillis(answer != null ? trialResponseTime : null);
                 trialAnswerDao.create(trialAnswer);
             }
         }

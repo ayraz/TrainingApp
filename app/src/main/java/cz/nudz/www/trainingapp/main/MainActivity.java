@@ -2,16 +2,17 @@ package cz.nudz.www.trainingapp.main;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
-import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.training.TrainingActivity;
+import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
 import cz.nudz.www.trainingapp.tutorial.TutorialPagerActivity;
 
 public class MainActivity extends BaseActivity {
@@ -22,8 +23,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export_data:
-                DataExporter dataExporter = new DataExporter(this);
-                dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
+                DataExporter.verifyStoragePermissions(this);
                 return true;
             case R.id.action_logout:
                 getSessionManager().logoutUser();
@@ -49,7 +49,10 @@ public class MainActivity extends BaseActivity {
         binding.mainActivityTrainingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            // Check for user immediately as we cannot do anything in training without one.
+            if (getSessionManager().checkLogin()) {
                 TrainingActivity.startActivity(MainActivity.this, ParadigmType.COLOR);
+            }
             }
         });
 
@@ -67,5 +70,12 @@ public class MainActivity extends BaseActivity {
                 trialSelectionFragment.show(getSupportFragmentManager(), "");
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        DataExporter dataExporter = new DataExporter(this);
+        dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
     }
 }

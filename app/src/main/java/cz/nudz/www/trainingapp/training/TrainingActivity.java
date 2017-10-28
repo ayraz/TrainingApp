@@ -4,22 +4,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
-import android.util.Log;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.security.auth.login.LoginException;
-
-import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.CountDownFragment;
-import cz.nudz.www.trainingapp.LoginActivity;
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.PauseFragment;
 import cz.nudz.www.trainingapp.R;
@@ -31,6 +25,7 @@ import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
+import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.main.BaseActivity;
@@ -69,10 +64,8 @@ public class TrainingActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-        getSessionManager().checkLogin();
         username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
         trainingRepository = new TrainingRepository(this, getDbHelper());
-
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         // TODO: Each session/paradigm starts with lowest difficulty.
         showFragment(WarningFragment.newInstance(currentParadigmType, null), WarningFragment.TAG);
@@ -118,20 +111,9 @@ public class TrainingActivity extends BaseActivity implements
 
     @Override
     public void startTraining() {
-        try {
-            currentSession = trainingRepository.startAndStoreTrainingSession(username);
-            currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
-            nextSequence();
-        } catch (LoginException e) {
-            Log.e(TrainingActivity.class.getSimpleName(), e.getMessage());
-            Utils.showErrorDialog(this, null, getString(R.string.errorNotLoggedIn));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    LoginActivity.startActivity(TrainingActivity.this);
-                }
-            }, 2500);
-        }
+        currentSession = trainingRepository.startAndStoreTrainingSession(username);
+        currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
+        nextSequence();
     }
 
     @Override

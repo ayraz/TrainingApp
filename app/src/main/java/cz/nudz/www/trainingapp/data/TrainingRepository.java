@@ -6,8 +6,6 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.Date;
 
-import javax.security.auth.login.LoginException;
-
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
@@ -37,18 +35,14 @@ public class TrainingRepository {
         this.trainingSessionDao = dbHelper.getTrainingSessionDao();
     }
 
-    public TrainingSession startAndStoreTrainingSession(String username) throws LoginException {
+    public TrainingSession startAndStoreTrainingSession(String username) {
         User user = userDao.queryForId(username);
-        if (user == null) {
-            throw new LoginException("User is not logged in yet on training screen!");
-        } else {
-            TrainingSession trainingSession = new TrainingSession();
-            trainingSession.setUser(user);
-            trainingSession.setStartDate(new Date());
-            trainingSession.setFinished(false);
-            trainingSessionDao.create(trainingSession);
-            return trainingSession;
-        }
+        TrainingSession trainingSession = new TrainingSession();
+        trainingSession.setUser(user);
+        trainingSession.setStartDate(new Date());
+        trainingSession.setFinished(false);
+        trainingSessionDao.create(trainingSession);
+        return trainingSession;
     }
 
     public void updateParadigm(Paradigm paradigm) {
@@ -74,7 +68,7 @@ public class TrainingRepository {
         Sequence sequence = new Sequence();
         sequence.setParadigm(paradigm);
         sequence.setStartDate(new Date());
-        sequence.setDifficulty(difficulty);
+        sequence.setDifficulty(Difficulty.toInteger(difficulty));
         sequenceDao.create(sequence);
         return sequence;
     }

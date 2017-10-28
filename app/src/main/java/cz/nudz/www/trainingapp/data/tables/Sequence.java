@@ -5,8 +5,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-import cz.nudz.www.trainingapp.enums.Difficulty;
-
 /**
  * Created by artem on 21-Sep-17.
  */
@@ -21,7 +19,7 @@ public class Sequence {
     private Paradigm paradigm;
 
     @DatabaseField(canBeNull = false)
-    private Difficulty difficulty;
+    private int difficulty;
 
     @DatabaseField(canBeNull = false)
     private Date startDate;
@@ -47,11 +45,16 @@ public class Sequence {
         this.paradigm = paradigm;
     }
 
-    public Difficulty getDifficulty() {
+    /**
+     *
+     * @return One-based*
+     * difficulty integer.
+     */
+    public int getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
+    public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
 

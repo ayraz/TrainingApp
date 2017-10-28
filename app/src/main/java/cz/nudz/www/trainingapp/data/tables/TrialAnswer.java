@@ -22,8 +22,11 @@ public class TrialAnswer {
     @DatabaseField(canBeNull = false)
     private boolean isChangingTrial;
 
-    @DatabaseField(canBeNull = false)
-    private long responseTimeMillis;
+    /**
+     * Null when left unanswered by user.
+     */
+    @DatabaseField()
+    private Long responseTimeMillis;
 
     public TrialAnswer() {};
 
@@ -51,11 +54,11 @@ public class TrialAnswer {
         isCorrect = correct;
     }
 
-    public long getResponseTimeMillis() {
+    public Long getResponseTimeMillis() {
         return responseTimeMillis;
     }
 
-    public void setResponseTimeMillis(long responseTimeMillis) {
+    public void setResponseTimeMillis(Long responseTimeMillis) {
         this.responseTimeMillis = responseTimeMillis;
     }
 
