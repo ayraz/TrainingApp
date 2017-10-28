@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 /**
  * Created by artem on 01-Oct-17.

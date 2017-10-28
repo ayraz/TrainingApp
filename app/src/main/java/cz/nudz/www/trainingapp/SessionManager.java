@@ -77,5 +77,4 @@ public class SessionManager {
     private void redirectToLogin() {
         LoginActivity.startActivity(context);
     }
-
 }

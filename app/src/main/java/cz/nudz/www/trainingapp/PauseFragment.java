@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.databinding.PauseFragmentBinding;
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.enums.Adjustment;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 

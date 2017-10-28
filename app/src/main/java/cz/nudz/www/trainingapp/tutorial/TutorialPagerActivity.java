@@ -7,15 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.main.BaseActivity;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
-public class TutorialPagerActivity extends AppCompatActivity {
+public class TutorialPagerActivity extends BaseActivity {
 
     private static final int PAGE_COUNT = 8;
 

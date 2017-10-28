@@ -27,10 +27,12 @@ import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.Trial;
 import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
 import cz.nudz.www.trainingapp.databinding.SequenceFragmentBinding;
+import cz.nudz.www.trainingapp.enums.Difficulty;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
-import cz.nudz.www.trainingapp.utils.TrainingUtils;
+import cz.nudz.www.trainingapp.utils.Utils;
 
-import static cz.nudz.www.trainingapp.Side.LEFT;
+import static cz.nudz.www.trainingapp.enums.Side.LEFT;
 
 public abstract class SequenceFragment extends Fragment {
 
@@ -132,7 +134,7 @@ public abstract class SequenceFragment extends Fragment {
                 binding.trainingFragmentRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 // Adjustment may change on per-sequence basis
-                totalStimCount = TrainingUtils.getStimCount(difficulty);
+                totalStimCount = Utils.getStimCount(difficulty);
                 halfStimCount = totalStimCount / 2;
 
                 // Grids on both sides are identical so use whatever.
@@ -141,7 +143,7 @@ public abstract class SequenceFragment extends Fragment {
                         binding.trainingFragmentLeftGrid.getWidth(),
                         binding.trainingFragmentLeftGrid.getHeight());
 
-                cellSize = TrainingUtils.optimalContainingSquareSize(gridSize, gridSize, halfStimCount);
+                cellSize = Utils.optimalContainingSquareSize(gridSize, gridSize, halfStimCount);
                 // each cell can contain 4 actual stimuli; this excess space is for 'pseudo-randomness'..
                 // simulated with padding inside the cell.
                 paddingStart = halfStimCount <= 4 ? DEFAULT_TRIAL_COUNT : DEFAULT_TRIAL_COUNT / 2;
@@ -189,7 +191,7 @@ public abstract class SequenceFragment extends Fragment {
 
                 currentTrial = new Trial(difficulty);
 
-                TrainingUtils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                Utils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
                     // user answer handlers have to be set trial-wise
                 binding.trainingFragmentSameBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -232,13 +234,13 @@ public abstract class SequenceFragment extends Fragment {
                             @Override
                             public void run() {
                                 final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                                TrainingUtils.setViewsVisible(true, views);
+                                Utils.setViewsVisible(true, views);
 
                                 // RETENTION INTERVAL
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        TrainingUtils.setViewsVisible(false, views);
+                                        Utils.setViewsVisible(false, views);
 
                                         if (currentTrial.isChanging()) {
                                             // pick random stim in cued grid
@@ -256,14 +258,14 @@ public abstract class SequenceFragment extends Fragment {
                                             @Override
                                             public void run() {
                                                 responseStartTime = new Date();
-                                                TrainingUtils.setViewsVisible(true, views);
-                                                TrainingUtils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                                                Utils.setViewsVisible(true, views);
+                                                Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
 
                                                 // TRIAL END
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        TrainingUtils.setViewsVisible(false, views);
+                                                        Utils.setViewsVisible(false, views);
                                                         
                                                         // insert null answer if user did not answer this trial
                                                         if (answers.size() == i)
@@ -322,7 +324,7 @@ public abstract class SequenceFragment extends Fragment {
             stimuli.add(new ArrayList<ImageView>(halfStimCount));
             stimuli.add(new ArrayList<ImageView>(halfStimCount));
 
-            final List<Rect> basePositions = TrainingUtils.generateGridPositions(gridSize, cellSize);
+            final List<Rect> basePositions = Utils.generateGridPositions(gridSize, cellSize);
             if (basePositions.size() < halfStimCount)
                 throw new IllegalStateException("The grid is too small for the number of stimuli.");
 
@@ -334,7 +336,7 @@ public abstract class SequenceFragment extends Fragment {
                 Collections.shuffle(gridPositions);
 
                 for (int j = 0; j < halfStimCount; ++j) {
-                    ImageView v = TrainingUtils.createStimView(getActivity());
+                    ImageView v = Utils.createStimView(getActivity());
                     stimuli.get(i).add(v);
 
                     FrameLayout container = new FrameLayout(getActivity());

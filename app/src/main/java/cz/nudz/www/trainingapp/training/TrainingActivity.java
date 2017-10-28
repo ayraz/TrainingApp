@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -18,14 +17,13 @@ import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
-import cz.nudz.www.trainingapp.Adjustment;
+import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.CountDownFragment;
 import cz.nudz.www.trainingapp.LoginActivity;
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.PauseFragment;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
-import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.WarningFragment;
 import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.data.TrainingRepository;
@@ -33,9 +31,12 @@ import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
-import cz.nudz.www.trainingapp.utils.TrainingUtils;
+import cz.nudz.www.trainingapp.enums.Difficulty;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.main.BaseActivity;
+import cz.nudz.www.trainingapp.utils.Utils;
 
-public class TrainingActivity extends AppCompatActivity implements
+public class TrainingActivity extends BaseActivity implements
         SequenceFragment.SequenceFragmentListener,
         CountDownFragment.CountDownListener,
         WarningFragment.WarningFragmentListener {
@@ -46,10 +47,7 @@ public class TrainingActivity extends AppCompatActivity implements
 
     private TrainingActivityBinding binding;
     private int sequenceCount = 0;
-    private SessionManager sessionManager;
     private String username;
-    private TrainingApp applicationContext;
-    private TrainingAppDbHelper dbHelper;
     private TrainingRepository trainingRepository;
 
     private ParadigmType currentParadigmType;
@@ -71,13 +69,9 @@ public class TrainingActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-        sessionManager = new SessionManager(this);
-        sessionManager.checkLogin();
-        username = sessionManager.getUserDetails().get(SessionManager.KEY_USERNAME);
-
-        applicationContext = (TrainingApp) getApplicationContext();
-        dbHelper = applicationContext.getDbHelper();
-        trainingRepository = new TrainingRepository(this, dbHelper);
+        getSessionManager().checkLogin();
+        username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
+        trainingRepository = new TrainingRepository(this, getDbHelper());
 
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         // TODO: Each session/paradigm starts with lowest difficulty.
@@ -130,7 +124,7 @@ public class TrainingActivity extends AppCompatActivity implements
             nextSequence();
         } catch (LoginException e) {
             Log.e(TrainingActivity.class.getSimpleName(), e.getMessage());
-            TrainingUtils.showErrorDialog(this, null, getString(R.string.errorNotLoggedIn));
+            Utils.showErrorDialog(this, null, getString(R.string.errorNotLoggedIn));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -170,7 +164,7 @@ public class TrainingActivity extends AppCompatActivity implements
         trainingRepository.finishAndUpdateSequence(currentSequence);
 
         if (sequenceCount < SEQUENCE_COUNT) {
-            Difficulty newDifficulty = TrainingUtils.adjustDifficulty(answers, currentDifficulty);
+            Difficulty newDifficulty = Utils.adjustDifficulty(answers, currentDifficulty);
             Adjustment adjustment = Adjustment.SAME;
             if (newDifficulty != null) {
                 if (newDifficulty.ordinal() > currentDifficulty.ordinal()) {
@@ -228,7 +222,7 @@ public class TrainingActivity extends AppCompatActivity implements
             // TODO remove after debug
             binding.paradigm.setText(currentParadigmType.toString());
         } else {
-            TrainingUtils.showErrorDialog(this, null, getString(R.string.errorNoParadigmsLeft));
+            Utils.showErrorDialog(this, null, getString(R.string.errorNoParadigmsLeft));
         }
     }
 
@@ -237,6 +231,6 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     public TrainingAppDbHelper getDbHelper() {
-        return dbHelper;
+        return getHelper();
     }
 }

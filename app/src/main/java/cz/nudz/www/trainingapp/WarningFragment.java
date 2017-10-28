@@ -13,8 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.databinding.WarningFragmentBinding;
-import cz.nudz.www.trainingapp.training.ParadigmType;
-import cz.nudz.www.trainingapp.utils.TrainingUtils;
+import cz.nudz.www.trainingapp.enums.Adjustment;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.utils.Utils;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
@@ -84,7 +85,7 @@ public class WarningFragment extends Fragment {
                 }
             });
         } else {
-            TrainingUtils.setViewsVisible(false,
+            Utils.setViewsVisible(false,
                     binding.warningFragmentWarning,
                     binding.warningFragmentGoBackBtn,
                     binding.warningFragmentStartTrainingBtn);

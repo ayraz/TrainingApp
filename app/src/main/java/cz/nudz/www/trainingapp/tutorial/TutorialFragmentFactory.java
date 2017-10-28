@@ -1,7 +1,7 @@
 package cz.nudz.www.trainingapp.tutorial;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 /**
  * Created by aa250602 on 10/5/17.
@@ -16,7 +16,7 @@ public class TutorialFragmentFactory {
             case 0:
                 return TutorialImageFragment.newInstance(
                         R.string.shapeParadigmStartHelp,
-                        R.string.tutorialFragmentNextHelp,
+                        R.string.nextHelp,
                         null);
             // cue help
             case 1:
@@ -30,14 +30,14 @@ public class TutorialFragmentFactory {
                         break;
                 }
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentCueHelp,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.cueHelp,
+                        R.string.nextPreviousHelp,
                         drawableResId);
             // short pause
             case 2:
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentShortPause,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.shortPause,
+                        R.string.nextPreviousHelp,
                         R.drawable.test_pic_pause);
             // memory help
             case 3:
@@ -51,15 +51,15 @@ public class TutorialFragmentFactory {
                         break;
                 }
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentMemorizeHelp,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.memorizeHelp,
+                        R.string.nextPreviousHelp,
                         drawableResId
                 );
             // longer pause
             case 4:
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentLongerPause,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.longerPause,
+                        R.string.nextPreviousHelp,
                         R.drawable.test_pic_pause);
             // change detection
             case 5:
@@ -73,20 +73,20 @@ public class TutorialFragmentFactory {
                         break;
                 }
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentIdentificationHelp,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.identificationHelp,
+                        R.string.nextPreviousHelp,
                         drawableResId);
             // inter-trial pause
             case 6:
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentInterTrialPauseHelp,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.interTrialPauseHelp,
+                        R.string.nextPreviousHelp,
                         R.drawable.test_pic_pause);
             // now you try
             case 7:
                 return TutorialImageFragment.newInstance(
-                        R.string.tutorialFragmentNowYouTryMessage,
-                        R.string.tutorialFragmentNextPreviousHelp,
+                        R.string.nowYouTryMessage,
+                        R.string.nextPreviousHelp,
                         null);
         }
         return new TutorialImageFragment();

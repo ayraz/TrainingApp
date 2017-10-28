@@ -1,12 +1,10 @@
 package cz.nudz.www.trainingapp.utils;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,16 +12,13 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.training.Difficulty;
-import cz.nudz.www.trainingapp.training.SequenceFragment;
-import cz.nudz.www.trainingapp.training.TrainingActivity;
+import cz.nudz.www.trainingapp.enums.Difficulty;
 
 /**
  * Created by aa250602 on 14/9/2017.
  */
 
-public class TrainingUtils {
+public class Utils {
     public static List<Rect> generateGridPositions(int gridSize, int cellSize) {
         List<Rect> positions = new ArrayList<>();
         int col = 0;

@@ -6,9 +6,21 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="cz.nudz.www.trainingapp.MainActivity"
+        tools:context="cz.nudz.www.trainingapp.main.MainActivity"
         tools:layout_editor_absoluteY="89dp"
         tools:layout_editor_absoluteX="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <Button
             android:id="@+id/mainActivityTutorialBtn"
@@ -18,7 +30,7 @@
             app:layout_constraintLeft_toRightOf="@+id/mainActivityTrainingBtn"
             app:layout_constraintRight_toLeftOf="@+id/mainActivityTrialBtn"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/mainActivityTutorial" />
+            android:text="@string/tutorialBtnText" />
 
         <Button
             android:id="@+id/mainActivityTrialBtn"
@@ -28,13 +40,13 @@
             app:layout_constraintLeft_toRightOf="@+id/mainActivityTutorialBtn"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/mainActivityTrial" />
+            android:text="@string/trialBtnText" />
 
         <Button
             android:id="@+id/mainActivityTrainingBtn"
             android:layout_width="189dp"
             android:layout_height="wrap_content"
-            android:text="@string/mainActivityTraining"
+            android:text="@string/trainingBtnText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/mainActivityTutorialBtn"

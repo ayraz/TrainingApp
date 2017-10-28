@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.trial;
 
 
 import android.database.DataSetObserver;
@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cz.nudz.www.trainingapp.ParadigmSet;
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TrialSelectionFragmentBinding;
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 
 /**

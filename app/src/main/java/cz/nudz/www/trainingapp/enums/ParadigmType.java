@@ -1,4 +1,9 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp.enums;
+
+import cz.nudz.www.trainingapp.training.ColorParadigmFragment;
+import cz.nudz.www.trainingapp.training.PositionParadigmFragment;
+import cz.nudz.www.trainingapp.training.SequenceFragment;
+import cz.nudz.www.trainingapp.training.ShapeParadigmFragment;
 
 /**
  * Created by artem on 27-May-17.

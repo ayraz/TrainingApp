@@ -12,8 +12,8 @@ import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
 import cz.nudz.www.trainingapp.data.tables.User;
-import cz.nudz.www.trainingapp.training.Difficulty;
-import cz.nudz.www.trainingapp.training.ParadigmType;
+import cz.nudz.www.trainingapp.enums.Difficulty;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 /**
  * Created by artem on 26-Sep-17.

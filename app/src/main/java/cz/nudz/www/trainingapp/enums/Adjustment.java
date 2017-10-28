@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.enums;
 
 /**
  * Created by artem on 15-Sep-17.

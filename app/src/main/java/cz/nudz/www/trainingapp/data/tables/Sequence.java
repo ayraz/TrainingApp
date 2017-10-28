@@ -5,7 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-import cz.nudz.www.trainingapp.training.Difficulty;
+import cz.nudz.www.trainingapp.enums.Difficulty;
 
 /**
  * Created by artem on 21-Sep-17.

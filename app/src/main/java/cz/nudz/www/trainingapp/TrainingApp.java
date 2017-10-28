@@ -19,8 +19,6 @@ public class TrainingApp extends Application {
     // edit: made a weak reference to be sure.
     private static WeakReference<Context> context;
 
-    private TrainingAppDbHelper dbHelper;
-
     public static WeakReference<Context> getContext() {
         return context;
     }
@@ -29,19 +27,5 @@ public class TrainingApp extends Application {
     public void onCreate() {
         super.onCreate();
         TrainingApp.context = new WeakReference<Context>(this);
-    }
-
-    public TrainingAppDbHelper getDbHelper() {
-        if (dbHelper == null) {
-            dbHelper = OpenHelperManager.getHelper(this, TrainingAppDbHelper.class);
-        }
-        return dbHelper;
-    }
-
-    public void releaseHelper() {
-        if (dbHelper != null) {
-            OpenHelperManager.releaseHelper();
-            dbHelper = null;
-        }
     }
 }
