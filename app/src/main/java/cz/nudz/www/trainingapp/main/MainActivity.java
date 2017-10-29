@@ -3,17 +3,17 @@ package cz.nudz.www.trainingapp.main;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
+import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
-import cz.nudz.www.trainingapp.enums.ParadigmType;
-import cz.nudz.www.trainingapp.training.TrainingActivity;
-import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
-import cz.nudz.www.trainingapp.tutorial.TutorialPagerActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -45,31 +45,8 @@ public class MainActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
         setSupportActionBar(binding.appBar);
-
-        binding.mainActivityTrainingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            // Check for user immediately as we cannot do anything in training without one.
-            if (getSessionManager().checkLogin()) {
-                TrainingActivity.startActivity(MainActivity.this, ParadigmType.COLOR);
-            }
-            }
-        });
-
-        binding.mainActivityTutorialBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TutorialPagerActivity.startActivity(MainActivity.this);
-            }
-        });
-
-        binding.mainActivityTrialBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TrialSelectionFragment trialSelectionFragment = new TrialSelectionFragment();
-                trialSelectionFragment.show(getSupportFragmentManager(), "");
-            }
-        });
+        binding.viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
     @Override
@@ -78,4 +55,39 @@ public class MainActivity extends BaseActivity {
         DataExporter dataExporter = new DataExporter(this);
         dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
     }
+
+    private class SectionPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new ModeSelectionFragment();
+                case 1:
+                default:
+                    return new PerformanceSummaryFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.modeSelectionTitle);
+                case 1:
+                default:
+                    return getString(R.string.performanceSummaryTitle);
+            }
+        }
+    }
+
 }

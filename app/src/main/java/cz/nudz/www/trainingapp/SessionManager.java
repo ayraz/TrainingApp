@@ -6,7 +6,6 @@ import android.os.Handler;
 
 import java.util.HashMap;
 
-import cz.nudz.www.trainingapp.main.BaseActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 /**

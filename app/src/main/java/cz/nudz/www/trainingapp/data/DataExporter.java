@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.main;
+package cz.nudz.www.trainingapp.data;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -15,8 +15,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 /**

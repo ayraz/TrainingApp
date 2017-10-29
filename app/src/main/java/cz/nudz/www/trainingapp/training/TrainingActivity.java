@@ -28,7 +28,7 @@ import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
-import cz.nudz.www.trainingapp.main.BaseActivity;
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 public class TrainingActivity extends BaseActivity implements

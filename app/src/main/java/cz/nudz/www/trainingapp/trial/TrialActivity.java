@@ -12,7 +12,7 @@ import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TrialActivityBinding;
-import cz.nudz.www.trainingapp.main.BaseActivity;
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.training.SequenceFragment;

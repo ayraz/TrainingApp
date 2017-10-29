@@ -11,7 +11,6 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
-import cz.nudz.www.trainingapp.main.BaseActivity;
 import cz.nudz.www.trainingapp.main.MainActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
 import cz.nudz.www.trainingapp.utils.YesNoDialogFragment;

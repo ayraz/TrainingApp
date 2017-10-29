@@ -12,7 +12,7 @@ import android.view.View;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
-import cz.nudz.www.trainingapp.main.BaseActivity;
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 public class TutorialPagerActivity extends BaseActivity {

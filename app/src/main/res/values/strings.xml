@@ -42,4 +42,6 @@
     <string name="actionExportData">Export výcvikových údaju</string>
     <string name="logout">Odhlásit se</string>
     <string name="dataExportSuccess">Údaje byly úspěšně exportovány.</string>
+    <string name="modeSelectionTitle">Výběr Režimu</string>
+    <string name="performanceSummaryTitle">Přehled Výkonnosti</string>
 </resources>
