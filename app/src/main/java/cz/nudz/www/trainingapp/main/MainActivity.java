@@ -18,12 +18,15 @@ import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 public class MainActivity extends BaseActivity {
 
     private MainActivityBinding binding;
+    private DataExporter dataExporter;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export_data:
-                DataExporter.verifyStoragePermissions(this);
+                if (DataExporter.verifyStoragePermissions(this)) {
+                    dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
+                }
                 return true;
             case R.id.action_logout:
                 getSessionManager().logoutUser();
@@ -47,12 +50,13 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(binding.appBar);
         binding.viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+
+        dataExporter = new DataExporter(this);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        DataExporter dataExporter = new DataExporter(this);
         dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
     }
 

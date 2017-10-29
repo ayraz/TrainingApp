@@ -118,9 +118,10 @@ public class DataExporter {
      *
      * @param activity
      *
+     * @return Whether we have permission to write to external storage
      * @see <a href="https://stackoverflow.com/questions/8854359/exception-open-failed-eacces-permission-denied-on-android">details</a>
      */
-    public static void verifyStoragePermissions(AppCompatActivity activity) {
+    public static boolean verifyStoragePermissions(AppCompatActivity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -131,6 +132,8 @@ public class DataExporter {
                     PERMISSIONS_STORAGE,
                     REQUEST_EXTERNAL_STORAGE
             );
+            return false;
         }
+        return true;
     }
 }
