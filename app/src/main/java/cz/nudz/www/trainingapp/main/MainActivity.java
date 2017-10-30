@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_export_data:
                 if (DataExporter.verifyStoragePermissions(this)) {
-                    dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
+                    dataExporter.export(getSessionManager().getUsername());
                 }
                 return true;
             case R.id.action_logout:
@@ -51,13 +51,15 @@ public class MainActivity extends BaseActivity {
         binding.viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
+        // make sure we have a logged in user before we start exporting
+        getSessionManager().checkLogin();
         dataExporter = new DataExporter(this);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        dataExporter.export(getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME));
+        dataExporter.export(getSessionManager().getUsername());
     }
 
     private class SectionPagerAdapter extends FragmentPagerAdapter {

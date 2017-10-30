@@ -67,6 +67,7 @@ public class TrainingActivity extends BaseActivity implements
         username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
         trainingRepository = new TrainingRepository(this, getDbHelper());
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
+
         // TODO: Each session/paradigm starts with lowest difficulty.
         showFragment(WarningFragment.newInstance(currentParadigmType, null), WarningFragment.TAG);
 

@@ -1,10 +1,13 @@
 package cz.nudz.www.trainingapp.data;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
@@ -84,6 +87,39 @@ public class TrainingRepository {
         ts.setEndDate(new Date());
         ts.setFinished(true);
         trainingSessionDao.update(ts);
+    }
+
+    public List<SessionData> getParadigmSessionData(String username, ParadigmType paradigmType) {
+        Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username , " +
+                "ts.startDate, " +
+                "MAX(s.difficulty) AS maxDifficulty " +
+                "FROM User u " +
+                "JOIN TrainingSession ts ON ts.user_id = u.username " +
+                "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
+                "JOIN Sequence s ON s.paradigm_id = p.id " +
+                "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
+                "GROUP BY ts.id, ts.startDate " +
+                "ORDER BY ts.startDate ASC",
+                new String[]{username, paradigmType.toString()});
+
+        List<SessionData> results = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            results.add(new SessionData(
+                new Date(cursor.getString(cursor.getColumnIndex("startDate"))),
+                cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
+            ));
+        }
+        return results;
+    }
+
+    public static class SessionData {
+        public SessionData(Date sessionDate, int maxDifficulty) {
+            this.sessionDate = sessionDate;
+            this.maxDifficulty = maxDifficulty;
+        }
+
+        public Date sessionDate;
+        public int maxDifficulty;
     }
 
     public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() {

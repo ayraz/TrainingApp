@@ -14,16 +14,15 @@ import cz.nudz.www.trainingapp.utils.Utils;
 
 public class SessionManager {
 
+    public static final String KEY_USERNAME = "KEY_USERNAME";
+
     private SharedPreferences pref;
     private Editor editor;
     private BaseActivity context;
 
-    private int PRIVATE_MODE = 0;
-
+    private static int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "TrainingAppPref";
-
     private static final String KEY_IS_LOGGED_IN = "KEY_IS_LOGGED_IN";
-    public static final String KEY_USERNAME = "KEY_USERNAME";
 
     public SessionManager(BaseActivity context) {
         this.context = context;
@@ -64,6 +63,14 @@ public class SessionManager {
         user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
 
         return user;
+    }
+
+    /**
+     *
+     * @return Username of currently logged user; null if no user is logged.
+     */
+    public String getUsername() {
+        return getUserDetails().get(SessionManager.KEY_USERNAME);
     }
 
     /**
