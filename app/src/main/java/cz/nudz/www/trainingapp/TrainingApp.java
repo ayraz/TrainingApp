@@ -6,12 +6,8 @@ import android.content.Context;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import cz.nudz.www.trainingapp.database.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.training.Paradigm;
+import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 
 /**
  * Created by artem on 12-Sep-17.
@@ -23,14 +19,6 @@ public class TrainingApp extends Application {
     // edit: made a weak reference to be sure.
     private static WeakReference<Context> context;
 
-    // TODO: move this paradigm stuff to another singleton..
-    private final static List<Paradigm> paradigmSet = new ArrayList<>(Arrays.asList(
-            Paradigm.COLOR,
-            Paradigm.POSITION,
-            Paradigm.SHAPE));
-
-    private TrainingAppDbHelper dbHelper;
-
     public static WeakReference<Context> getContext() {
         return context;
     }
@@ -39,38 +27,5 @@ public class TrainingApp extends Application {
     public void onCreate() {
         super.onCreate();
         TrainingApp.context = new WeakReference<Context>(this);
-    }
-
-    /**
-     *
-     * @param currentParadigm
-     * @return Returns next paradigm in a fixed sequence or null if there are no more.
-     */
-    public static Paradigm nextParadigm(Paradigm currentParadigm) {
-        int i = paradigmSet.indexOf(currentParadigm);
-        // no paradigmSet left
-        if (i == paradigmSet.size() - 1) {
-            return null;
-        } else {
-            return paradigmSet.get(i + 1);
-        }
-    }
-
-    public TrainingAppDbHelper getDbHelper() {
-        if (dbHelper == null) {
-            dbHelper = OpenHelperManager.getHelper(this, TrainingAppDbHelper.class);
-        }
-        return dbHelper;
-    }
-
-    public void releaseHelper() {
-        if (dbHelper != null) {
-            OpenHelperManager.releaseHelper();
-            dbHelper = null;
-        }
-    }
-
-    public static int indexOfParadigm(Paradigm paradigm) {
-        return paradigmSet.indexOf(paradigm);
     }
 }

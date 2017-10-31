@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.database.tables;
+package cz.nudz.www.trainingapp.data.tables;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -18,11 +18,14 @@ public class TrainingSession {
     @DatabaseField(canBeNull = false)
     private Date startDate;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     private Date endDate;
 
     @DatabaseField(canBeNull = false)
     private boolean isFinished;
+
+    @DatabaseField(canBeNull = false, foreign = true)
+    private User user;
 
     public TrainingSession() {};
 
@@ -56,5 +59,13 @@ public class TrainingSession {
 
     public void setFinished(boolean finished) {
         isFinished = finished;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

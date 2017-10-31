@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.database.tables;
+package cz.nudz.www.trainingapp.data.tables;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -16,11 +16,17 @@ public class TrialAnswer {
     @DatabaseField(canBeNull = false, foreign = true)
     private Sequence sequence;
 
-    @DatabaseField(canBeNull = false)
-    private boolean isCorrect;
+    @DatabaseField()
+    private Boolean isCorrect;
 
     @DatabaseField(canBeNull = false)
-    private int responseTimeMillis;
+    private boolean isChangingTrial;
+
+    /**
+     * Null when left unanswered by user.
+     */
+    @DatabaseField()
+    private Long responseTimeMillis;
 
     public TrialAnswer() {};
 
@@ -40,19 +46,27 @@ public class TrialAnswer {
         this.sequence = sequence;
     }
 
-    public boolean isCorrect() {
+    public Boolean isCorrect() {
         return isCorrect;
     }
 
-    public void setCorrect(boolean correct) {
+    public void setCorrect(Boolean correct) {
         isCorrect = correct;
     }
 
-    public int getResponseTimeMillis() {
+    public Long getResponseTimeMillis() {
         return responseTimeMillis;
     }
 
-    public void setResponseTimeMillis(int responseTimeMillis) {
+    public void setResponseTimeMillis(Long responseTimeMillis) {
         this.responseTimeMillis = responseTimeMillis;
+    }
+
+    public boolean isChangingTrial() {
+        return isChangingTrial;
+    }
+
+    public void setChangingTrial(boolean changingTrial) {
+        isChangingTrial = changingTrial;
     }
 }

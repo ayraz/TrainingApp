@@ -1,12 +1,12 @@
 package cz.nudz.www.trainingapp;
 
-import java.util.HashMap;
-
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Handler;
 
-import cz.nudz.www.trainingapp.training.LoginActivity;
+import java.util.HashMap;
+
+import cz.nudz.www.trainingapp.utils.Utils;
 
 /**
  * Created by artem on 21-Sep-17.
@@ -14,39 +14,44 @@ import cz.nudz.www.trainingapp.training.LoginActivity;
 
 public class SessionManager {
 
-    private SharedPreferences pref;
-    private Editor editor;
-    private Context context;
-
-    private int PRIVATE_MODE = 0;
-
-    private static final String PREF_NAME = "TrainingAppPref";
-
-    private static final String KEY_IS_LOGGED_IN = "KEY_IS_LOGGED_IN";
     public static final String KEY_USERNAME = "KEY_USERNAME";
 
-    public SessionManager(Context context) {
+    private SharedPreferences pref;
+    private Editor editor;
+    private BaseActivity context;
+
+    private static int PRIVATE_MODE = 0;
+    private static final String PREF_NAME = "TrainingAppPref";
+    private static final String KEY_IS_LOGGED_IN = "KEY_IS_LOGGED_IN";
+
+    public SessionManager(BaseActivity context) {
         this.context = context;
-        pref = this.context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
-        editor = pref.edit();
+        this.pref = this.context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        this.editor = pref.edit();
     }
 
     public void createSession(String name) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.putString(KEY_USERNAME, name);
-
         editor.commit();
     }
 
     /**
      * Check if user is logged in. If user is not logged in, redirect to LoginActivity
      */
-    public void checkLogin() {
+    public boolean checkLogin() {
         if (!this.isLoggedIn()) {
             // user is not logged in, redirect him to Login Activity
-            redirectToLogin();
+            Utils.showErrorDialog(context, null, context.getString(R.string.errorNotLoggedIn));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    redirectToLogin();
+                }
+            }, 3000);
+            return false;
         }
-
+        return true;
     }
 
     /**
@@ -58,6 +63,14 @@ public class SessionManager {
         user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
 
         return user;
+    }
+
+    /**
+     *
+     * @return Username of currently logged user; null if no user is logged.
+     */
+    public String getUsername() {
+        return getUserDetails().get(SessionManager.KEY_USERNAME);
     }
 
     /**
@@ -79,5 +92,4 @@ public class SessionManager {
     private void redirectToLogin() {
         LoginActivity.startActivity(context);
     }
-
 }

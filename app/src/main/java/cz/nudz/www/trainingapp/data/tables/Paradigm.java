@@ -1,9 +1,11 @@
-package cz.nudz.www.trainingapp.database.tables;
+package cz.nudz.www.trainingapp.data.tables;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
+
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 /**
  * Created by artem on 21-Sep-17.
@@ -19,19 +21,16 @@ public class Paradigm {
     private TrainingSession trainingSession;
 
     @DatabaseField(canBeNull = false)
-    private cz.nudz.www.trainingapp.training.Paradigm paradigmType;
+    private ParadigmType paradigmType;
 
     @DatabaseField(canBeNull = false)
     private Date startDate;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     private Date endDate;
 
     @DatabaseField
-    private Date pauseStartDate;
-
-    @DatabaseField
-    private Date pauseEndDate;
+    private long pauseDurationMillis;
 
     public Paradigm() {};
 
@@ -51,11 +50,11 @@ public class Paradigm {
         this.trainingSession = trainingSession;
     }
 
-    public cz.nudz.www.trainingapp.training.Paradigm getParadigmType() {
+    public ParadigmType getParadigmType() {
         return paradigmType;
     }
 
-    public void setParadigmType(cz.nudz.www.trainingapp.training.Paradigm paradigmType) {
+    public void setParadigmType(ParadigmType paradigmType) {
         this.paradigmType = paradigmType;
     }
 
@@ -75,19 +74,12 @@ public class Paradigm {
         this.endDate = endDate;
     }
 
-    public Date getPauseStartDate() {
-        return pauseStartDate;
+    public long getPauseDurationMillis() {
+        return pauseDurationMillis;
     }
 
-    public void setPauseStartDate(Date pauseStartDate) {
-        this.pauseStartDate = pauseStartDate;
+    public void setPauseDurationMillis(long pauseDurationMillis) {
+        this.pauseDurationMillis = pauseDurationMillis;
     }
 
-    public Date getPauseEndDate() {
-        return pauseEndDate;
-    }
-
-    public void setPauseEndDate(Date pauseEndDate) {
-        this.pauseEndDate = pauseEndDate;
-    }
 }

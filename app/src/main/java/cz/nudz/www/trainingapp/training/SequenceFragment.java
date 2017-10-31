@@ -16,27 +16,32 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.Trial;
+import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
 import cz.nudz.www.trainingapp.databinding.SequenceFragmentBinding;
+import cz.nudz.www.trainingapp.enums.Difficulty;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
-import cz.nudz.www.trainingapp.utils.TrainingUtils;
+import cz.nudz.www.trainingapp.utils.Utils;
 
-import static cz.nudz.www.trainingapp.training.Side.LEFT;
+import static cz.nudz.www.trainingapp.enums.Side.LEFT;
 
 public abstract class SequenceFragment extends Fragment {
 
     public static final String TAG = SequenceFragment.class.getSimpleName();
 
-    public static int getTrialCount() {
-        return TRIAL_COUNT;
-    }
-
     private static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
-    private static final int TRIAL_COUNT = 20;
+    private static final String KEY_TRIAL_COUNT = "KEY_TRIAL_COUNT";
+    public static final int DEFAULT_TRIAL_COUNT = 20;
+
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
     private static final int POST_CUE_PAUSE = 100;
@@ -56,8 +61,8 @@ public abstract class SequenceFragment extends Fragment {
     private final Handler handler = new Handler();
 
     private Difficulty difficulty;
-    // Unanswered trials are NULL
-    private List<Boolean> answers = new ArrayList<>(TRIAL_COUNT);;
+    private int trialCount;
+    private List<Boolean> answers;
     private int gridSize;
     private int cellSize;
     private int halfStimCount;
@@ -65,12 +70,26 @@ public abstract class SequenceFragment extends Fragment {
     private int paddingStart;
     private int stimSize;
     private TrialRunner trialRunner;
+    private boolean isTrainingMode;
 
-    public static SequenceFragment newInstance(@NonNull Paradigm paradigm, @NonNull Difficulty difficulty) {
-        SequenceFragment fragment = Paradigm.toTrainingFragment(paradigm);
+    public static SequenceFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty) {
+        SequenceFragment fragment = ParadigmType.toTrainingFragment(paradigmType);
         Bundle args = new Bundle();
         args.putString(KEY_DIFFICULTY , difficulty.toString());
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Only use in trial mode.
+     * @param paradigmType
+     * @param difficulty
+     * @param trialCount
+     * @return
+     */
+    public static SequenceFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty, int trialCount) {
+        SequenceFragment fragment = SequenceFragment.newInstance(paradigmType, difficulty);
+        fragment.getArguments().putInt(KEY_TRIAL_COUNT, trialCount);
         return fragment;
     }
 
@@ -95,6 +114,13 @@ public abstract class SequenceFragment extends Fragment {
 
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
+        trialCount = DEFAULT_TRIAL_COUNT;
+        isTrainingMode = true;
+        if (getArguments().containsKey(KEY_TRIAL_COUNT)) {
+            trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
+            isTrainingMode = false;
+        }
+        answers = new ArrayList<>(trialCount);
 
         /*
          * Using this onExpired as an indicator that layout has finished...
@@ -108,7 +134,7 @@ public abstract class SequenceFragment extends Fragment {
                 binding.trainingFragmentRootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 // Adjustment may change on per-sequence basis
-                totalStimCount = TrainingUtils.getStimCount(difficulty);
+                totalStimCount = Utils.getStimCount(difficulty);
                 halfStimCount = totalStimCount / 2;
 
                 // Grids on both sides are identical so use whatever.
@@ -117,10 +143,10 @@ public abstract class SequenceFragment extends Fragment {
                         binding.trainingFragmentLeftGrid.getWidth(),
                         binding.trainingFragmentLeftGrid.getHeight());
 
-                cellSize = TrainingUtils.optimalContainingSquareSize(gridSize, gridSize, halfStimCount);
+                cellSize = Utils.optimalContainingSquareSize(gridSize, gridSize, halfStimCount);
                 // each cell can contain 4 actual stimuli; this excess space is for 'pseudo-randomness'..
                 // simulated with padding inside the cell.
-                paddingStart = halfStimCount <= 4 ? 20 : 10;
+                paddingStart = halfStimCount <= 4 ? DEFAULT_TRIAL_COUNT : DEFAULT_TRIAL_COUNT / 2;
                 stimSize = (cellSize / 2) - paddingStart;
 
                 trialRunner = new TrialRunner();
@@ -135,11 +161,13 @@ public abstract class SequenceFragment extends Fragment {
     private class TrialRunner implements Runnable {
 
         // recursive loop counter
-        private int count = 0;
+        private int i = 0;
+        private Trial currentTrial;
+        private Date responseStartTime;
 
         @Override
         public void run() {
-            if (count < TRIAL_COUNT) {
+            if (i < trialCount) {
                 executeTrial();
             } else {
                 listener.onSequenceFinished(answers);
@@ -161,23 +189,21 @@ public abstract class SequenceFragment extends Fragment {
                 // prevent event loop
                 lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                final Trial trial = new Trial(difficulty);
+                currentTrial = new Trial(difficulty);
 
-                // user answer handlers have to be set trial-wise
+                Utils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                    // user answer handlers have to be set trial-wise
                 binding.trainingFragmentSameBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        answers.add(!trial.isChanging());
-                        // allow only one answer
-                        disableAnswerBtns();
+                        handleAnswerSubmission(!currentTrial.isChanging());
                     }
                 });
 
                 binding.trainingFragmentDifferentBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        answers.add(trial.isChanging());
-                        disableAnswerBtns();
+                        handleAnswerSubmission(currentTrial.isChanging());
                     }
                 });
 
@@ -185,7 +211,7 @@ public abstract class SequenceFragment extends Fragment {
 
                 // START THE TRIAL...
                 final View cue;
-                switch (trial.getCueSide()) {
+                switch (currentTrial.getCueSide()) {
                     case LEFT:
                         cue = binding.trainingFragmentCueLeft;
                         break;
@@ -194,7 +220,7 @@ public abstract class SequenceFragment extends Fragment {
                         break;
                     default:
                         throw new IllegalStateException(String.format(
-                                "Trials's cueSide state is invalid: {0}", trial.getCueSide().toString()));
+                                "Trials's cueSide state is invalid: {0}", currentTrial.getCueSide().toString()));
                 }
                 cue.setVisibility(View.VISIBLE);
 
@@ -208,19 +234,19 @@ public abstract class SequenceFragment extends Fragment {
                             @Override
                             public void run() {
                                 final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                                TrainingUtils.setViewsVisible(true, views);
+                                Utils.setViewsVisible(true, views);
 
                                 // RETENTION INTERVAL
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        TrainingUtils.setViewsVisible(false, views);
+                                        Utils.setViewsVisible(false, views);
 
-                                        if (trial.isChanging()) {
+                                        if (currentTrial.isChanging()) {
                                             // pick random stim in cued grid
                                             int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
 
-                                            final ImageView changingStim = trial.getCueSide() == LEFT
+                                            final ImageView changingStim = currentTrial.getCueSide() == LEFT
                                                     ? stimuli.get(LEFT_GRID_INDEX).get(index)
                                                     : stimuli.get(RIGHT_GRID_INDEX).get(index);
 
@@ -231,29 +257,27 @@ public abstract class SequenceFragment extends Fragment {
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                TrainingUtils.setViewsVisible(true, views);
-                                                TrainingUtils.setViewsVisible(true,
-                                                        binding.trainingFragmentSameBtn,
-                                                        binding.trainingFragmentDifferentBtn);
+                                                responseStartTime = new Date();
+                                                Utils.setViewsVisible(true, views);
+                                                Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
 
                                                 // TRIAL END
                                                 handler.postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        TrainingUtils.setViewsVisible(false, views);
-
-                                                        disableAnswerBtns();
-                                                        // insert null if user did not answer this trial
-                                                        if (answers.size() == count)
-                                                            answers.add(null);
+                                                        Utils.setViewsVisible(false, views);
+                                                        
+                                                        // insert null answer if user did not answer this trial
+                                                        if (answers.size() == i)
+                                                            handleAnswerSubmission(null);
 
                                                         // START NEXT TRIAL
                                                         handler.postDelayed(
                                                                 TrialRunner.this,
                                                                 (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
 
-                                                        listener.onTrialFinished(count);
-                                                        count += 1;
+                                                        listener.onTrialFinished(i);
+                                                        i += 1;
 
                                                     }
                                                 }, (int) (TEST_INTERVAL * DEBUG_SLOW));
@@ -273,6 +297,26 @@ public abstract class SequenceFragment extends Fragment {
             });
         }
 
+        private void handleAnswerSubmission(Boolean answer) {
+            // allow only one answer per trial
+            disableAnswerBtns();
+            answers.add(answer);
+            if (isTrainingMode) {
+                // response time in millis
+                long trialResponseTime = (new Date()).getTime() - responseStartTime.getTime();
+
+                // TODO: remove this hardcoded dependency
+                TrainingActivity parentActivity = (TrainingActivity) getActivity();
+                RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao = parentActivity.getDbHelper().getTrialAnswerDao();
+                TrialAnswer trialAnswer = new TrialAnswer();
+                trialAnswer.setSequence(parentActivity.getCurrentSequence());
+                trialAnswer.setCorrect(answers.get(answers.size() - 1));
+                trialAnswer.setChangingTrial(currentTrial.isChanging());
+                trialAnswer.setResponseTimeMillis(answer != null ? trialResponseTime : null);
+                trialAnswerDao.create(trialAnswer);
+            }
+        }
+
         @NonNull
         private List<List<ImageView>> setupGridViews() {
             // Two sets of stimuli corresponding to two grids (left and right)
@@ -280,7 +324,7 @@ public abstract class SequenceFragment extends Fragment {
             stimuli.add(new ArrayList<ImageView>(halfStimCount));
             stimuli.add(new ArrayList<ImageView>(halfStimCount));
 
-            final List<Rect> basePositions = TrainingUtils.generateGridPositions(gridSize, cellSize);
+            final List<Rect> basePositions = Utils.generateGridPositions(gridSize, cellSize);
             if (basePositions.size() < halfStimCount)
                 throw new IllegalStateException("The grid is too small for the number of stimuli.");
 
@@ -292,7 +336,7 @@ public abstract class SequenceFragment extends Fragment {
                 Collections.shuffle(gridPositions);
 
                 for (int j = 0; j < halfStimCount; ++j) {
-                    ImageView v = TrainingUtils.createStimView(getActivity());
+                    ImageView v = Utils.createStimView(getActivity());
                     stimuli.get(i).add(v);
 
                     FrameLayout container = new FrameLayout(getActivity());

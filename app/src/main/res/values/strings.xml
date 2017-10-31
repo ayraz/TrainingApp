@@ -1,48 +1,47 @@
 <resources>
     <string name="app_name">Training App</string>
-    <string name="mainActivityTraining">Trénink</string>
-    <string name="mainActivityTutorial">Instrukce</string>
-    <string name="mainActivityTrial">Zacvík</string>
-
-    <string name="tutorialFragmentNextHelp">Pro pokračování na instrukce stiskněte šipku.</string>
-    <string name="tutorialFragmentNextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>
-    <string name="tutorialFragmentCueHelp">Šipka určuje stranu pro zapamatování tvaru podnětů na daných pozicích.</string>
-    <string name="tutorialFragmentSmallPause">Krátká pauza.</string>
-    <string name="tutorialFragmentMemorizeHelp">Snažte si zapamatovat tvary podnětů na daných pozicích a straně určené šipkou.</string>
-    <string name="tutorialFragmentIdentificationHelp"><b>Identifikace změny</b> – stejné či rozdílné?</string>
-    <string name="tutorialFragmentIntertrialPauseHelp">Pauza – krátký odpočinek před dalším úkolem.</string>
-
-    <string name="tutorialActivityNextBtnText">Další</string>
-    <string name="tutorialActivityPrevBtnText">Předchozí</string>
-
+    <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
-
-    <string name="warningFragmentWarningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
-    <string name="warningFragmentContinueBtnText">Rozumím, přejit k trenínku.</string>
-    <string name="goBackBtnText">Vrátit se</string>
-    <string name="startTrainingBtnText">Začít trénink</string>
-
-    <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
-    <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
-    <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
-
-    <string name="errorTitle">Chyba</string>
-    <string name="errorNoParadigmsLeft">Žádné další paradigmy odešly.</string>
-    <string name="genericErrorMessage">Jejda, bohužel něco nefungovalo.</string>
-
-    <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
+    <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
+    <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
+    <string name="createUserTitle">Vytvořit uživatele?</string>
     <string name="difficultyLoweredMessage">VEDETE SE DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
+    <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
-
-    <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
-    <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
-
-    <string name="yes">ano</string>
+    <string name="errorGenericMessage">Jejda, bohužel něco nefungovalo.</string>
+    <string name="errorNoParadigmsLeft">Žádné další paradigmy odešly.</string>
+    <string name="errorNotLoggedIn">Nejste přihlášeni a budete přesměrováni na přihlašovací obrazovku.</string>
+    <string name="errorTitle">Chyba</string>
+    <string name="goBackBtnText">Vrátit se</string>
+    <string name="trainingBtnText">Trénink</string>
+    <string name="trialBtnText">Zacvík</string>
+    <string name="tutorialBtnText">Instrukce</string>
     <string name="no">ne</string>
     <string name="ok">ok</string>
-
-    <string name="createUserTitle">Vytvořit uživatele?</string>
-    <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
-    <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
+    <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
+    <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
+    <string name="selectParadigmTypeForTrialTitle">Vyberte si paradigmu pro vyzkoušení:</string>
+    <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="startTrainingBtnText">Začít trénink</string>
+    <string name="nextBtnText">Další</string>
+    <string name="prevBtnText">Předchozí</string>
+    <string name="cueHelp">Šipka určuje stranu pro zapamatování tvaru podnětů na daných pozicích.</string>
+    <string name="identificationHelp"><b>Identifikace změny</b> – stejné či rozdílné?</string>
+    <string name="interTrialPauseHelp">Pauza – krátký odpočinek před dalším úkolem.</string>
+    <string name="longerPause">Delší pauza.</string>
+    <string name="memorizeHelp">Snažte si zapamatovat tvary podnětů na daných pozicích a straně určené šipkou.</string>
+    <string name="nextHelp">Pro pokračování na instrukce stiskněte šipku.</string>
+    <string name="nextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>
+    <string name="nowYouTryMessage"><![CDATA[<b>NYNÍ, KDYŽ UŽ VÍTE, JAK NA TO,\nMŮŽETE SI VYZKOUŠET PÁR ZÁCVIČNÝCH ÚKOLŮ</b>]]></string>
+    <string name="shortPause">Krátká pauza.</string>
+    <string name="continueBtnText">Rozumím, přejit k trenínku.</string>
+    <string name="warningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
+    <string name="yes">ano</string>
+    <string name="actionExportData">Export výcvikových údaju</string>
+    <string name="logout">Odhlásit se</string>
+    <string name="dataExportSuccess">Údaje byly úspěšně exportovány.</string>
+    <string name="modeSelectionTitle">Výběr Režimu</string>
+    <string name="performanceSummaryTitle">Přehled Výkonnosti</string>
 </resources>

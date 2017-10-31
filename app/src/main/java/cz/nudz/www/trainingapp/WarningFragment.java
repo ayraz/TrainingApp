@@ -1,10 +1,8 @@
-package cz.nudz.www.trainingapp.training;
+package cz.nudz.www.trainingapp;
 
 
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.TrainingApp;
 import cz.nudz.www.trainingapp.databinding.WarningFragmentBinding;
-import cz.nudz.www.trainingapp.utils.TrainingUtils;
+import cz.nudz.www.trainingapp.enums.Adjustment;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.utils.Utils;
 
-import static cz.nudz.www.trainingapp.training.Adjustment.*;
-import static cz.nudz.www.trainingapp.training.Paradigm.*;
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
-import static cz.nudz.www.trainingapp.training.TrainingActivity.startActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,28 +27,28 @@ public class WarningFragment extends Fragment {
     public static final String KEY_DIFFICULTY_STATE = "KEY_DIFFICULTY_STATE";
     public static final String TAG = WarningFragment.class.getSimpleName();
     private WarningFragmentBinding binding;
-    private Paradigm currentParadigm;
+    private ParadigmType currentParadigmType;
     private Adjustment adjustment;
     private boolean isSequencePause;
     private WarningFragmentListener listener;
 
     /**
      *
-     * @param paradigm
+     * @param paradigmType
      * @param adjustment Adjustment must only be passed for sequence pause, otherwise it has to be null signaling paradigm pause.
      * @return
      */
-    public static WarningFragment newInstance(@NonNull Paradigm paradigm, @Nullable Adjustment adjustment) {
+    public static WarningFragment newInstance(@NonNull ParadigmType paradigmType, @Nullable Adjustment adjustment) {
         WarningFragment warningFragment = new WarningFragment();
-        Bundle bundle = bundleArguments(paradigm, adjustment);
+        Bundle bundle = bundleArguments(paradigmType, adjustment);
         warningFragment.setArguments(bundle);
         return warningFragment;
     }
 
     @NonNull
-    public static Bundle bundleArguments(@NonNull Paradigm paradigm, @Nullable Adjustment adjustment) {
+    public static Bundle bundleArguments(@NonNull ParadigmType paradigmType, @Nullable Adjustment adjustment) {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_PARADIGM, paradigm.toString());
+        bundle.putString(KEY_PARADIGM, paradigmType.toString());
         if (adjustment != null) {
             bundle.putString(KEY_DIFFICULTY_STATE, adjustment.toString());
         }
@@ -68,7 +63,7 @@ public class WarningFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.warning_fragment, container, false);
 
-        currentParadigm = Paradigm.valueOf(getArguments().getString(KEY_PARADIGM));
+        currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
         if (getArguments().containsKey(KEY_DIFFICULTY_STATE)) {
             adjustment = Adjustment.valueOf(getArguments().getString(KEY_DIFFICULTY_STATE));
             isSequencePause = true;
@@ -90,7 +85,7 @@ public class WarningFragment extends Fragment {
                 }
             });
         } else {
-            TrainingUtils.setViewsVisible(false,
+            Utils.setViewsVisible(false,
                     binding.warningFragmentWarning,
                     binding.warningFragmentGoBackBtn,
                     binding.warningFragmentStartTrainingBtn);
@@ -122,7 +117,7 @@ public class WarningFragment extends Fragment {
                     return R.string.difficultyRaisedMessage;
             }
         } else {
-            switch (currentParadigm) {
+            switch (currentParadigmType) {
                 case COLOR:
                     return R.string.colorParadigmStartHelp;
                 case SHAPE:
@@ -131,11 +126,11 @@ public class WarningFragment extends Fragment {
                     return R.string.positionParadigmStartHelp;
             }
         }
-        return R.string.genericErrorMessage;
+        return R.string.errorGenericMessage;
     }
 
     private boolean isFirstParadigm() {
-        return TrainingApp.indexOfParadigm(currentParadigm) == 0;
+        return ParadigmSet.indexOf(currentParadigmType) == 0;
     }
 
     public interface WarningFragmentListener {

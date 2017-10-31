@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.database;
+package cz.nudz.www.trainingapp.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,11 +10,11 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-import cz.nudz.www.trainingapp.database.tables.Paradigm;
-import cz.nudz.www.trainingapp.database.tables.Sequence;
-import cz.nudz.www.trainingapp.database.tables.TrainingSession;
-import cz.nudz.www.trainingapp.database.tables.TrialAnswer;
-import cz.nudz.www.trainingapp.database.tables.User;
+import cz.nudz.www.trainingapp.data.tables.Paradigm;
+import cz.nudz.www.trainingapp.data.tables.Sequence;
+import cz.nudz.www.trainingapp.data.tables.TrainingSession;
+import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
+import cz.nudz.www.trainingapp.data.tables.User;
 
 /**
  * Created by artem on 19-Sep-17.
@@ -23,7 +23,7 @@ import cz.nudz.www.trainingapp.database.tables.User;
 public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String TAG = TrainingAppDbHelper.class.getSimpleName();
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "TrainingApp.db";
 
     public TrainingAppDbHelper(Context context) {
