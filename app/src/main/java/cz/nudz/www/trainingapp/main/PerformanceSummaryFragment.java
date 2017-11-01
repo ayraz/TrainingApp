@@ -58,9 +58,11 @@ public class PerformanceSummaryFragment extends Fragment {
 
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {
-                    return new SimpleDateFormat("dd/mm").format(sessionData.get((int) value).sessionDate);
+                    return new SimpleDateFormat("dd/MM/yyyy").format(sessionData.get((int) value).sessionDate);
                 }
             });
+            binding.lineChart.getAxisLeft().setGranularity(1);
+//            binding.lineChart.getAxisRight().setGranularity(1);
             LineDataSet lineDataSet = new LineDataSet(entries, "Label");
             binding.lineChart.setData(new LineData(lineDataSet));
             binding.lineChart.invalidate();

@@ -8,34 +8,34 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/mainActivityTutorialBtn"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/mainActivityTrainingBtn"
-            app:layout_constraintRight_toLeftOf="@+id/mainActivityTrialBtn"
+            android:id="@+id/tutorialBtn"
+            style="@style/MainScreenButton"
+            app:layout_constraintLeft_toRightOf="@+id/trainingBtn"
+            app:layout_constraintRight_toLeftOf="@+id/trialBtn"
+            android:text="@string/tutorialBtnText"
+            android:background="@drawable/placeholder"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/tutorialBtnText" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
-            android:id="@+id/mainActivityTrialBtn"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/mainActivityTutorialBtn"
+            android:id="@+id/trialBtn"
+            style="@style/MainScreenButton"
+            app:layout_constraintLeft_toRightOf="@+id/tutorialBtn"
             app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/trialBtnText"
+            android:background="@drawable/placeholder"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/trialBtnText" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <Button
-            android:id="@+id/mainActivityTrainingBtn"
-            android:layout_width="189dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/trainingBtn"
+            style="@style/MainScreenButton"
             android:text="@string/trainingBtnText"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/placeholder"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/mainActivityTutorialBtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintRight_toLeftOf="@+id/tutorialBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

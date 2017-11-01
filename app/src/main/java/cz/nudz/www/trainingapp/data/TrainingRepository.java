@@ -2,9 +2,12 @@ package cz.nudz.www.trainingapp.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +23,8 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
  * Created by artem on 26-Sep-17.
  */
 public class TrainingRepository {
+
+    public static final String TAG = TrainingRepository.class.getSimpleName();
 
     private final Context context;
     private final TrainingAppDbHelper dbHelper;
@@ -104,10 +109,15 @@ public class TrainingRepository {
 
         List<SessionData> results = new ArrayList<>();
         while (cursor.moveToNext()) {
-            results.add(new SessionData(
-                new Date(cursor.getString(cursor.getColumnIndex("startDate"))),
-                cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
-            ));
+            try {
+                results.add(new SessionData(
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex("startDate"))),
+                    cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
+                ));
+            } catch (ParseException e) {
+                Log.e(TAG, e.getMessage());
+                throw new RuntimeException(e);
+            }
         }
         return results;
     }

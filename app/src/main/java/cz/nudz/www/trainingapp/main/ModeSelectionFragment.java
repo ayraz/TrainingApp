@@ -16,6 +16,7 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.training.TrainingActivity;
 import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
 import cz.nudz.www.trainingapp.tutorial.TutorialPagerActivity;
+import cz.nudz.www.trainingapp.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +30,12 @@ public class ModeSelectionFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Utils.enableViews(true, binding.trainingBtn, binding.trialBtn, binding.tutorialBtn);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,9 +43,10 @@ public class ModeSelectionFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.mode_selection_fragment, container, false);
         activity = (BaseActivity) getActivity();
 
-        binding.mainActivityTrainingBtn.setOnClickListener(new View.OnClickListener() {
+        binding.trainingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
                 // Check for user immediately as we cannot do anything in training without one.
                 if (activity.getSessionManager().checkLogin()) {
                     TrainingActivity.startActivity(activity, ParadigmType.COLOR);
@@ -46,16 +54,18 @@ public class ModeSelectionFragment extends Fragment {
             }
         });
 
-        binding.mainActivityTutorialBtn.setOnClickListener(new View.OnClickListener() {
+        binding.tutorialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
                 TutorialPagerActivity.startActivity(activity);
             }
         });
 
-        binding.mainActivityTrialBtn.setOnClickListener(new View.OnClickListener() {
+        binding.trialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
                 TrialSelectionFragment trialSelectionFragment = new TrialSelectionFragment();
                 trialSelectionFragment.show(getChildFragmentManager(), "");
             }

@@ -47,13 +47,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
 
-        setSupportActionBar(binding.appBar);
-        binding.viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
+        // make sure we have a logged in user before we can proceed with anything
+        if (getSessionManager().checkLogin()) {
+            setSupportActionBar(binding.appBar);
+            binding.viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
+            binding.tabLayout.setupWithViewPager(binding.viewPager);
 
-        // make sure we have a logged in user before we start exporting
-        getSessionManager().checkLogin();
-        dataExporter = new DataExporter(this);
+            dataExporter = new DataExporter(this);
+        }
     }
 
     @Override
