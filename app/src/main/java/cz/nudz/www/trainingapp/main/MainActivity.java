@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
                     return new ModeSelectionFragment();
                 case 1:
                 default:
-                    return new PerformanceSummaryFragment();
+                    return new ChartSelectionFragment();
             }
         }
 

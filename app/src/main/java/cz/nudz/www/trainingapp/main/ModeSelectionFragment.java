@@ -34,7 +34,7 @@ public class ModeSelectionFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Utils.enableViews(true, binding.trainingBtn, binding.trialBtn, binding.tutorialBtn);
+        Utils.enableViews(true, binding.trainingBtn, binding.tutorialBtn);
     }
 
     @Override
@@ -65,7 +65,6 @@ public class ModeSelectionFragment extends Fragment {
         binding.trialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setEnabled(false);
                 TrialSelectionFragment trialSelectionFragment = new TrialSelectionFragment();
                 trialSelectionFragment.show(getChildFragmentManager(), "");
             }

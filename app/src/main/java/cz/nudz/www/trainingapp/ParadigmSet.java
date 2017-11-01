@@ -32,6 +32,10 @@ public abstract class ParadigmSet {
         }
     }
 
+    public static ParadigmType getAt(int i) {
+        return PARADIGM_TYPE_SET.get(i);
+    }
+
     public static int indexOf(ParadigmType paradigmType) {
         return PARADIGM_TYPE_SET.indexOf(paradigmType);
     }
