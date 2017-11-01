@@ -15,11 +15,11 @@ import cz.nudz.www.trainingapp.databinding.TrialActivityBinding;
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
-import cz.nudz.www.trainingapp.training.SequenceFragment;
+import cz.nudz.www.trainingapp.training.TrainingFragment;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
-public class TrialActivity extends BaseActivity implements SequenceFragment.SequenceFragmentListener {
+public class TrialActivity extends BaseActivity implements TrainingFragment.SequenceFragmentListener {
 
     private TrialActivityBinding binding;
 
@@ -41,7 +41,7 @@ public class TrialActivity extends BaseActivity implements SequenceFragment.Sequ
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(binding.trialActivityFragmentContainer.getId(),
-                SequenceFragment.newInstance(paradigmType, Difficulty.ONE, 3)); // TODO: replace with real values..
+                TrainingFragment.newInstance(paradigmType, Difficulty.ONE, 3)); // TODO: replace with real values..
         fragmentTransaction.commit();
     }
 

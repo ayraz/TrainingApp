@@ -19,7 +19,7 @@ import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
-public class ShapeParadigmFragment extends SequenceFragment {
+public class ShapeParadigmFragment extends TrainingFragment {
 
     private List<Drawable> drawables;
 

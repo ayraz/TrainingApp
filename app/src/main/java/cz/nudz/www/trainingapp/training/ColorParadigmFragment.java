@@ -14,7 +14,7 @@ import java.util.List;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.ArrayUtils;
 
-public class ColorParadigmFragment extends SequenceFragment {
+public class ColorParadigmFragment extends TrainingFragment {
 
     private List<Integer> colors;
 

@@ -2,7 +2,7 @@ package cz.nudz.www.trainingapp.enums;
 
 import cz.nudz.www.trainingapp.training.ColorParadigmFragment;
 import cz.nudz.www.trainingapp.training.PositionParadigmFragment;
-import cz.nudz.www.trainingapp.training.SequenceFragment;
+import cz.nudz.www.trainingapp.training.TrainingFragment;
 import cz.nudz.www.trainingapp.training.ShapeParadigmFragment;
 
 /**
@@ -14,7 +14,7 @@ public enum ParadigmType {
     SHAPE,
     POSITION;
 
-    public static SequenceFragment toTrainingFragment(ParadigmType paradigmType) {
+    public static TrainingFragment toTrainingFragment(ParadigmType paradigmType) {
         switch (paradigmType) {
             case COLOR:
                 return new ColorParadigmFragment();

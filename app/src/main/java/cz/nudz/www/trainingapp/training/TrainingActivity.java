@@ -32,7 +32,7 @@ import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 public class TrainingActivity extends BaseActivity implements
-        SequenceFragment.SequenceFragmentListener,
+        TrainingFragment.SequenceFragmentListener,
         CountDownFragment.CountDownListener,
         WarningFragment.WarningFragmentListener {
 
@@ -97,10 +97,10 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private void stopTrainingCallbacks() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SequenceFragment.TAG);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TrainingFragment.TAG);
         if (fragment != null) {
             // Unregister all handler callbacks to prevent unwanted navigation caused by postDelayed.
-            ((SequenceFragment) fragment).removePendingCallbacks();
+            ((TrainingFragment) fragment).removePendingCallbacks();
         }
     }
 
@@ -188,7 +188,7 @@ public class TrainingActivity extends BaseActivity implements
     private void nextSequence() {
         currentSequence = trainingRepository.startAndStoreSequence(currentParadigm, currentDifficulty);
 
-        showFragment(SequenceFragment.newInstance(currentParadigmType, currentDifficulty), SequenceFragment.TAG);
+        showFragment(TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
     }

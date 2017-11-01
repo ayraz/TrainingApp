@@ -34,9 +34,9 @@ import cz.nudz.www.trainingapp.utils.Utils;
 
 import static cz.nudz.www.trainingapp.enums.Side.LEFT;
 
-public abstract class SequenceFragment extends Fragment {
+public abstract class TrainingFragment extends Fragment {
 
-    public static final String TAG = SequenceFragment.class.getSimpleName();
+    public static final String TAG = TrainingFragment.class.getSimpleName();
 
     private static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
     private static final String KEY_TRIAL_COUNT = "KEY_TRIAL_COUNT";
@@ -53,7 +53,7 @@ public abstract class SequenceFragment extends Fragment {
     private static final int LEFT_GRID_INDEX = 0;
     private static final int RIGHT_GRID_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
-    private static final double DEBUG_SLOW = 0.2;
+    private static final double DEBUG_SLOW = 1;
 
     private SequenceFragmentBinding binding;
     private ConstraintLayout[] grids;
@@ -72,8 +72,8 @@ public abstract class SequenceFragment extends Fragment {
     private TrialRunner trialRunner;
     private boolean isTrainingMode;
 
-    public static SequenceFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty) {
-        SequenceFragment fragment = ParadigmType.toTrainingFragment(paradigmType);
+    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty) {
+        TrainingFragment fragment = ParadigmType.toTrainingFragment(paradigmType);
         Bundle args = new Bundle();
         args.putString(KEY_DIFFICULTY , difficulty.toString());
         fragment.setArguments(args);
@@ -87,8 +87,8 @@ public abstract class SequenceFragment extends Fragment {
      * @param trialCount
      * @return
      */
-    public static SequenceFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty, int trialCount) {
-        SequenceFragment fragment = SequenceFragment.newInstance(paradigmType, difficulty);
+    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty, int trialCount) {
+        TrainingFragment fragment = TrainingFragment.newInstance(paradigmType, difficulty);
         fragment.getArguments().putInt(KEY_TRIAL_COUNT, trialCount);
         return fragment;
     }

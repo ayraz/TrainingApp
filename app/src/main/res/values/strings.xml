@@ -47,4 +47,7 @@
     <string name="colorParadigmPerformanceSummary">Shrnutí výkonu barevných paradigmat</string>
     <string name="positionParadigmPerformanceSummary">Shrnutí výkonu pozičních paradigmat</string>
     <string name="shapeParadigmPerformanceSummary">Shrnutí výkonu tvarových paradigmat</string>
+    <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
+    <string name="usernameLabel">Uživatelské jméno: </string>
+    <string name="loginBtnText">Přihlásit se</string>
 </resources>

@@ -15,7 +15,7 @@ import java.util.List;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 
-public class PositionParadigmFragment extends SequenceFragment {
+public class PositionParadigmFragment extends TrainingFragment {
 
     private Drawable drawable;
     private int[] angles = new int[] {0, 45, 90, 135, 225, 315};
