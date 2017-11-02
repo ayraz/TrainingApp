@@ -13,7 +13,7 @@
             app:layout_constraintLeft_toRightOf="@+id/trainingBtn"
             app:layout_constraintRight_toLeftOf="@+id/trialBtn"
             android:text="@string/tutorialBtnText"
-            android:background="@drawable/placeholder"
+            android:drawableTop="@drawable/ic_course_filled"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -23,7 +23,7 @@
             app:layout_constraintLeft_toRightOf="@+id/tutorialBtn"
             app:layout_constraintRight_toRightOf="parent"
             android:text="@string/trialBtnText"
-            android:background="@drawable/placeholder"
+            android:drawableTop="@drawable/ic_restart_filled"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -31,7 +31,7 @@
             android:id="@+id/trainingBtn"
             style="@style/MainScreenButton"
             android:text="@string/trainingBtnText"
-            android:background="@drawable/placeholder"
+            android:drawableTop="@drawable/ic_barbell_filled"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/tutorialBtn"
             app:layout_constraintTop_toTopOf="parent"

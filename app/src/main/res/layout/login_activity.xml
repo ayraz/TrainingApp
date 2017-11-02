@@ -8,30 +8,29 @@
         android:layout_height="match_parent"
         tools:context="cz.nudz.www.trainingapp.LoginActivity">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout">
+            android:layout_marginBottom="20dp"
+            android:text="@string/lastLoginAsLabel"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lastLoginAsLabel"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/lastLoginAsBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                tools:text="username" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/lastLoginAsBtn"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="8dp"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            tools:text="username" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -47,16 +46,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/usernameLabel"
                 android:textColor="@color/black"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:textSize="20sp"
-                android:textAlignment="center"
                 android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:textSize="20sp"
                 tools:text="Name" />
         </LinearLayout>
 
@@ -64,7 +63,7 @@
             android:id="@+id/loginBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="24dp"
             android:text="@string/loginBtnText"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -73,9 +72,9 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <android.support.constraint.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/guideline"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.4" />
 
