@@ -22,7 +22,7 @@
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
     <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
-    <string name="selectParadigmTypeForTrialTitle">Vyberte si paradigmu pro vyzkoušení:</string>
+    <string name="selectParadigmTypeForTrialTitle">Výběr paradigmatu pro vyzkoušení</string>
     <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="startTrainingBtnText">Začít trénink</string>
     <string name="nextBtnText">Další</string>
@@ -50,4 +50,8 @@
     <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
     <string name="usernameLabel">Uživatelské jméno: </string>
     <string name="loginBtnText">Přihlásit se</string>
+    <string name="difficultyLabel">Složitost: </string>
+    <string name="tryColorParadigmBtn">Vyzkoušet barevnou paradigmu</string>
+    <string name="tryPositionParadigmBtn">Vyzkoušet poziční paradigmu</string>
+    <string name="tryShapeParadigmBtn">Vyzkoušet tvarovou paradigmu</string>
 </resources>
