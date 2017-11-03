@@ -26,7 +26,7 @@ import java.util.List;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.Trial;
 import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
-import cz.nudz.www.trainingapp.databinding.SequenceFragmentBinding;
+import cz.nudz.www.trainingapp.databinding.TrainingFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
@@ -55,7 +55,7 @@ public abstract class TrainingFragment extends Fragment {
     // Do not set to 0, unless you want to nullify other intervals..
     private static final double DEBUG_SLOW = 1;
 
-    private SequenceFragmentBinding binding;
+    private TrainingFragmentBinding binding;
     private ConstraintLayout[] grids;
     private SequenceFragmentListener listener;
     private final Handler handler = new Handler();
@@ -110,7 +110,7 @@ public abstract class TrainingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.sequence_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.training_fragment, container, false);
 
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));

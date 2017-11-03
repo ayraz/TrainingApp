@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.main;
 
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -60,6 +61,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        for (int result : grantResults) {
+            // if permissions are not granted, leave...
+            if (result != PackageManager.PERMISSION_GRANTED) return;
+        }
         dataExporter.export(getSessionManager().getUsername());
     }
 
@@ -76,7 +81,7 @@ public class MainActivity extends BaseActivity {
                     return new ModeSelectionFragment();
                 case 1:
                 default:
-                    return new ChartSelectionFragment();
+                    return new PerformanceSummaryFragment();
             }
         }
 
