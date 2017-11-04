@@ -72,18 +72,8 @@ public class WarningFragment extends Fragment {
         }
 
         if (isFirstParadigm() && !isSequencePause) {
-            binding.warningFragmentGoBackBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.goBack();
-                }
-            });
-            binding.warningFragmentStartTrainingBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.startTraining();
-                }
-            });
+            binding.warningFragmentGoBackBtn.setOnClickListener(v -> listener.goBack());
+            binding.warningFragmentStartTrainingBtn.setOnClickListener(v -> listener.startTraining());
         } else {
             Utils.setViewsVisible(false,
                     binding.warningFragmentWarning,

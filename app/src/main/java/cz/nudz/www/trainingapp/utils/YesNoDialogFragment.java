@@ -28,19 +28,11 @@ public class YesNoDialogFragment extends AlertDialogFragment {
     @Override
     protected void init(AlertDialog.Builder builder) {
         super.init(builder);
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                YesNoDialogFragment.this.dismiss();
-            }
+        builder.setNegativeButton(R.string.no, (dialog, which) -> {
+            dialog.dismiss();
+            YesNoDialogFragment.this.dismiss();
         });
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.onYes();
-            }
-        });
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> listener.onYes());
     }
 
     @Override

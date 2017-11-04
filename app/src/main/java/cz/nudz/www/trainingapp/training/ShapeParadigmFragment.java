@@ -45,12 +45,7 @@ public class ShapeParadigmFragment extends TrainingFragment {
 
     @Override
     protected void performChange(final ImageView changingStim) {
-        List<Drawable> filtered = CollectionUtils.filterList(this.drawables, new Predicate<Drawable>() {
-            @Override
-            public boolean apply(Drawable drawable) {
-                return !(drawable == changingStim.getDrawable());
-            }
-        });
+        List<Drawable> filtered = CollectionUtils.filterList(this.drawables, drawable -> !(drawable == changingStim.getDrawable()));
         Drawable changeDrawable = filtered.get(RandomUtils.nextIntExclusive(0, filtered.size()));
         changingStim.setImageDrawable(changeDrawable);
     }

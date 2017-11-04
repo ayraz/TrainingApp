@@ -12,7 +12,6 @@ import android.view.MenuItem;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 

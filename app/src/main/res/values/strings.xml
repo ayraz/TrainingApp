@@ -18,7 +18,7 @@
     <string name="trialBtnText">Zacvík</string>
     <string name="tutorialBtnText">Instrukce</string>
     <string name="no">ne</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
     <string name="quitTrainingDialogTitle">Ukončení tréninku</string>

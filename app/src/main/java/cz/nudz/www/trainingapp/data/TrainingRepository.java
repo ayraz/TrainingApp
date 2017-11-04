@@ -95,7 +95,7 @@ public class TrainingRepository {
     }
 
     public List<SessionData> getParadigmSessionData(String username, ParadigmType paradigmType) {
-        Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username , " +
+        try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username , " +
                 "ts.startDate, " +
                 "MAX(s.difficulty) AS maxDifficulty " +
                 "FROM User u " +
@@ -105,21 +105,22 @@ public class TrainingRepository {
                 "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
                 "GROUP BY ts.id, ts.startDate " +
                 "ORDER BY ts.startDate ASC",
-                new String[]{username, paradigmType.toString()});
+                new String[]{username, paradigmType.toString()})) {
 
-        List<SessionData> results = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            try {
-                results.add(new SessionData(
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex("startDate"))),
-                    cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
-                ));
-            } catch (ParseException e) {
-                Log.e(TAG, e.getMessage());
-                throw new RuntimeException(e);
-            }
+                List<SessionData> results = new ArrayList<>();
+                while (cursor.moveToNext()) {
+                    try {
+                        results.add(new SessionData(
+                                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex("startDate"))),
+                                cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
+                        ));
+                    } catch (ParseException e) {
+                        Log.e(TAG, e.getMessage());
+                        throw new RuntimeException(e);
+                    }
+                }
+                return results;
         }
-        return results;
     }
 
     public static class SessionData {

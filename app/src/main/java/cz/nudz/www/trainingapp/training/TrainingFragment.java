@@ -178,7 +178,7 @@ public abstract class TrainingFragment extends Fragment {
             final List<List<ImageView>> stimuli = setupGridViews();
 
             // merge stimuli from both grids
-            final List<ImageView> allStimuli = new ArrayList<ImageView>(stimuli.get(LEFT_GRID_INDEX));
+            final List<ImageView> allStimuli = new ArrayList<>(stimuli.get(LEFT_GRID_INDEX));
             allStimuli.addAll(stimuli.get(RIGHT_GRID_INDEX));
 
             // Once the last view's layout is finished we can start setting up stimuli
@@ -193,19 +193,9 @@ public abstract class TrainingFragment extends Fragment {
 
                 Utils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
                     // user answer handlers have to be set trial-wise
-                binding.trainingFragmentSameBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        handleAnswerSubmission(!currentTrial.isChanging());
-                    }
-                });
+                binding.trainingFragmentSameBtn.setOnClickListener(v -> handleAnswerSubmission(!currentTrial.isChanging()));
 
-                binding.trainingFragmentDifferentBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        handleAnswerSubmission(currentTrial.isChanging());
-                    }
-                });
+                binding.trainingFragmentDifferentBtn.setOnClickListener(v -> handleAnswerSubmission(currentTrial.isChanging()));
 
                 initStimuli(allStimuli);
 
@@ -225,73 +215,59 @@ public abstract class TrainingFragment extends Fragment {
                 cue.setVisibility(View.VISIBLE);
 
                 // CUE PAUSE
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        cue.setVisibility(View.INVISIBLE);
+                handler.postDelayed(() -> {
+                    cue.setVisibility(View.INVISIBLE);
 
-                        // MEMORY ARRAY
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                                Utils.setViewsVisible(true, views);
+                    // MEMORY ARRAY
+                    handler.postDelayed(() -> {
+                        final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
+                        Utils.setViewsVisible(true, views);
 
-                                // RETENTION INTERVAL
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Utils.setViewsVisible(false, views);
+                        // RETENTION INTERVAL
+                        handler.postDelayed(() -> {
+                            Utils.setViewsVisible(false, views);
 
-                                        if (currentTrial.isChanging()) {
-                                            // pick random stim in cued grid
-                                            int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
+                            if (currentTrial.isChanging()) {
+                                // pick random stim in cued grid
+                                int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
 
-                                            final ImageView changingStim = currentTrial.getCueSide() == LEFT
-                                                    ? stimuli.get(LEFT_GRID_INDEX).get(index)
-                                                    : stimuli.get(RIGHT_GRID_INDEX).get(index);
+                                final ImageView changingStim = currentTrial.getCueSide() == LEFT
+                                        ? stimuli.get(LEFT_GRID_INDEX).get(index)
+                                        : stimuli.get(RIGHT_GRID_INDEX).get(index);
 
-                                            performChange(changingStim);
-                                        }
-
-                                        // TEST ARRAY
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                responseStartTime = new Date();
-                                                Utils.setViewsVisible(true, views);
-                                                Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
-
-                                                // TRIAL END
-                                                handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Utils.setViewsVisible(false, views);
-                                                        
-                                                        // insert null answer if user did not answer this trial
-                                                        if (answers.size() == i)
-                                                            handleAnswerSubmission(null);
-
-                                                        // START NEXT TRIAL
-                                                        handler.postDelayed(
-                                                                TrialRunner.this,
-                                                                (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
-
-                                                        listener.onTrialFinished(i);
-                                                        i += 1;
-
-                                                    }
-                                                }, (int) (TEST_INTERVAL * DEBUG_SLOW));
-
-                                            }
-                                        }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
-
-                                    }
-                                }, (int) (MEMORIZATION_INTERVAL * DEBUG_SLOW));
-
+                                performChange(changingStim);
                             }
-                        }, (int) (CUE_INTERVAL * DEBUG_SLOW));
 
-                    }
+                            // TEST ARRAY
+                            handler.postDelayed(() -> {
+                                responseStartTime = new Date();
+                                Utils.setViewsVisible(true, views);
+                                Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+
+                                // TRIAL END
+                                handler.postDelayed(() -> {
+                                    Utils.setViewsVisible(false, views);
+
+                                    // insert null answer if user did not answer this trial
+                                    if (answers.size() == i)
+                                        handleAnswerSubmission(null);
+
+                                    // START NEXT TRIAL
+                                    handler.postDelayed(
+                                            TrialRunner.this,
+                                            (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
+
+                                    listener.onTrialFinished(i);
+                                    i += 1;
+
+                                }, (int) (TEST_INTERVAL * DEBUG_SLOW));
+
+                            }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
+
+                        }, (int) (MEMORIZATION_INTERVAL * DEBUG_SLOW));
+
+                    }, (int) (CUE_INTERVAL * DEBUG_SLOW));
+
                 }, (int) (POST_CUE_PAUSE * DEBUG_SLOW));
                 }
             });
@@ -320,9 +296,9 @@ public abstract class TrainingFragment extends Fragment {
         @NonNull
         private List<List<ImageView>> setupGridViews() {
             // Two sets of stimuli corresponding to two grids (left and right)
-            final List<List<ImageView>> stimuli = new ArrayList<List<ImageView>>(2);
-            stimuli.add(new ArrayList<ImageView>(halfStimCount));
-            stimuli.add(new ArrayList<ImageView>(halfStimCount));
+            final List<List<ImageView>> stimuli = new ArrayList<>(2);
+            stimuli.add(new ArrayList<>(halfStimCount));
+            stimuli.add(new ArrayList<>(halfStimCount));
 
             final List<Rect> basePositions = Utils.generateGridPositions(gridSize, cellSize);
             if (basePositions.size() < halfStimCount)
@@ -332,7 +308,7 @@ public abstract class TrainingFragment extends Fragment {
             for (int i = 0; i < 2; ++i) {
                 ConstraintLayout grid = grids[i];
                 // this is not i deep copy! it is only for shuffling on different grids
-                final List<Rect> gridPositions = new ArrayList<Rect>(basePositions);
+                final List<Rect> gridPositions = new ArrayList<>(basePositions);
                 Collections.shuffle(gridPositions);
 
                 for (int j = 0; j < halfStimCount; ++j) {

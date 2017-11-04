@@ -3,11 +3,7 @@ package cz.nudz.www.trainingapp;
 import android.app.Application;
 import android.content.Context;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import java.lang.ref.WeakReference;
-
-import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 
 /**
  * Created by artem on 12-Sep-17.
@@ -26,6 +22,6 @@ public class TrainingApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        TrainingApp.context = new WeakReference<Context>(this);
+        TrainingApp.context = new WeakReference<>(this);
     }
 }

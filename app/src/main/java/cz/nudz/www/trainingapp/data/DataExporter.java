@@ -40,7 +40,7 @@ public class DataExporter {
     public DataExporter(BaseActivity activity) {
         this.activity = activity;
         this.dbHelper = activity.getHelper();
-    };
+    }
 
     /**
      * Exports user training data in excel compatible format.
@@ -59,7 +59,8 @@ public class DataExporter {
         File f = new File(filePath);
         try {
             final int colCount = 14;
-            Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username AS [Username], " +
+
+            try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username AS [Username], " +
                     "ts.startDate AS [Session Start Date], ts.endDate AS [Session End Date], ts.isFinished AS [Is Finished], " +
                     "p.startDate AS [Paradigm Start Date], p.endDate AS [Paradigm End Date], p.paradigmType AS [Paradigm Type], p.pauseDurationMillis AS [Paradigm Pause], " +
                     "s.startDate AS [Sequence Start Date], s.endDate AS [Sequence End Date], s.difficulty AS [Difficulty], " +
@@ -69,10 +70,7 @@ public class DataExporter {
                     "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
                     "JOIN Sequence s ON s.paradigm_id = p.id " +
                     "JOIN TrialAnswer ta ON ta.sequence_id = s.id " +
-                    "WHERE u.username = ?", new String[]{username});
-
-            CSVWriter writer = new CSVWriter(new FileWriter(filePath , false), ';');
-            try {
+                    "WHERE u.username = ?", new String[]{username}); CSVWriter writer = new CSVWriter(new FileWriter(filePath, false), ';')) {
                 writer.writeNext(cursor.getColumnNames());
                 while (cursor.moveToNext()) {
                     String[] row = new String[colCount];
@@ -86,9 +84,6 @@ public class DataExporter {
                     }
                     writer.writeNext(row);
                 }
-            } finally {
-                cursor.close();
-                writer.close();
             }
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
@@ -105,10 +100,7 @@ public class DataExporter {
      */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /**

@@ -27,7 +27,7 @@ public class TrainingSession {
     @DatabaseField(canBeNull = false, foreign = true)
     private User user;
 
-    public TrainingSession() {};
+    public TrainingSession() {}
 
     public int getId() {
         return id;

@@ -43,12 +43,7 @@ public class SessionManager {
         if (!this.isLoggedIn()) {
             // user is not logged in, redirect him to Login Activity
             Utils.showErrorDialog(context, null, context.getString(R.string.errorNotLoggedIn));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    redirectToLogin();
-                }
-            }, 3000);
+            new Handler().postDelayed(this::redirectToLogin, 3000);
             return false;
         }
         return true;
@@ -58,7 +53,7 @@ public class SessionManager {
      * Get stored session data. Use public keys on this class to query for details.
      */
     public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
 
         user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
 

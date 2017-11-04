@@ -27,7 +27,7 @@ public class Sequence {
     @DatabaseField()
     private Date endDate;
 
-    public Sequence() {};
+    public Sequence() {}
 
     public int getId() {
         return id;

@@ -13,7 +13,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private volatile TrainingAppDbHelper helper;
     private volatile boolean created = false;

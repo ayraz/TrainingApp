@@ -2,9 +2,7 @@ package cz.nudz.www.trainingapp.main;
 
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,31 +42,22 @@ public class ModeSelectionFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.mode_selection_fragment, container, false);
         activity = (BaseActivity) getActivity();
 
-        binding.trainingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setEnabled(false);
-                // Check for user immediately as we cannot do anything in training without one.
-                if (activity.getSessionManager().checkLogin()) {
-                    TrainingActivity.startActivity(activity, ParadigmType.COLOR);
-                }
+        binding.trainingBtn.setOnClickListener(v -> {
+            v.setEnabled(false);
+            // Check for user immediately as we cannot do anything in training without one.
+            if (activity.getSessionManager().checkLogin()) {
+                TrainingActivity.startActivity(activity, ParadigmType.COLOR);
             }
         });
 
-        binding.tutorialBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setEnabled(false);
-                TutorialPagerActivity.startActivity(activity);
-            }
+        binding.tutorialBtn.setOnClickListener(v -> {
+            v.setEnabled(false);
+            TutorialPagerActivity.startActivity(activity);
         });
 
-        binding.trialBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TrialSelectionFragment trialSelectionFragment = new TrialSelectionFragment();
-                trialSelectionFragment.show(getChildFragmentManager(), "");
-            }
+        binding.trialBtn.setOnClickListener(v -> {
+            TrialSelectionFragment trialSelectionFragment = new TrialSelectionFragment();
+            trialSelectionFragment.show(getChildFragmentManager(), "");
         });
 
         return binding.getRoot();

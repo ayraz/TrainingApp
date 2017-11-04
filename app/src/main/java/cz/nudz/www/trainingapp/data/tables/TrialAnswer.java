@@ -28,7 +28,7 @@ public class TrialAnswer {
     @DatabaseField()
     private Long responseTimeMillis;
 
-    public TrialAnswer() {};
+    public TrialAnswer() {}
 
     public int getId() {
         return id;

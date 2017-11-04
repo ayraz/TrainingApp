@@ -38,18 +38,8 @@ public class LoginActivity extends BaseActivity implements YesNoDialogFragment.Y
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
-        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-        binding.lastLoginAsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.username.setText(binding.lastLoginAsBtn.getText());
-            }
-        });
+        binding.loginBtn.setOnClickListener(v -> login());
+        binding.lastLoginAsBtn.setOnClickListener(v -> binding.username.setText(binding.lastLoginAsBtn.getText()));
 
         // set last user btn help
         try {

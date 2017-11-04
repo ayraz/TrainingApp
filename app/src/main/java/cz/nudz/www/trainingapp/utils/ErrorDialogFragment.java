@@ -29,12 +29,9 @@ public class ErrorDialogFragment extends AlertDialogFragment {
     @Override
     protected void init(AlertDialog.Builder builder) {
         super.init(builder);
-        builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                ErrorDialogFragment.this.dismiss();
-            }
+        builder.setNeutralButton(R.string.ok, (dialog, which) -> {
+            dialog.dismiss();
+            ErrorDialogFragment.this.dismiss();
         });
     }
 }

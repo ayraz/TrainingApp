@@ -64,19 +64,9 @@ public class TutorialPagerActivity extends BaseActivity {
             }
         });
 
-        binding.tutorialActivityPrevBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pager.setCurrentItem(getCurrentPage() - 1);
-            }
-        });
+        binding.tutorialActivityPrevBtn.setOnClickListener(v -> pager.setCurrentItem(getCurrentPage() - 1));
 
-        binding.tutorialActivityNextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pager.setCurrentItem(getCurrentPage() + 1);
-            }
-        });
+        binding.tutorialActivityNextBtn.setOnClickListener(v -> pager.setCurrentItem(getCurrentPage() + 1));
     }
 
     private int getCurrentPage() {

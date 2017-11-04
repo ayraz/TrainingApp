@@ -2,7 +2,6 @@ package cz.nudz.www.trainingapp.main;
 
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -54,13 +53,7 @@ public class PerformanceSummaryFragment extends Fragment {
                 entries.add(new Entry(i, sessionData.get(i).maxDifficulty));
             }
 
-            binding.lineChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
-
-                @Override
-                public String getFormattedValue(float value, AxisBase axis) {
-                    return new SimpleDateFormat("dd/MM/yyyy").format(sessionData.get((int) value).sessionDate);
-                }
-            });
+            binding.lineChart.getXAxis().setValueFormatter((value, axis) -> new SimpleDateFormat("dd/MM/yyyy").format(sessionData.get((int) value).sessionDate));
             binding.lineChart.getAxisLeft().setGranularity(1);
 //            binding.lineChart.getAxisRight().setGranularity(1);
             LineDataSet lineDataSet = new LineDataSet(entries, "Label");

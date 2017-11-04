@@ -3,8 +3,6 @@ package cz.nudz.www.trainingapp.utils;
 import com.android.internal.util.Predicate;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**

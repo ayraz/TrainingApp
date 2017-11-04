@@ -80,19 +80,11 @@ public class TrainingActivity extends BaseActivity implements
         new AlertDialog.Builder(this)
                 .setTitle(R.string.quitTrainingDialogTitle)
                 .setMessage(R.string.quitTrainingDialogMessage)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        stopTrainingCallbacks();
-                        TrainingActivity.super.onBackPressed();
-                    }
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    stopTrainingCallbacks();
+                    TrainingActivity.super.onBackPressed();
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
         .create().show();
     }
 

@@ -1,10 +1,8 @@
 package cz.nudz.www.trainingapp.trial;
 
 
-import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,12 +33,7 @@ public class TrialSelectionFragment extends DialogFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.trial_selection_fragment, container, false);
 
         binding.paradigmTypeList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.paradigmTypeList.setAdapter(new TrialRowAdapter(new TrialRowAdapter.OnParadigmRowClick() {
-            @Override
-            public void onClick(View v, ParadigmType paradigmType, Difficulty difficulty) {
-                TrialActivity.startActivity(getActivity(), paradigmType, difficulty);
-            }
-        }));
+        binding.paradigmTypeList.setAdapter(new TrialRowAdapter((v, paradigmType, difficulty) -> TrialActivity.startActivity(getActivity(), paradigmType, difficulty)));
 
         return binding.getRoot();
     }

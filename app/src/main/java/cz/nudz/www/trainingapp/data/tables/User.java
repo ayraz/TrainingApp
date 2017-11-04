@@ -37,7 +37,7 @@ public class User {
         this.lastLoginDate = lastLoginDate;
     }
 
-    public User() {};
+    public User() {}
 
     public String getUsername() {
         return username;

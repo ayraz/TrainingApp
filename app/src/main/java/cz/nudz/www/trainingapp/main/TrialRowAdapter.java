@@ -76,14 +76,11 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
             this.chartTitleBtn = (TextView) v.findViewById(R.id.chartTitleBtn);
             this.difficultySpinner = (Spinner) v.findViewById(R.id.difficultySpinner);
 
-            chartTitleBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int difficultyIndex = Integer.parseInt((String) ViewHolder.this.difficultySpinner.getSelectedItem()) - 1;
-                    TrialRowAdapter.this.callback.onClick(view,
-                            ParadigmSet.getAt(getAdapterPosition()),
-                            Difficulty.values()[difficultyIndex]);
-                }
+            chartTitleBtn.setOnClickListener(view -> {
+                int difficultyIndex = Integer.parseInt((String) ViewHolder.this.difficultySpinner.getSelectedItem()) - 1;
+                TrialRowAdapter.this.callback.onClick(view,
+                        ParadigmSet.getAt(getAdapterPosition()),
+                        Difficulty.values()[difficultyIndex]);
             });
         }
 

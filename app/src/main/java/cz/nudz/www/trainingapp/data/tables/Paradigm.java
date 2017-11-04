@@ -32,7 +32,7 @@ public class Paradigm {
     @DatabaseField
     private long pauseDurationMillis;
 
-    public Paradigm() {};
+    public Paradigm() {}
 
     public int getId() {
         return id;
