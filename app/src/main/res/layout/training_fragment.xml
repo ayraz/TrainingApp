@@ -122,25 +122,16 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <View
-            android:id="@+id/trainingFragmentBtnSeparator"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/trainingFragmentGuideBottom" />
-
         <ImageButton
             android:id="@+id/trainingFragmentDifferentBtn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="196dp"
+            android:layout_height="72dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentGuideCenter"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/trainingFragmentGuideBottom"
-            app:srcCompat="@drawable/btn_cancel"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:srcCompat="@drawable/btn_cancel" />
 
         <ImageButton
             android:id="@+id/trainingFragmentSameBtn"

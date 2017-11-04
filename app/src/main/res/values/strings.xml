@@ -50,7 +50,7 @@
     <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
     <string name="usernameLabel">Uživatelské jméno: </string>
     <string name="loginBtnText">Přihlásit se</string>
-    <string name="difficultyLabel">Složitost: </string>
+    <string name="difficultyLabel">úroveň: </string>
     <string name="tryColorParadigmBtn">Vyzkoušet barevnou paradigmu</string>
     <string name="tryPositionParadigmBtn">Vyzkoušet poziční paradigmu</string>
     <string name="tryShapeParadigmBtn">Vyzkoušet tvarovou paradigmu</string>
