@@ -300,7 +300,7 @@ public abstract class TrainingFragment extends Fragment {
             stimuli.add(new ArrayList<>(halfStimCount));
             stimuli.add(new ArrayList<>(halfStimCount));
 
-            final List<Rect> basePositions = Utils.generateGridPositions(gridSize, cellSize);
+            final List<Rect> basePositions = generateGridPositions(gridSize, cellSize);
             if (basePositions.size() < halfStimCount)
                 throw new IllegalStateException("The grid is too small for the number of stimuli.");
 
@@ -312,7 +312,7 @@ public abstract class TrainingFragment extends Fragment {
                 Collections.shuffle(gridPositions);
 
                 for (int j = 0; j < halfStimCount; ++j) {
-                    ImageView v = Utils.createStimView(getActivity());
+                    ImageView v = createStimView(getActivity());
                     stimuli.get(i).add(v);
 
                     FrameLayout container = new FrameLayout(getActivity());
@@ -354,6 +354,33 @@ public abstract class TrainingFragment extends Fragment {
 
         v.setLayoutParams(params);
         grid.addView(v);
+    }
+
+    @NonNull
+    public static ImageView createStimView(Context context) {
+        ImageView v = new ImageView(context);
+        v.setVisibility(View.INVISIBLE);
+        // we need to set view's id to later find it in the layout..
+        v.setId(View.generateViewId());
+        return v;
+    }
+
+    public static List<Rect> generateGridPositions(int gridSize, int cellSize) {
+        List<Rect> positions = new ArrayList<>();
+        int col = 0;
+        while (col * cellSize + cellSize <= gridSize) {
+            int row = 0;
+            while (row * cellSize + cellSize <= gridSize) {
+                positions.add(new Rect(
+                        col * cellSize,
+                        row * cellSize,
+                        col * cellSize + cellSize,
+                        row * cellSize + cellSize));
+                ++row;
+            }
+            ++col;
+        }
+        return positions;
     }
 
     public interface SequenceFragmentListener {

@@ -1,17 +1,16 @@
 package cz.nudz.www.trainingapp.utils;
 
-import android.content.Context;
-import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.dialogs.AlertDialogFragment;
+import cz.nudz.www.trainingapp.dialogs.ErrorDialogFragment;
+import cz.nudz.www.trainingapp.dialogs.YesNoDialogFragment;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 
 /**
@@ -19,23 +18,6 @@ import cz.nudz.www.trainingapp.enums.Difficulty;
  */
 
 public class Utils {
-    public static List<Rect> generateGridPositions(int gridSize, int cellSize) {
-        List<Rect> positions = new ArrayList<>();
-        int col = 0;
-        while (col * cellSize + cellSize <= gridSize) {
-            int row = 0;
-            while (row * cellSize + cellSize <= gridSize) {
-                positions.add(new Rect(
-                        col * cellSize,
-                        row * cellSize,
-                        col * cellSize + cellSize,
-                        row * cellSize + cellSize));
-                ++row;
-            }
-            ++col;
-        }
-        return positions;
-    }
 
     /**
      * See: https://math.stackexchange.com/questions/466198/algorithm-to-get-the-maximum-size-of-n-squares-that-fit-into-a-rectangle-with-a
@@ -96,15 +78,6 @@ public class Utils {
         return adjustment;
     }
 
-    @NonNull
-    public static ImageView createStimView(Context context) {
-        ImageView v = new ImageView(context);
-        v.setVisibility(View.INVISIBLE);
-        // we need to set view's id to later find it in the layout..
-        v.setId(View.generateViewId());
-        return v;
-    }
-
     public static void setViewsVisible(boolean visible, View... views) {
         for (View v : views) {
             v.setVisibility(visible ? View.VISIBLE: View.INVISIBLE);
@@ -117,6 +90,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Checks if given text is null, null string, or empty after trimming.
+     * @param text
+     * @return
+     */
     public static boolean isNullOrEmpty(String text) {
         return (text == null
                 || text.isEmpty()

@@ -1,7 +1,6 @@
-package cz.nudz.www.trainingapp.utils;
+package cz.nudz.www.trainingapp.dialogs;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

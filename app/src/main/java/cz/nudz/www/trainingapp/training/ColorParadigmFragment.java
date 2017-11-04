@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.utils.ArrayUtils;
+import cz.nudz.www.trainingapp.utils.CollectionUtils;
 
 public class ColorParadigmFragment extends TrainingFragment {
 
@@ -23,8 +23,7 @@ public class ColorParadigmFragment extends TrainingFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Setup stimuli/probe colors..
         // The color count covers entirely stimuli count even for hardest difficulty + 1 for color change.
-        colors = ArrayUtils.toIntArrayList(getResources().getIntArray(R.array.trialColors));
-
+        colors = CollectionUtils.toList(getResources().getIntArray(R.array.trialColors));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

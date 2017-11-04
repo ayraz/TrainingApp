@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.utils;
+package cz.nudz.www.trainingapp.dialogs;
 
 
 import android.app.Dialog;

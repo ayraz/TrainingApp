@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.android.internal.util.Predicate;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +43,7 @@ public class ShapeParadigmFragment extends TrainingFragment {
 
     @Override
     protected void performChange(final ImageView changingStim) {
-        List<Drawable> filtered = CollectionUtils.filterList(this.drawables, drawable -> !(drawable == changingStim.getDrawable()));
+        List<Drawable> filtered = CollectionUtils.filter(this.drawables, drawable -> !(drawable == changingStim.getDrawable()));
         Drawable changeDrawable = filtered.get(RandomUtils.nextIntExclusive(0, filtered.size()));
         changingStim.setImageDrawable(changeDrawable);
     }

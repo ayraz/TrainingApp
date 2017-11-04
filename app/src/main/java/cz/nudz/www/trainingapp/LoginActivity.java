@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
@@ -17,7 +16,7 @@ import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.main.MainActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
-import cz.nudz.www.trainingapp.utils.YesNoDialogFragment;
+import cz.nudz.www.trainingapp.dialogs.YesNoDialogFragment;
 
 public class LoginActivity extends BaseActivity implements YesNoDialogFragment.YesNoDialogFragmentListener {
 
