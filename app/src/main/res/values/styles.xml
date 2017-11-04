@@ -7,7 +7,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/grey</item>
+        <item name="android:windowBackground">@color/appBackground</item>
     </style>
 
     <style name="MainScreenButton" parent="">
@@ -22,5 +22,9 @@
 
     <style name="CustomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">false</item>
+    </style>
+
+    <style name="AppTheme.CardButton" parent="Base.Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/white</item>
     </style>
 </resources>

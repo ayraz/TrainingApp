@@ -3,6 +3,7 @@ package cz.nudz.www.trainingapp;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -42,8 +43,8 @@ public class SessionManager {
     public boolean checkLogin() {
         if (!this.isLoggedIn()) {
             // user is not logged in, redirect him to Login Activity
-            Utils.showErrorDialog(context, null, context.getString(R.string.errorNotLoggedIn));
-            new Handler().postDelayed(this::redirectToLogin, 3000);
+            Toast.makeText(context, R.string.errorNotLoggedIn, Toast.LENGTH_LONG);
+            redirectToLogin();
             return false;
         }
         return true;

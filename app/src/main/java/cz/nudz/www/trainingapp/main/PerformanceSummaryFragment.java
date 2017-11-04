@@ -30,7 +30,6 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
  */
 public class PerformanceSummaryFragment extends Fragment {
 
-
     private PerformanceSummaryFragmentBinding binding;
     private BaseActivity activity;
 

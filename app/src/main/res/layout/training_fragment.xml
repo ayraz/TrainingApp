@@ -131,14 +131,14 @@
             app:layout_constraintLeft_toLeftOf="@+id/trainingFragmentGuideCenter"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/trainingFragmentGuideBottom"
-            app:srcCompat="@drawable/btn_cancel" />
+            app:srcCompat="@drawable/icons8_not_equal" />
 
         <ImageButton
             android:id="@+id/trainingFragmentSameBtn"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/btn_checked"
+            app:srcCompat="@drawable/icons8_equal_sign"
             android:scaleType="fitCenter"
             app:layout_constraintTop_toBottomOf="@+id/trainingFragmentLeftGrid"
             app:layout_constraintRight_toLeftOf="@+id/trainingFragmentDifferentBtn"

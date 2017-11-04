@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Training App</string>
     <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="welcomeText"><![CDATA[<h2>Ahoj a vítej v TrainingApp,</h2>
+        Právě teď jste na hlavní obrazovce, můžete se zde pohybovat všemi možnostmi aplikace:
+        <ul><li><b>Tréninkový režim</b> - zde můžete zahájit skutečný trénink, který bude zaznamenán.</li><li><b>Režim výuky</b> - to vás provede každou etapou tréninku (viz tuto možnost před začátkem skutečného tréninku).</li><li><b>Režim zkušební verze</b> - zde můžete zvolit libovolný z dostupných výcvikových úkolů a vyzkoušet několik z nich (výsledky nejsou zaznamenávány).</li></ul>
+        Jakmile dokončíte alespoň jednu tréninkovou relaci, budete moci zobrazit přehled výsledků z části <b>"Výsledky"</b>.]]></string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
     <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
@@ -11,12 +15,15 @@
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
     <string name="errorGenericMessage">Jejda, bohužel něco nefungovalo.</string>
     <string name="errorNoParadigmsLeft">Žádné další paradigmy odešly.</string>
-    <string name="errorNotLoggedIn">Nejste přihlášeni a budete přesměrováni na přihlašovací obrazovku.</string>
+    <string name="errorNotLoggedIn">Nejste přihlášeni, budete přesměrováni na přihlašovací obrazovku.</string>
     <string name="errorTitle">Chyba</string>
     <string name="goBackBtnText">Vrátit se</string>
-    <string name="trainingBtnText">Trénink</string>
-    <string name="trialBtnText">Zacvík</string>
-    <string name="tutorialBtnText">Instrukce</string>
+    <string name="trainingOptionTitle">Trénink</string>
+    <string name="trialOptionTitle">Zacvík</string>
+    <string name="tutorialOptionTitle">Instrukce</string>
+    <string name="introOptionTitle">Úvod</string>
+    <string name="lastSessionPerformanceOptionTitle">Poslední Seance</string>
+    <string name="allSessionsPerformanceOptionTitle">Všechny Seance</string>
     <string name="no">ne</string>
     <string name="ok">OK</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
@@ -54,4 +61,7 @@
     <string name="tryColorParadigmBtn">Vyzkoušet barevnou paradigmu</string>
     <string name="tryPositionParadigmBtn">Vyzkoušet poziční paradigmu</string>
     <string name="tryShapeParadigmBtn">Vyzkoušet tvarovou paradigmu</string>
+    <string name="mainCardTitle">Hlavní</string>
+    <string name="modesCardTitle">Režimy</string>
+    <string name="resultsCardTitle">Výsledky</string>
 </resources>

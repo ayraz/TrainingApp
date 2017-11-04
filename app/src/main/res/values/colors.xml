@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="appBackground">#F3F3F3</color>
     <color name="trainingBackground">#CDC9C8</color>
+    <color name="menuOptionSelected">#3F51B5CC</color>
 
     <color name="red">#ff0000</color>
     <color name="yellow">#ffff00</color>
