@@ -17,6 +17,8 @@ import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
+import cz.nudz.www.trainingapp.summary.PerformanceSummaryFragment;
+import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
 import cz.nudz.www.trainingapp.trial.ModeSelectionFragment;
 
 public class MainActivity extends BaseActivity {
@@ -68,9 +70,10 @@ public class MainActivity extends BaseActivity {
                     case R.string.trialOptionTitle:
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
-                        showFragment(new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
+                        showFragment(new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
+                        showFragment(new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                 }
             });
@@ -102,6 +105,7 @@ public class MainActivity extends BaseActivity {
 
     private void showFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         transaction.replace(binding.fragmentContainer.getId(), fragment, tag);
         transaction.commit();
     }
@@ -119,7 +123,7 @@ public class MainActivity extends BaseActivity {
                     return new ModeSelectionFragment();
                 case 1:
                 default:
-                    return new PerformanceSummaryFragment();
+                    return new SessionRecapFragment();
             }
         }
 

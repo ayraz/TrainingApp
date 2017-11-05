@@ -44,7 +44,7 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         ));
         CARD_OPTIONS_MAP.put(R.string.resultsCardTitle, Arrays.asList(
             new Pair<>(R.string.lastSessionPerformanceOptionTitle, R.drawable.icons8_area_chart),
-            new Pair<>(R.string.allSessionsPerformanceOptionTitle, R.drawable.icons8_area_chart)
+            new Pair<>(R.string.allSessionsPerformanceOptionTitle, R.drawable.icons8_measure)
         ));
     }
 

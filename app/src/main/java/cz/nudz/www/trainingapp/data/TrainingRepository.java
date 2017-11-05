@@ -139,15 +139,18 @@ public class TrainingRepository {
         }
     }
 
-    public List<Pair<Date, Integer>> getAllSessionParadigmData(String username, String paradigmType) {
+    public List<Pair<String, Integer>> getAllSessionParadigmData(String username, String paradigmType) {
         try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(allSessionDataQuery,
             new String[]{username, paradigmType})) {
 
-            List<Pair<Date, Integer>> results = new ArrayList<>();
+            List<Pair<String, Integer>> results = new ArrayList<>();
             while (cursor.moveToNext()) {
                 try {
                     results.add(new Pair<>(
-                            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex("startDate"))),
+                            // TODO: uh oh, perhaps find a better way to do this...
+                            new SimpleDateFormat("dd/MM/yyyy").format(
+                                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
+                                            cursor.getString(cursor.getColumnIndex("startDate")))),
                             cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
                     ));
                 } catch (ParseException e) {

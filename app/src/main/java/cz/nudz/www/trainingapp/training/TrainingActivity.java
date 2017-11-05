@@ -12,9 +12,7 @@ import android.support.v7.app.AlertDialog;
 import java.util.Date;
 import java.util.List;
 
-import cz.nudz.www.trainingapp.CountDownFragment;
 import cz.nudz.www.trainingapp.ParadigmSet;
-import cz.nudz.www.trainingapp.PauseFragment;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.WarningFragment;

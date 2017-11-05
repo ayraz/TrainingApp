@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.WarningFragment;
 import cz.nudz.www.trainingapp.databinding.PauseFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.ParadigmType;

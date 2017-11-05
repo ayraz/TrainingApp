@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.CountDownFragmentBinding;
 
 public class CountDownFragment extends DialogFragment {

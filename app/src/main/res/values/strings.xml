@@ -30,6 +30,9 @@
     <string name="introOptionTitle">Úvod</string>
     <string name="lastSessionPerformanceOptionTitle">Poslední Seance</string>
     <string name="allSessionsPerformanceOptionTitle">Všechny Seance</string>
+    <string name="lastSessionColorResultsTitle">Výsledky z poslední seance - Barva</string>
+    <string name="lastSessionPositionResultsTitle">Výsledky z poslední seance - Pozice</string>
+    <string name="lastSessionShapeResultsTitle">Výsledky z poslední seance - Tvar</string>
     <string name="no">NE</string>
     <string name="ok">OK</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
@@ -70,4 +73,7 @@
     <string name="mainCardTitle">Hlavní</string>
     <string name="modesCardTitle">Režimy</string>
     <string name="resultsCardTitle">Výsledky</string>
+    <string name="levelProgressionLabel">postup úrovně v úkolu</string>
+    <string name="maxLevelReachedLabel">maximální dosažena úroveň v úkolu</string>
+    <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninku.</string>
 </resources>
