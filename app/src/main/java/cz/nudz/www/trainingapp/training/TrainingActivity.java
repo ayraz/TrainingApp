@@ -1,7 +1,6 @@
 package cz.nudz.www.trainingapp.training;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -32,13 +31,13 @@ import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 public class TrainingActivity extends BaseActivity implements
-        TrainingFragment.SequenceFragmentListener,
+        TrainingFragment.TrainingFragmentListener,
         CountDownFragment.CountDownListener,
         WarningFragment.WarningFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
-
-    private static final int SEQUENCE_COUNT = 7;
+    public static final int DEFAULT_SEQUENCE_COUNT = 7;
+    public static final int DEFAULT_TRIAL_COUNT = 20;
 
     private TrainingActivityBinding binding;
     private int sequenceCount = 0;
@@ -121,7 +120,7 @@ public class TrainingActivity extends BaseActivity implements
 
     @Override
     public void onContinue() {
-        if (sequenceCount < SEQUENCE_COUNT) {
+        if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
             nextSequence();
         }
         else if (isParadigmFinished()) {
@@ -138,7 +137,7 @@ public class TrainingActivity extends BaseActivity implements
         sequenceCount += 1;
         trainingRepository.finishAndUpdateSequence(currentSequence);
 
-        if (sequenceCount < SEQUENCE_COUNT) {
+        if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
             Difficulty newDifficulty = Utils.adjustDifficulty(answers, currentDifficulty);
             Adjustment adjustment = Adjustment.SAME;
             if (newDifficulty != null) {
@@ -174,7 +173,7 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private boolean isParadigmFinished() {
-        return sequenceCount == SEQUENCE_COUNT;
+        return sequenceCount == DEFAULT_SEQUENCE_COUNT;
     }
 
     private void nextSequence() {

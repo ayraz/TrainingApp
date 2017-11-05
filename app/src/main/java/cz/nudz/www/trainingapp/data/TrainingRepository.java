@@ -2,6 +2,7 @@ package cz.nudz.www.trainingapp.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -12,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
 import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.training.TrainingActivity;
 
 /**
  * Created by artem on 26-Sep-17.
@@ -33,6 +36,26 @@ public class TrainingRepository {
     private RuntimeExceptionDao<Sequence, Integer> sequenceDao;
     private RuntimeExceptionDao<User, String> userDao;
     private RuntimeExceptionDao<TrainingSession, Integer> trainingSessionDao;
+
+    private final String allSessionDataQuery = "SELECT username , " +
+            "ts.startDate, " +
+            "MAX(s.difficulty) AS maxDifficulty " +
+            "FROM User u " +
+            "JOIN TrainingSession ts ON ts.user_id = u.username " +
+            "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
+            "JOIN Sequence s ON s.paradigm_id = p.id " +
+            "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
+            "GROUP BY ts.id, ts.startDate " +
+            "ORDER BY ts.startDate ASC";
+
+    private final String lastSessionDataQuery = "SELECT p.id AS paradigmId, s.difficulty " +
+            "FROM User u " +
+            "JOIN TrainingSession ts ON ts.user_id = u.username " +
+            "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
+            "JOIN Sequence s ON s.paradigm_id = p.id " +
+            "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
+            "ORDER BY ts.startDate DESC, s.id ASC " +
+            "LIMIT " + TrainingActivity.DEFAULT_SEQUENCE_COUNT;
 
     public TrainingRepository(Context context, TrainingAppDbHelper helper) {
         this.context = context.getApplicationContext();
@@ -94,43 +117,46 @@ public class TrainingRepository {
         trainingSessionDao.update(ts);
     }
 
-    public List<SessionData> getParadigmSessionData(String username, ParadigmType paradigmType) {
-        try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username , " +
-                "ts.startDate, " +
-                "MAX(s.difficulty) AS maxDifficulty " +
-                "FROM User u " +
-                "JOIN TrainingSession ts ON ts.user_id = u.username " +
-                "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
-                "JOIN Sequence s ON s.paradigm_id = p.id " +
-                "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
-                "GROUP BY ts.id, ts.startDate " +
-                "ORDER BY ts.startDate ASC",
-                new String[]{username, paradigmType.toString()})) {
+    public List<Pair<String, Integer>> getLastSessionParadigmData (String username, String paradigmType) {
+        try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(lastSessionDataQuery,
+                new String[] { username, paradigmType })) {
+            List<Pair<String, Integer>> result = new ArrayList<>(TrainingActivity.DEFAULT_SEQUENCE_COUNT);
+            if (cursor.moveToFirst()) {
+                final int paradigmId = cursor.getInt(cursor.getColumnIndex("paradigmId"));
+                int i = 1;
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext(), ++i) {
+                    // if at any point we get a sequence from different paradigm, the query must be wrong.
+                    if (paradigmId != cursor.getInt(cursor.getColumnIndex("paradigmId")))
+                        throw new IllegalStateException("Sequences are from distinct paradigms; broken query.");
 
-                List<SessionData> results = new ArrayList<>();
-                while (cursor.moveToNext()) {
-                    try {
-                        results.add(new SessionData(
-                                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex("startDate"))),
-                                cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
-                        ));
-                    } catch (ParseException e) {
-                        Log.e(TAG, e.getMessage());
-                        throw new RuntimeException(e);
-                    }
+                    result.add(new Pair<>(
+                            context.getString(R.string.sequence) + " " + i + ".",
+                            cursor.getInt(cursor.getColumnIndex("difficulty"))
+                    ));
                 }
-                return results;
+            }
+            return result;
         }
     }
 
-    public static class SessionData {
-        public SessionData(Date sessionDate, int maxDifficulty) {
-            this.sessionDate = sessionDate;
-            this.maxDifficulty = maxDifficulty;
-        }
+    public List<Pair<Date, Integer>> getAllSessionParadigmData(String username, String paradigmType) {
+        try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(allSessionDataQuery,
+            new String[]{username, paradigmType})) {
 
-        public Date sessionDate;
-        public int maxDifficulty;
+            List<Pair<Date, Integer>> results = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                try {
+                    results.add(new Pair<>(
+                            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(cursor.getColumnIndex("startDate"))),
+                            cursor.getInt(cursor.getColumnIndex("maxDifficulty"))
+                    ));
+                } catch (ParseException e) {
+                    Log.e(TAG, e.getMessage());
+                    throw new RuntimeException(e);
+                }
+            }
+            return results;
+        }
     }
 
     public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() {

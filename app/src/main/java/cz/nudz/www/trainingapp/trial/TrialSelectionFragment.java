@@ -12,9 +12,6 @@ import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TrialSelectionFragmentBinding;
-import cz.nudz.www.trainingapp.enums.Difficulty;
-import cz.nudz.www.trainingapp.enums.ParadigmType;
-import cz.nudz.www.trainingapp.main.TrialRowAdapter;
 
 
 /**

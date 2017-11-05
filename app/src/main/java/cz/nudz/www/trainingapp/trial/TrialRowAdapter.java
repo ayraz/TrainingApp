@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp.main;
+package cz.nudz.www.trainingapp.trial;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

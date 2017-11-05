@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+        <string name="welcomeText"><![CDATA[Hello, welcome to the training app.
+Right now you are on the main screen, you may navigate to all of the application\'s options from here:
+Training mode - here you can start the actual training which will be recorded.
+Tutorial mode - this will walk you through each stage of the training application (see this option before starting the actual training).
+Trial mode - here you can choose any one of available training tasks try a few of them out (results are not recorded).
+Once you fully complete at least one training session, you will be able to see you results summary from the "Results section".]]></string>
+</resources>

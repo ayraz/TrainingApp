@@ -40,7 +40,6 @@ public abstract class TrainingFragment extends Fragment {
 
     private static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
     private static final String KEY_TRIAL_COUNT = "KEY_TRIAL_COUNT";
-    public static final int DEFAULT_TRIAL_COUNT = 20;
 
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
@@ -57,7 +56,7 @@ public abstract class TrainingFragment extends Fragment {
 
     private TrainingFragmentBinding binding;
     private ConstraintLayout[] grids;
-    private SequenceFragmentListener listener;
+    private TrainingFragmentListener listener;
     private final Handler handler = new Handler();
 
     private Difficulty difficulty;
@@ -96,10 +95,10 @@ public abstract class TrainingFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SequenceFragmentListener) {
-            listener = (SequenceFragmentListener) context;
+        if (context instanceof TrainingFragmentListener) {
+            listener = (TrainingFragmentListener) context;
         } else {
-            throw new ClassCastException("Parent must implement SequenceFragmentListener interface.");
+            throw new ClassCastException("Parent must implement TrainingFragmentListener interface.");
         }
     }
 
@@ -114,7 +113,7 @@ public abstract class TrainingFragment extends Fragment {
 
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
-        trialCount = DEFAULT_TRIAL_COUNT;
+        trialCount = TrainingActivity.DEFAULT_TRIAL_COUNT;
         isTrainingMode = true;
         if (getArguments().containsKey(KEY_TRIAL_COUNT)) {
             trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
@@ -146,7 +145,7 @@ public abstract class TrainingFragment extends Fragment {
                 cellSize = Utils.optimalContainingSquareSize(gridSize, gridSize, halfStimCount);
                 // each cell can contain 4 actual stimuli; this excess space is for 'pseudo-randomness'..
                 // simulated with padding inside the cell.
-                paddingStart = halfStimCount <= 4 ? DEFAULT_TRIAL_COUNT : DEFAULT_TRIAL_COUNT / 2;
+                paddingStart = halfStimCount <= 4 ? TrainingActivity.DEFAULT_TRIAL_COUNT : TrainingActivity.DEFAULT_TRIAL_COUNT / 2;
                 stimSize = (cellSize / 2) - paddingStart;
 
                 trialRunner = new TrialRunner();
@@ -383,7 +382,7 @@ public abstract class TrainingFragment extends Fragment {
         return positions;
     }
 
-    public interface SequenceFragmentListener {
+    public interface TrainingFragmentListener {
 
         void onSequenceFinished(List<Boolean> answers);
 

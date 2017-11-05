@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.ListViewCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
@@ -18,6 +17,7 @@ import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
+import cz.nudz.www.trainingapp.trial.ModeSelectionFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -68,6 +68,7 @@ public class MainActivity extends BaseActivity {
                     case R.string.trialOptionTitle:
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
+                        showFragment(new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
                         break;
@@ -75,17 +76,17 @@ public class MainActivity extends BaseActivity {
             });
             binding.menuList.setAdapter(menuCardAdapter);
             binding.menuList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        }
 
-        // navigate to welcome fragment via fake click
-        if (savedInstanceState == null) {
-            binding.menuList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    ((MenuCardAdapter) binding.menuList.getAdapter()).clickHome();
-                    binding.menuList.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            });
+            // navigate to welcome fragment via fake click
+            if (savedInstanceState == null) {
+                binding.menuList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        ((MenuCardAdapter) binding.menuList.getAdapter()).clickHome();
+                        binding.menuList.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                });
+            }
         }
     }
 

@@ -20,7 +20,7 @@ import cz.nudz.www.trainingapp.training.TrainingFragment;
 
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
-public class TrialActivity extends BaseActivity implements TrainingFragment.SequenceFragmentListener {
+public class TrialActivity extends BaseActivity implements TrainingFragment.TrainingFragmentListener {
 
     public static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
 

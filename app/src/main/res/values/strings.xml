@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Training App</string>
+    <string name="color">Barva</string>
+    <string name="position">Pozice</string>
+    <string name="shape">Tvar</string>
+    <string name="sequence">Řada</string>
     <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
-    <string name="welcomeText"><![CDATA[<h2>Ahoj a vítej v TrainingApp,</h2>
-        Právě teď jste na hlavní obrazovce, můžete se zde pohybovat všemi možnostmi aplikace:
-        <ul><li><b>Tréninkový režim</b> - zde můžete zahájit skutečný trénink, který bude zaznamenán.</li><li><b>Režim výuky</b> - to vás provede každou etapou tréninku (viz tuto možnost před začátkem skutečného tréninku).</li><li><b>Režim zkušební verze</b> - zde můžete zvolit libovolný z dostupných výcvikových úkolů a vyzkoušet několik z nich (výsledky nejsou zaznamenávány).</li></ul>
-        Jakmile dokončíte alespoň jednu tréninkovou relaci, budete moci zobrazit přehled výsledků z části <b>"Výsledky"</b>.]]></string>
+    <string name="welcomeText"><![CDATA[<h1>Ahoj a vítej v TrainingApp,</h1>
+        Právě teď jste na hlavní obrazovce, můžete se zde pohybovat všemi možnostmi aplikace:<br/><br/>
+        <li>&nbsp;<b>Tréninkový režim</b> - zde můžete zahájit skutečný trénink, který bude zaznamenán.</li>
+        <li>&nbsp;<b>Režim výuky</b> - to vás provede každou etapou tréninku (viz tuto možnost před začátkem skutečného tréninku).</li>
+        <li>&nbsp;<b>Režim zkušební verze</b> - zde můžete zvolit libovolný z dostupných výcvikových úkolů a vyzkoušet několik z nich (výsledky nejsou zaznamenávány).</li>
+        Jakmile dokončíte alespoň jednu tréninkovou relaci, budete moci zobrazit přehled výsledků z části <b>&quot;Výsledky&quot;</b>.]]></string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
     <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
@@ -24,7 +30,7 @@
     <string name="introOptionTitle">Úvod</string>
     <string name="lastSessionPerformanceOptionTitle">Poslední Seance</string>
     <string name="allSessionsPerformanceOptionTitle">Všechny Seance</string>
-    <string name="no">ne</string>
+    <string name="no">NE</string>
     <string name="ok">OK</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>

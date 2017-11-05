@@ -2,15 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cz.nudz.www.trainingapp.main.PerformanceSummaryFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChart"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </android.support.constraint.ConstraintLayout>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/colorChart"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:minHeight="250dp"/>
 
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/positionChart"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/shapeChart"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+        </LinearLayout>
+
+    </ScrollView>
 </layout>
