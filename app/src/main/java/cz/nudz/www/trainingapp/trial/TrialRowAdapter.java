@@ -1,12 +1,14 @@
 package cz.nudz.www.trainingapp.trial;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import cz.nudz.www.trainingapp.ParadigmSet;
@@ -35,31 +37,34 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String title = "";
-        Context context = holder.getChartTitleBtn().getContext();
+        int drawableId = 0;
+        Context context = holder.getTryBtn().getContext();
         switch (ParadigmSet.getAt(position)) {
             case COLOR:
                 title = context.getString(R.string.tryColorParadigmBtn);
+                drawableId = R.drawable.color_icon;
                 break;
             case POSITION:
                 title = context.getString(R.string.tryPositionParadigmBtn);
+                drawableId = R.drawable.position_icon;
                 break;
             case SHAPE:
                 title = context.getString(R.string.tryShapeParadigmBtn);
+                drawableId = R.drawable.shape_icon;
                 break;
         }
-        holder.getChartTitleBtn().setText(title);
+        holder.getTryBtn().setText(title);
+
+        holder.getIcon().setImageDrawable(context.getResources().getDrawable(drawableId));
 
         String[] difficulties = new String[Difficulty.values().length];
         for (int i = 0; i < difficulties.length; ++i) {
             difficulties[i] = Integer.toString(i+1);
         }
-
-        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_spinner_item,
-                difficulties);
-        stringArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        holder.getDifficultySpinner().setAdapter(stringArrayAdapter);
-        holder.getDifficultySpinner().setSelection(0);
+        holder.getDifficultyPicker().setMinValue(1);
+        holder.getDifficultyPicker().setMaxValue(difficulties.length);
+        holder.getDifficultyPicker().setWrapSelectorWheel(false);
+        holder.getDifficultyPicker().setDisplayedValues(difficulties);
     }
 
     @Override
@@ -68,28 +73,32 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView chartTitleBtn;
-        private final Spinner difficultySpinner;
+
+        private final ImageView icon;
+        private final TextView tryBtn;
+        private final NumberPicker difficultyPicker;
 
         public ViewHolder(View v) {
             super(v);
-            this.chartTitleBtn = (TextView) v.findViewById(R.id.chartTitleBtn);
-            this.difficultySpinner = (Spinner) v.findViewById(R.id.difficultySpinner);
+            this.tryBtn = v.findViewById(R.id.tryBtn);
+            this.difficultyPicker = v.findViewById(R.id.difficultyPicker);
+            this.icon = v.findViewById(R.id.icon);
 
-            chartTitleBtn.setOnClickListener(view -> {
-                int difficultyIndex = Integer.parseInt((String) ViewHolder.this.difficultySpinner.getSelectedItem()) - 1;
-                TrialRowAdapter.this.callback.onClick(view,
-                        ParadigmSet.getAt(getAdapterPosition()),
-                        Difficulty.values()[difficultyIndex]);
-            });
+            tryBtn.setOnClickListener(view -> TrialRowAdapter.this.callback.onClick(view,
+                    ParadigmSet.getAt(getAdapterPosition()),
+                    Difficulty.values()[ViewHolder.this.difficultyPicker.getValue() - 1]));
         }
 
-        public TextView getChartTitleBtn() {
-            return chartTitleBtn;
+        public TextView getTryBtn() {
+            return tryBtn;
         }
 
-        public Spinner getDifficultySpinner() {
-            return difficultySpinner;
+        public NumberPicker getDifficultyPicker() {
+            return difficultyPicker;
+        }
+
+        public ImageView getIcon() {
+            return icon;
         }
     }
 

@@ -66,7 +66,8 @@ public class TrainingActivity extends BaseActivity implements
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
 
         // TODO: Each session/paradigm starts with lowest difficulty.
-        showFragment(WarningFragment.newInstance(currentParadigmType, null), WarningFragment.TAG);
+        showFragment(binding.trainingActivityFragmentContainer.getId(),
+                WarningFragment.newInstance(currentParadigmType, null), WarningFragment.TAG);
 
         // TODO remove after debug
         binding.paradigm.setText(currentParadigmType.toString());
@@ -91,12 +92,6 @@ public class TrainingActivity extends BaseActivity implements
             // Unregister all handler callbacks to prevent unwanted navigation caused by postDelayed.
             ((TrainingFragment) fragment).removePendingCallbacks();
         }
-    }
-
-    private void showFragment(Fragment fragment, String tag) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(binding.trainingActivityFragmentContainer.getId(), fragment, tag);
-        transaction.commit();
     }
 
     @Override
@@ -148,7 +143,9 @@ public class TrainingActivity extends BaseActivity implements
             } else {
                 // TODO: handle max level
             }
-            showFragment(PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
+            showFragment(binding.trainingActivityFragmentContainer.getId(),
+                    PauseFragment.newInstance(currentParadigmType, adjustment),
+                    PauseFragment.TAG);
         } else if (isTrainingFinished()) {
             trainingRepository.finishAndUpdateSession(currentSession);
             // TODO: handle end of training..
@@ -156,7 +153,9 @@ public class TrainingActivity extends BaseActivity implements
             trainingRepository.finishAndUpdateParadigm(currentParadigm);
             paradigmPauseStartTime = new Date();
             // next cannot be null because end of training is handled above..
-            showFragment(PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null), PauseFragment.TAG);
+            showFragment(binding.trainingActivityFragmentContainer.getId(),
+                    PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null),
+                    PauseFragment.TAG);
         }
     }
 
@@ -177,7 +176,9 @@ public class TrainingActivity extends BaseActivity implements
     private void nextSequence() {
         currentSequence = trainingRepository.startAndStoreSequence(currentParadigm, currentDifficulty);
 
-        showFragment(TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
+        showFragment(binding.trainingActivityFragmentContainer.getId(),
+                TrainingFragment.newInstance(currentParadigmType, currentDifficulty),
+                TrainingFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
     }

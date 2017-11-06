@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.main;
 
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,15 +14,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 
+import java.util.List;
+
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
+import cz.nudz.www.trainingapp.enums.Difficulty;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.summary.PerformanceSummaryFragment;
 import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
+import cz.nudz.www.trainingapp.training.TrainingFragment;
 import cz.nudz.www.trainingapp.trial.ModeSelectionFragment;
+import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements
+        TrialSelectionFragment.OnTrialSelectedListener,
+        TrainingFragment.TrainingFragmentListener {
 
     private MainActivityBinding binding;
     private DataExporter dataExporter;
@@ -61,19 +70,20 @@ public class MainActivity extends BaseActivity {
             MenuCardAdapter menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
                 switch (optionStringId) {
                     case R.string.introOptionTitle:
-                        showFragment(new HomeFragment(), HomeFragment.TAG);
+                        showFragment(binding.fragmentContainer.getId(), new HomeFragment(), HomeFragment.TAG);
                         break;
                     case R.string.trainingOptionTitle:
                         break;
                     case R.string.tutorialOptionTitle:
                         break;
                     case R.string.trialOptionTitle:
+                        showFragment(binding.fragmentContainer.getId(), new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
-                        showFragment(new SessionRecapFragment(), SessionRecapFragment.TAG);
+                        showFragment(binding.fragmentContainer.getId(), new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
-                        showFragment(new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
+                        showFragment(binding.fragmentContainer.getId(), new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                 }
             });
@@ -103,45 +113,16 @@ public class MainActivity extends BaseActivity {
         dataExporter.export(getSessionManager().getUsername());
     }
 
-    private void showFragment(Fragment fragment, String tag) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        transaction.replace(binding.fragmentContainer.getId(), fragment, tag);
-        transaction.commit();
+    @Override
+    public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty) {
+
+        showAndStackFragment(binding.fragmentContainer.getId(),
+                TrainingFragment.newInstance(paradigmType, difficulty, 3),
+                TrainingFragment.TAG);
     }
 
-    private class SectionPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new ModeSelectionFragment();
-                case 1:
-                default:
-                    return new SessionRecapFragment();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.modeSelectionTitle);
-                case 1:
-                default:
-                    return getString(R.string.performanceSummaryTitle);
-            }
-        }
+    @Override
+    public void onSequenceFinished(List<Boolean> answers) {
+        getSupportFragmentManager().popBackStack();
     }
-
 }

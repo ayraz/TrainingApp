@@ -66,10 +66,10 @@
     <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
     <string name="usernameLabel">Uživatelské jméno: </string>
     <string name="loginBtnText">Přihlásit se</string>
-    <string name="difficultyLabel">úroveň: </string>
-    <string name="tryColorParadigmBtn">Vyzkoušet barevnou paradigmu</string>
-    <string name="tryPositionParadigmBtn">Vyzkoušet poziční paradigmu</string>
-    <string name="tryShapeParadigmBtn">Vyzkoušet tvarovou paradigmu</string>
+    <string name="difficultyLabel">Úroveň: </string>
+    <string name="tryColorParadigmBtn">Vyzkoušet "Barvu"</string>
+    <string name="tryPositionParadigmBtn">Vyzkoušet "Pozici"</string>
+    <string name="tryShapeParadigmBtn">Vyzkoušet "Tvar"</string>
     <string name="mainCardTitle">Hlavní</string>
     <string name="modesCardTitle">Režimy</string>
     <string name="resultsCardTitle">Výsledky</string>

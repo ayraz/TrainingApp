@@ -1,6 +1,7 @@
 package cz.nudz.www.trainingapp.trial;
 
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -9,9 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TimePicker;
 
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TrialSelectionFragmentBinding;
+import cz.nudz.www.trainingapp.enums.Difficulty;
+import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 
 /**
@@ -19,7 +24,15 @@ import cz.nudz.www.trainingapp.databinding.TrialSelectionFragmentBinding;
  */
 public class TrialSelectionFragment extends DialogFragment {
 
+    public interface OnTrialSelectedListener {
+
+        void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty);
+    }
+
+    public static final String TAG = TrialSelectionFragment.class.getSimpleName();
+
     private TrialSelectionFragmentBinding binding;
+    private OnTrialSelectedListener listener;
 
     public TrialSelectionFragment() {
         // Required empty public constructor
@@ -30,8 +43,19 @@ public class TrialSelectionFragment extends DialogFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.trial_selection_fragment, container, false);
 
         binding.paradigmTypeList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.paradigmTypeList.setAdapter(new TrialRowAdapter((v, paradigmType, difficulty) -> TrialActivity.startActivity(getActivity(), paradigmType, difficulty)));
+        binding.paradigmTypeList.setAdapter(new TrialRowAdapter((v, paradigmType, difficulty) -> listener.onTrialSelected(paradigmType, difficulty)));
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+
+        try {
+            listener = (OnTrialSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement " + OnTrialSelectedListener.class.getSimpleName());
+        }
     }
 }

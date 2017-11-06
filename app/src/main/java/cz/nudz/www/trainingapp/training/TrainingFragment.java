@@ -1,6 +1,7 @@
 package cz.nudz.www.trainingapp.training;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -95,22 +96,37 @@ public abstract class TrainingFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        // lock screen orientation to landscape for trials
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         if (context instanceof TrainingFragmentListener) {
             listener = (TrainingFragmentListener) context;
-        } else {
-            throw new ClassCastException("Parent must implement TrainingFragmentListener interface.");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        // unlock screen orientation once trials/tutorials are finished
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+        super.onDetach();
     }
 
     public void removePendingCallbacks() {
         this.handler.removeCallbacksAndMessages(null);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        removePendingCallbacks();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.training_fragment, container, false);
-
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
         trialCount = TrainingActivity.DEFAULT_TRIAL_COUNT;
@@ -168,7 +184,7 @@ public abstract class TrainingFragment extends Fragment {
         public void run() {
             if (i < trialCount) {
                 executeTrial();
-            } else {
+            } else if (listener != null) {
                 listener.onSequenceFinished(answers);
             }
         }
@@ -256,7 +272,7 @@ public abstract class TrainingFragment extends Fragment {
                                             TrialRunner.this,
                                             (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
 
-                                    listener.onTrialFinished(i);
+                                    if (listener != null) listener.onTrialFinished(i);
                                     i += 1;
 
                                 }, (int) (TEST_INTERVAL * DEBUG_SLOW));
@@ -386,6 +402,8 @@ public abstract class TrainingFragment extends Fragment {
 
         void onSequenceFinished(List<Boolean> answers);
 
-        void onTrialFinished(int trialCount);
+        default void onTrialFinished(int trialCount) {
+            // do nothing
+        }
     }
 }
