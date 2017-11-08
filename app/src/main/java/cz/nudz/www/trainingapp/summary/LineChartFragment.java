@@ -94,7 +94,13 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
         chart.setDescription(desc);
 
         final XAxis xAxis = chart.getXAxis();
-        xAxis.setValueFormatter(((value, axis) -> data.get((int) value).first));
+        xAxis.setAxisMinimum(0f);
+        // setting minimum on xAxis does not help fucking mpchart to pass humanly value to formatter
+        // so beware of the index hack in the formatter...
+        xAxis.setValueFormatter(((value, axis) -> {
+            value = value < 0 ? 0 : value % data.size();
+            return data.get((int) value).first;
+        }));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(CHART_FONT_SIZE);
         xAxis.setDrawGridLines(false);
