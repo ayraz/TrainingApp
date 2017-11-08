@@ -99,10 +99,6 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         }
     }
 
-    public void clickHome() {
-        home.performClick();
-    }
-
     public interface OnMenuOptionSelectedListener {
 
         void onSelection(int optionStringId);

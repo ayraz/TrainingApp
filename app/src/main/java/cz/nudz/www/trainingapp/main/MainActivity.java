@@ -4,12 +4,13 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewTreeObserver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity implements
     private DataExporter dataExporter;
     private MenuCardAdapter menuCardAdapter;
     private ParadigmType firstParadigm;
-    private int container;
+    private int containerId;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -69,30 +70,29 @@ public class MainActivity extends BaseActivity implements
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
         dataExporter = new DataExporter(this);
         firstParadigm = ParadigmSet.getAt(0);
+        containerId = binding.fragmentContainer.getId();
 
         // make sure we have a logged in user before we can proceed with anything
         if (getSessionManager().checkLogin()) {
             setSupportActionBar(binding.appBar);
-
             menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
-                container = binding.fragmentContainer.getId();
                 switch (optionStringId) {
                     case R.string.introOptionTitle:
-                        showFragment(container, new HomeFragment(), HomeFragment.TAG);
+                        showFragment(containerId, new HomeFragment(), HomeFragment.TAG);
                         break;
                     case R.string.trainingOptionTitle:
-                        showFragment(container, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
+                        showFragment(containerId, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
                         break;
                     case R.string.tutorialOptionTitle:
                         break;
                     case R.string.trialOptionTitle:
-                        showFragment(container, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
+                        showFragment(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
-                        showFragment(container, new SessionRecapFragment(), SessionRecapFragment.TAG);
+                        showFragment(containerId, new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
-                        showFragment(container, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
+                        showFragment(containerId, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                 }
             });
@@ -100,15 +100,10 @@ public class MainActivity extends BaseActivity implements
             final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             binding.menuList.setLayoutManager(layoutManager);
 
-            // navigate to welcome fragment via fake click
             if (savedInstanceState == null) {
-                binding.menuList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        ((MenuCardAdapter) binding.menuList.getAdapter()).clickHome();
-                        binding.menuList.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                });
+                // navigate to welcome fragment
+                menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
+                showFragment(containerId, new HomeFragment(), HomeFragment.TAG);
             }
         }
     }
@@ -153,18 +148,23 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void startTraining() {
-        showAndStackFragment(container,
+        showAndStackFragment(containerId,
                 CountDownFragment.newInstance(10 * 1000, getString(R.string.trainingStartsInTitle), getString(R.string.startImmediatelyBtnText)),
                 CountDownFragment.TAG);
     }
 
     @Override
     public void onExpired() {
-        TrainingActivity.startActivity(this, firstParadigm);
+        navigateToTrainingActivity();
     }
 
     @Override
     public void onContinue() {
+        navigateToTrainingActivity();
+    }
+
+    private void navigateToTrainingActivity() {
         TrainingActivity.startActivity(this, firstParadigm);
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }

@@ -81,6 +81,7 @@ public class CountDownFragment extends DialogFragment {
         countDownTimer.start();
 
         binding.continueBtn.setOnClickListener(v -> {
+            countDownTimer.cancel();
             listener.onContinue();
             dismiss();
         });
