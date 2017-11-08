@@ -41,4 +41,18 @@ public class CollectionUtils {
         }
         return result;
     }
+
+    /**
+     * Convert Integer list to int array.
+     * @param list
+     * @return
+     */
+    public static int[] toArray(List<Integer> list) {
+        final int size = list.size();
+        int[] array = new int[size];
+        for (int i = 0; i < size; ++i) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
 }

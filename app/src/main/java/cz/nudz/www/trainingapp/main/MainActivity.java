@@ -1,19 +1,16 @@
 package cz.nudz.www.trainingapp.main;
 
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
@@ -25,15 +22,18 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.summary.PerformanceSummaryFragment;
 import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
 import cz.nudz.www.trainingapp.training.TrainingFragment;
-import cz.nudz.www.trainingapp.trial.ModeSelectionFragment;
 import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
+import cz.nudz.www.trainingapp.utils.CollectionUtils;
 
 public class MainActivity extends BaseActivity implements
         TrialSelectionFragment.OnTrialSelectedListener,
         TrainingFragment.TrainingFragmentListener {
 
+    private static final String KEY_ACTIVE_OPTION_POS = "KEY_ACTIVE_OPTION_POS";
+
     private MainActivityBinding binding;
     private DataExporter dataExporter;
+    private MenuCardAdapter menuCardAdapter;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements
         if (getSessionManager().checkLogin()) {
             setSupportActionBar(binding.appBar);
 
-            MenuCardAdapter menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
+            menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
                 switch (optionStringId) {
                     case R.string.introOptionTitle:
                         showFragment(binding.fragmentContainer.getId(), new HomeFragment(), HomeFragment.TAG);
@@ -88,7 +88,8 @@ public class MainActivity extends BaseActivity implements
                 }
             });
             binding.menuList.setAdapter(menuCardAdapter);
-            binding.menuList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            binding.menuList.setLayoutManager(layoutManager);
 
             // navigate to welcome fragment via fake click
             if (savedInstanceState == null) {
@@ -101,6 +102,18 @@ public class MainActivity extends BaseActivity implements
                 });
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntegerArrayList(KEY_ACTIVE_OPTION_POS, new ArrayList<>(menuCardAdapter.getActiveOptionPosition()));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        menuCardAdapter.setActiveOptionPosition(savedInstanceState.getIntegerArrayList(KEY_ACTIVE_OPTION_POS));
     }
 
     @Override

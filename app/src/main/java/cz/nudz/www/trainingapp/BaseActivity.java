@@ -1,6 +1,7 @@
 package cz.nudz.www.trainingapp;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -84,17 +85,29 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showFragment(int containerId, Fragment fragment, String tag) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-        transaction.replace(containerId, fragment, tag);
-        transaction.commit();
+        if (!isFragmentShown(tag)) {
+            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag);
+            transaction.commit();
+        }
     }
 
     public void showAndStackFragment(int containerId, Fragment fragment, String tag) {
+        if (!isFragmentShown(tag)) {
+            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag);
+            transaction.addToBackStack(tag);
+            transaction.commit();
+        }
+    }
+
+    @NonNull
+    private FragmentTransaction replaceFragment(int containerId, Fragment fragment, String tag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         transaction.replace(containerId, fragment, tag);
-        transaction.addToBackStack(tag);
-        transaction.commit();
+        return transaction;
+    }
+
+    public boolean isFragmentShown(String tag) {
+        return getSupportFragmentManager().findFragmentByTag(tag) != null;
     }
 }

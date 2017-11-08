@@ -1,14 +1,17 @@
 package cz.nudz.www.trainingapp.summary;
 
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -41,6 +44,7 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
     protected ChartFragmentBinding binding;
     protected BaseActivity activity;
     protected TrainingRepository trainingRepository;
+    private Toast toast;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,7 +125,17 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
         protected void onPostExecute(List<Pair<X, Y>> results) {
             super.onPostExecute(results);
             if (results.isEmpty()) {
-                Toast.makeText(activity, R.string.notEnoughTrainingDataMessage, Toast.LENGTH_LONG).show();
+                if (toast == null) {
+                    toast = Toast.makeText(activity, R.string.notEnoughTrainingDataMessage, Toast.LENGTH_LONG);
+                    if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        final int activityWidth = activity.getWindow().getDecorView().getRootView().getWidth();
+                        toast.setGravity(
+                            Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM,
+                            (activityWidth - binding.getRoot().getWidth()) / 2,
+                            32);
+                    }
+                    toast.show();
+                }
                 return;
             }
             listener.onComplete(results);
