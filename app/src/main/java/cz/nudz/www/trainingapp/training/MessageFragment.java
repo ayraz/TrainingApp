@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.training;
 
 
 import android.content.Context;
@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.nudz.www.trainingapp.databinding.WarningFragmentBinding;
+import cz.nudz.www.trainingapp.ParadigmSet;
+import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.databinding.MessageFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.utils.Utils;
@@ -22,15 +24,16 @@ import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WarningFragment extends Fragment {
+public class MessageFragment extends Fragment {
 
-    public static final String KEY_DIFFICULTY_STATE = "KEY_DIFFICULTY_STATE";
-    public static final String TAG = WarningFragment.class.getSimpleName();
-    private WarningFragmentBinding binding;
+    public static final String KEY_ADJUSTMENT = "KEY_ADJUSTMENT";
+    public static final String TAG = MessageFragment.class.getSimpleName();
+
+    private MessageFragmentBinding binding;
     private ParadigmType currentParadigmType;
     private Adjustment adjustment;
     private boolean isSequencePause;
-    private WarningFragmentListener listener;
+    private MessageFragmentListener listener;
 
     /**
      *
@@ -38,11 +41,11 @@ public class WarningFragment extends Fragment {
      * @param adjustment Adjustment must only be passed for sequence pause, otherwise it has to be null signaling paradigm pause.
      * @return
      */
-    public static WarningFragment newInstance(@NonNull ParadigmType paradigmType, @Nullable Adjustment adjustment) {
-        WarningFragment warningFragment = new WarningFragment();
+    public static MessageFragment newInstance(@NonNull ParadigmType paradigmType, @Nullable Adjustment adjustment) {
+        MessageFragment messageFragment = new MessageFragment();
         Bundle bundle = bundleArguments(paradigmType, adjustment);
-        warningFragment.setArguments(bundle);
-        return warningFragment;
+        messageFragment.setArguments(bundle);
+        return messageFragment;
     }
 
     @NonNull
@@ -50,34 +53,32 @@ public class WarningFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_PARADIGM, paradigmType.toString());
         if (adjustment != null) {
-            bundle.putString(KEY_DIFFICULTY_STATE, adjustment.toString());
+            bundle.putString(KEY_ADJUSTMENT, adjustment.toString());
         }
         return bundle;
     }
 
-    public WarningFragment() {
+    public MessageFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.warning_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.message_fragment, container, false);
 
         currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
-        if (getArguments().containsKey(KEY_DIFFICULTY_STATE)) {
-            adjustment = Adjustment.valueOf(getArguments().getString(KEY_DIFFICULTY_STATE));
+        if (getArguments().containsKey(KEY_ADJUSTMENT)) {
+            adjustment = Adjustment.valueOf(getArguments().getString(KEY_ADJUSTMENT));
             isSequencePause = true;
         } else {
             isSequencePause = false;
         }
 
         if (isFirstParadigm() && !isSequencePause) {
-            binding.warningFragmentGoBackBtn.setOnClickListener(v -> listener.goBack());
             binding.warningFragmentStartTrainingBtn.setOnClickListener(v -> listener.startTraining());
         } else {
             Utils.setViewsVisible(false,
                     binding.warningFragmentWarning,
-                    binding.warningFragmentGoBackBtn,
                     binding.warningFragmentStartTrainingBtn);
         }
 
@@ -89,10 +90,9 @@ public class WarningFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof WarningFragmentListener) {
-            listener = (WarningFragmentListener) context;
-        } else {
-            throw new ClassCastException("Activity must implement WarningFragmentListener interface.");
+        // callback is only required on the main screen (start btn is hidden during pause)
+        if (context instanceof MessageFragmentListener) {
+            listener = (MessageFragmentListener) context;
         }
     }
 
@@ -123,10 +123,8 @@ public class WarningFragment extends Fragment {
         return ParadigmSet.indexOf(currentParadigmType) == 0;
     }
 
-    public interface WarningFragmentListener {
+    public interface MessageFragmentListener {
 
         void startTraining();
-
-        void goBack();
     }
 }

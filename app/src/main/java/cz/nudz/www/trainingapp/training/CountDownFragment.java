@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ public class CountDownFragment extends DialogFragment {
     public static final String TAG = CountDownFragment.class.getSimpleName();
 
     private static final String KEY_COUNT_DOWN_MILLIS = "KEY_COUNT_DOWN_MILLIS";
+    private static final String KEY_COUNT_DOWN_TITLE = "KEY_COUNT_DOWN_TITLE";
+    private static final String KEY_COUNT_DOWN_BTN_TEXT = "KEY_COUNT_DOWN_BTN_TEXT";
 
     private CountDownListener listener;
     private CountDownFragmentBinding binding;
@@ -34,6 +37,14 @@ public class CountDownFragment extends DialogFragment {
         return countDownFragment;
     }
 
+    public static CountDownFragment newInstance(int millisCountDown, @NonNull String title, @NonNull String btnText) {
+        final CountDownFragment countDownFragment = CountDownFragment.newInstance(millisCountDown);
+        final Bundle arguments = countDownFragment.getArguments();
+        arguments.putString(KEY_COUNT_DOWN_TITLE, title);
+        arguments.putString(KEY_COUNT_DOWN_BTN_TEXT, btnText);
+        return countDownFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,6 +55,13 @@ public class CountDownFragment extends DialogFragment {
             throw new IllegalStateException("Count down type must be set.");
         int millisToCountDown = getArguments().getInt(KEY_COUNT_DOWN_MILLIS);
 
+        if (getArguments().containsKey(KEY_COUNT_DOWN_TITLE)) {
+            binding.message.setText(getArguments().getString(KEY_COUNT_DOWN_TITLE));
+        }
+        if (getArguments().containsKey(KEY_COUNT_DOWN_BTN_TEXT)) {
+            binding.continueBtn.setText(getArguments().getString(KEY_COUNT_DOWN_BTN_TEXT));
+        }
+
         // TODO: if this fragment is ever reused in activity which is not locked to landscape, handle fragment rotation.
         // Start countdown
         countDownTimer = new CountDownTimer(millisToCountDown, 1000) {
@@ -51,7 +69,7 @@ public class CountDownFragment extends DialogFragment {
             public void onTick(long millisUntilFinished) {
                 long minutes = millisUntilFinished / (60 * 1000);
                 long seconds = (millisUntilFinished / 1000) % 60;
-                binding.countDownFragmentCountDownText.setText(String.format("%02d:%02d", minutes, seconds));
+                binding.countDownText.setText(String.format("%02d:%02d", minutes, seconds));
             }
 
             @Override
@@ -62,7 +80,7 @@ public class CountDownFragment extends DialogFragment {
         };
         countDownTimer.start();
 
-        binding.countDownFragmentContinueBtn.setOnClickListener(v -> {
+        binding.continueBtn.setOnClickListener(v -> {
             listener.onContinue();
             dismiss();
         });

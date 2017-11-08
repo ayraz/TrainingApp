@@ -1,7 +1,6 @@
 package cz.nudz.www.trainingapp.main;
 
 import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
+import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
@@ -21,19 +21,25 @@ import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.summary.PerformanceSummaryFragment;
 import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
+import cz.nudz.www.trainingapp.training.CountDownFragment;
+import cz.nudz.www.trainingapp.training.TrainingActivity;
 import cz.nudz.www.trainingapp.training.TrainingFragment;
+import cz.nudz.www.trainingapp.training.MessageFragment;
 import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
-import cz.nudz.www.trainingapp.utils.CollectionUtils;
 
 public class MainActivity extends BaseActivity implements
         TrialSelectionFragment.OnTrialSelectedListener,
-        TrainingFragment.TrainingFragmentListener {
+        TrainingFragment.TrainingFragmentListener,
+        MessageFragment.MessageFragmentListener,
+        CountDownFragment.CountDownListener {
 
     private static final String KEY_ACTIVE_OPTION_POS = "KEY_ACTIVE_OPTION_POS";
 
     private MainActivityBinding binding;
     private DataExporter dataExporter;
     private MenuCardAdapter menuCardAdapter;
+    private ParadigmType firstParadigm;
+    private int container;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -62,28 +68,31 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
         dataExporter = new DataExporter(this);
+        firstParadigm = ParadigmSet.getAt(0);
 
         // make sure we have a logged in user before we can proceed with anything
         if (getSessionManager().checkLogin()) {
             setSupportActionBar(binding.appBar);
 
             menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
+                container = binding.fragmentContainer.getId();
                 switch (optionStringId) {
                     case R.string.introOptionTitle:
-                        showFragment(binding.fragmentContainer.getId(), new HomeFragment(), HomeFragment.TAG);
+                        showFragment(container, new HomeFragment(), HomeFragment.TAG);
                         break;
                     case R.string.trainingOptionTitle:
+                        showFragment(container, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
                         break;
                     case R.string.tutorialOptionTitle:
                         break;
                     case R.string.trialOptionTitle:
-                        showFragment(binding.fragmentContainer.getId(), new TrialSelectionFragment(), TrialSelectionFragment.TAG);
+                        showFragment(container, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
-                        showFragment(binding.fragmentContainer.getId(), new SessionRecapFragment(), SessionRecapFragment.TAG);
+                        showFragment(container, new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
-                        showFragment(binding.fragmentContainer.getId(), new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
+                        showFragment(container, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                 }
             });
@@ -137,5 +146,22 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void startTraining() {
+        showAndStackFragment(container,
+                CountDownFragment.newInstance(10 * 1000, getString(R.string.trainingStartsInTitle), getString(R.string.startImmediatelyBtnText)),
+                CountDownFragment.TAG);
+    }
+
+    @Override
+    public void onExpired() {
+        TrainingActivity.startActivity(this, firstParadigm);
+    }
+
+    @Override
+    public void onContinue() {
+        TrainingActivity.startActivity(this, firstParadigm);
     }
 }

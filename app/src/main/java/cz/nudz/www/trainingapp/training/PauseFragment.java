@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.WarningFragment;
 import cz.nudz.www.trainingapp.databinding.PauseFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
@@ -39,7 +38,7 @@ public class PauseFragment extends DialogFragment {
      */
     public static PauseFragment newInstance(@NonNull ParadigmType paradigmType, @Nullable Adjustment adjustment) {
         PauseFragment pauseFragment = new PauseFragment();
-        Bundle bundle = WarningFragment.bundleArguments(paradigmType, adjustment);
+        Bundle bundle = MessageFragment.bundleArguments(paradigmType, adjustment);
         pauseFragment.setArguments(bundle);
         return pauseFragment;
     }
@@ -50,8 +49,8 @@ public class PauseFragment extends DialogFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.pause_fragment, container, false);
 
         currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
-        if (getArguments().containsKey(WarningFragment.KEY_DIFFICULTY_STATE)) {
-            adjustment = Adjustment.valueOf(getArguments().getString(WarningFragment.KEY_DIFFICULTY_STATE));
+        if (getArguments().containsKey(MessageFragment.KEY_ADJUSTMENT)) {
+            adjustment = Adjustment.valueOf(getArguments().getString(MessageFragment.KEY_ADJUSTMENT));
             isSequencePause = true;
         } else {
             isSequencePause = false;
@@ -60,8 +59,8 @@ public class PauseFragment extends DialogFragment {
         FragmentManager manager = getChildFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
-        WarningFragment warningFragment = WarningFragment.newInstance(currentParadigmType, adjustment);
-        transaction.add(R.id.pauseFragmentMessageContainer, warningFragment);
+        MessageFragment messageFragment = MessageFragment.newInstance(currentParadigmType, adjustment);
+        transaction.add(R.id.pauseFragmentMessageContainer, messageFragment);
 
         CountDownFragment countDownFragment = CountDownFragment.newInstance(isSequencePause ? SEQUENCE_TIMEOUT : PARADIGM_TIMEOUT);
         transaction.add(R.id.pauseFragmentCountDownContainer, countDownFragment);

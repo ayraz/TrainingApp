@@ -6,8 +6,8 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.List;
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
-import cz.nudz.www.trainingapp.WarningFragment;
 import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.data.TrainingRepository;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
@@ -30,8 +29,7 @@ import cz.nudz.www.trainingapp.utils.Utils;
 
 public class TrainingActivity extends BaseActivity implements
         TrainingFragment.TrainingFragmentListener,
-        CountDownFragment.CountDownListener,
-        WarningFragment.WarningFragmentListener {
+        CountDownFragment.CountDownListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
     public static final int DEFAULT_SEQUENCE_COUNT = 7;
@@ -43,6 +41,7 @@ public class TrainingActivity extends BaseActivity implements
     private TrainingRepository trainingRepository;
 
     private ParadigmType currentParadigmType;
+    // each paradigm starts with lowest difficulty.
     private Difficulty currentDifficulty = Difficulty.ONE;
     private TrainingSession currentSession;
     private Paradigm currentParadigm;
@@ -60,17 +59,30 @@ public class TrainingActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        enableImmersiveMode();
+
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
         username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
         trainingRepository = new TrainingRepository(this, getDbHelper());
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
 
-        // TODO: Each session/paradigm starts with lowest difficulty.
-        showFragment(binding.trainingActivityFragmentContainer.getId(),
-                WarningFragment.newInstance(currentParadigmType, null), WarningFragment.TAG);
+        currentSession = trainingRepository.startAndStoreTrainingSession(username);
+        currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
+        nextSequence();
 
         // TODO remove after debug
         binding.paradigm.setText(currentParadigmType.toString());
+    }
+
+    private void enableImmersiveMode() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
     @Override
@@ -92,18 +104,6 @@ public class TrainingActivity extends BaseActivity implements
             // Unregister all handler callbacks to prevent unwanted navigation caused by postDelayed.
             ((TrainingFragment) fragment).removePendingCallbacks();
         }
-    }
-
-    @Override
-    public void startTraining() {
-        currentSession = trainingRepository.startAndStoreTrainingSession(username);
-        currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
-        nextSequence();
-    }
-
-    @Override
-    public void goBack() {
-        super.onBackPressed();
     }
 
     @Override
