@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.utils;
 
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,22 @@ import cz.nudz.www.trainingapp.enums.Difficulty;
  */
 
 public class Utils {
+
+    /**
+     * Sets the background for a view while preserving its current padding.
+     *
+     * @param view View to receive the new background.
+     * @param color Background color.
+     */
+    public static void setBackgroundAndKeepPadding(View view, int color) {
+        int top = view.getPaddingTop();
+        int left = view.getPaddingLeft();
+        int right = view.getPaddingRight();
+        int bottom = view.getPaddingBottom();
+
+        view.setBackgroundColor(color);
+        view.setPadding(left, top, right, bottom);
+    }
 
     /**
      * See: https://math.stackexchange.com/questions/466198/algorithm-to-get-the-maximum-size-of-n-squares-that-fit-into-a-rectangle-with-a

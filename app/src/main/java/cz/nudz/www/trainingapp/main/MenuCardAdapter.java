@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.utils.Utils;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 
@@ -165,7 +166,7 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         }
 
         public void setActiveOptionColor(View option) {
-            option.setBackgroundColor(context.getResources().getColor(R.color.menuOptionSelected));
+            Utils.setBackgroundAndKeepPadding(option, context.getResources().getColor(R.color.menuOptionSelected));
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
