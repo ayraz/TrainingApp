@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
-import android.support.v7.view.menu.MenuWrapperFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 /**
@@ -44,16 +44,21 @@ public class PerformanceSummaryFragment extends LineChartFragment<String, Intege
 
     @NonNull
     @Override
-    protected LineDataSet configureChart(List<Pair<String, Integer>> data, LineChart chart, List<Entry> entries, ParadigmType paradigmType) {
-        final LineDataSet lineDataSet = super.configureChart(data, chart, entries, paradigmType);
-
+    protected void configureAxis(List<Pair<String, Integer>> data, LineChart chart, List<Entry> entries, ParadigmType paradigmType) {
+        super.configureAxis(data, chart, entries, paradigmType);
         chart.getXAxis().setDrawGridLines(true);
         chart.getAxisLeft().setDrawGridLines(false);
+    }
+
+    @NonNull
+    @Override
+    protected LineDataSet configureLineDataSet(List<Entry> entries, ParadigmType paradigmType) {
+        final LineDataSet lineDataSet = super.configureLineDataSet(entries, paradigmType);
 
         lineDataSet.setLabel(
-            String.format("%s \"%s\"",
-                    getString(R.string.maxLevelReachedLabel),
-                    getString(ParadigmType.getLocalizedStringId(paradigmType)))
+                String.format("%s \"%s\"",
+                        getString(R.string.maxLevelReachedLabel),
+                        getString(ParadigmType.getLocalizedStringId(paradigmType)))
         );
 
         return lineDataSet;

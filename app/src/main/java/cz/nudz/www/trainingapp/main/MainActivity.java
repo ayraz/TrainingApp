@@ -116,7 +116,10 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putIntegerArrayList(KEY_ACTIVE_OPTION_POS, new ArrayList<>(menuCardAdapter.getActiveOptionPosition()));
+        if (menuCardAdapter != null) {
+            outState.putIntegerArrayList(KEY_ACTIVE_OPTION_POS,
+                    new ArrayList<>(menuCardAdapter.getActiveOptionPosition()));
+        }
     }
 
     @Override

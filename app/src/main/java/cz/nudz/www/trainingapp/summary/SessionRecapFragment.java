@@ -43,8 +43,8 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
 
     @NonNull
     @Override
-    protected LineDataSet configureChart(List<Pair<String, Integer>> data, LineChart chart, List<Entry> entries, ParadigmType paradigmType) {
-        final LineDataSet lineDataSet = super.configureChart(data, chart, entries, paradigmType);
+    protected LineDataSet configureLineDataSet(List<Entry> entries, ParadigmType paradigmType) {
+        final LineDataSet lineDataSet = super.configureLineDataSet(entries, paradigmType);
 
         lineDataSet.setLabel(
                 String.format("%s \"%s\"",

@@ -47,6 +47,7 @@ public class TrainingActivity extends BaseActivity implements
     private Paradigm currentParadigm;
     private Sequence currentSequence;
     private Date paradigmPauseStartTime;
+    private int containerId;
 
     public static void startActivity(Context context, @NonNull ParadigmType paradigmType) {
         Intent intent = new Intent(context, TrainingActivity.class);
@@ -66,6 +67,7 @@ public class TrainingActivity extends BaseActivity implements
         username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
         trainingRepository = new TrainingRepository(this, getDbHelper());
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
+        containerId = binding.trainingActivityFragmentContainer.getId();
 
         currentSession = trainingRepository.startAndStoreTrainingSession(username);
         currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
@@ -143,19 +145,16 @@ public class TrainingActivity extends BaseActivity implements
             } else {
                 // TODO: handle max level
             }
-            showFragment(binding.trainingActivityFragmentContainer.getId(),
-                    PauseFragment.newInstance(currentParadigmType, adjustment),
-                    PauseFragment.TAG);
+            showFragment(containerId, PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
         } else if (isTrainingFinished()) {
             trainingRepository.finishAndUpdateSession(currentSession);
-            // TODO: handle end of training..
+            super.onBackPressed();
+            // TODO: handle end of training properly..
         } else if (isParadigmFinished()) {
             trainingRepository.finishAndUpdateParadigm(currentParadigm);
             paradigmPauseStartTime = new Date();
             // next cannot be null because end of training is handled above..
-            showFragment(binding.trainingActivityFragmentContainer.getId(),
-                    PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null),
-                    PauseFragment.TAG);
+            showFragment(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null), PauseFragment.TAG);
         }
     }
 
@@ -176,9 +175,7 @@ public class TrainingActivity extends BaseActivity implements
     private void nextSequence() {
         currentSequence = trainingRepository.startAndStoreSequence(currentParadigm, currentDifficulty);
 
-        showFragment(binding.trainingActivityFragmentContainer.getId(),
-                TrainingFragment.newInstance(currentParadigmType, currentDifficulty),
-                TrainingFragment.TAG);
+        showFragment(containerId, TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
     }
@@ -190,6 +187,9 @@ public class TrainingActivity extends BaseActivity implements
             sequenceCount = 0;
             currentParadigmType = next;
             currentDifficulty = Difficulty.ONE;
+
+            currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, next);
+
             nextSequence();
 
             // TODO remove after debug

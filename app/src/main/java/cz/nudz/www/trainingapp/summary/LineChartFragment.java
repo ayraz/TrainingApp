@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -69,16 +68,26 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
             entries.add(new Entry(i, data.get(i).second));
         }
 
-        LineDataSet lineDataSet = configureChart(data, chart, entries, paradigmType);
-
+        LineDataSet lineDataSet = configureLineDataSet(entries, paradigmType);
         // disable zooming
         chart.setScaleEnabled(false);
         chart.setData(new LineData(lineDataSet));
+        configureAxis(data, chart, entries, paradigmType);
         chart.invalidate();
     }
 
     @NonNull
-    protected LineDataSet configureChart(List<Pair<X, Y>> data, LineChart chart, List<Entry> entries, ParadigmType paradigmType) {
+    protected LineDataSet configureLineDataSet(List<Entry> entries, ParadigmType paradigmType) {
+        LineDataSet lineDataSet = new LineDataSet(entries, "");
+        lineDataSet.setValueFormatter(new DefaultValueFormatter(0));
+        lineDataSet.setValueTextSize(CHART_FONT_SIZE);
+        lineDataSet.setLineWidth(4f);
+        lineDataSet.setCircleRadius(8f);
+        return lineDataSet;
+    }
+
+    @NonNull
+    protected void configureAxis(List<Pair<X, Y>> data, LineChart chart, List<Entry> entries, ParadigmType paradigmType) {
         chart.setExtraOffsets(24, 0, 40, 0);
         final Description desc = new Description();
         desc.setEnabled(false);
@@ -95,14 +104,6 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
         axisLeft.setGranularity(1f);
         axisLeft.setTextSize(CHART_FONT_SIZE);
         chart.getAxisRight().setEnabled(false);
-
-        LineDataSet lineDataSet = new LineDataSet(entries, "");
-        lineDataSet.setValueFormatter(new DefaultValueFormatter(0));
-        lineDataSet.setValueTextSize(CHART_FONT_SIZE);
-        lineDataSet.setLineWidth(4f);
-        lineDataSet.setCircleRadius(8f);
-
-        return lineDataSet;
     }
 
     protected interface AsyncListener<X extends String, Y extends Integer> {
