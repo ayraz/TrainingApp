@@ -107,9 +107,10 @@ public abstract class TrainingFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        // unlock screen orientation once trials/tutorials are finished
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-
+        // unlock screen orientation once trials/tutorials are finished (when it is not training)
+        if (!(listener instanceof TrainingActivity)) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
         super.onDetach();
     }
 
