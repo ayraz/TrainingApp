@@ -27,6 +27,7 @@ import cz.nudz.www.trainingapp.training.TrainingActivity;
 import cz.nudz.www.trainingapp.training.TrainingFragment;
 import cz.nudz.www.trainingapp.training.MessageFragment;
 import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
+import cz.nudz.www.trainingapp.tutorial.TutorialPagerFragment;
 
 public class MainActivity extends BaseActivity implements
         TrialSelectionFragment.OnTrialSelectedListener,
@@ -67,6 +68,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
         dataExporter = new DataExporter(this);
         firstParadigm = ParadigmSet.getAt(0);
@@ -84,6 +86,7 @@ public class MainActivity extends BaseActivity implements
                         showFragment(containerId, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
                         break;
                     case R.string.tutorialOptionTitle:
+                        showFragment(containerId, new TutorialPagerFragment(), TutorialPagerFragment.TAG);
                         break;
                     case R.string.trialOptionTitle:
                         showFragment(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
@@ -135,7 +138,6 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty) {
-
         showAndStackFragment(binding.fragmentContainer.getId(),
                 TrainingFragment.newInstance(paradigmType, difficulty, 3),
                 TrainingFragment.TAG);

@@ -1,5 +1,12 @@
 package cz.nudz.www.trainingapp.tutorial;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 
@@ -9,9 +16,13 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 public class TutorialFragmentFactory {
 
-    public static TutorialImageFragment createTutorialFragment(ParadigmType type, int tutorialPosition) {
-        int drawableResId = 0;
-        switch (tutorialPosition) {
+    private static final int PAGE_COUNT_PER_PARADIGM = 8;
+    public static final int TOTAL_PAGE_COUNT = PAGE_COUNT_PER_PARADIGM * ParadigmSet.size();
+
+    public static TutorialImageFragment createTutorialFragment(ParadigmType type, int position) {
+        Integer drawableId = null;
+        position %= PAGE_COUNT_PER_PARADIGM;
+        switch (position) {
             // start help
             case 0:
                 return TutorialImageFragment.newInstance(
@@ -22,7 +33,7 @@ public class TutorialFragmentFactory {
             case 1:
                 switch (type) {
                     case SHAPE:
-                        drawableResId = R.drawable.test_pic_cue;
+                        drawableId = R.drawable.test_pic_cue;
                         break;
                     case COLOR:
                         break;
@@ -32,7 +43,7 @@ public class TutorialFragmentFactory {
                 return TutorialImageFragment.newInstance(
                         R.string.cueHelp,
                         R.string.nextPreviousHelp,
-                        drawableResId);
+                        drawableId);
             // short pause
             case 2:
                 return TutorialImageFragment.newInstance(
@@ -43,7 +54,7 @@ public class TutorialFragmentFactory {
             case 3:
                 switch (type) {
                     case SHAPE:
-                        drawableResId = R.drawable.test_pic_items;
+                        drawableId = R.drawable.test_pic_items;
                         break;
                     case COLOR:
                         break;
@@ -53,7 +64,7 @@ public class TutorialFragmentFactory {
                 return TutorialImageFragment.newInstance(
                         R.string.memorizeHelp,
                         R.string.nextPreviousHelp,
-                        drawableResId
+                        drawableId
                 );
             // longer pause
             case 4:
@@ -65,7 +76,7 @@ public class TutorialFragmentFactory {
             case 5:
                 switch (type) {
                     case SHAPE:
-                        drawableResId = R.drawable.test_pic_change;
+                        drawableId = R.drawable.test_pic_change;
                         break;
                     case COLOR:
                         break;
@@ -75,7 +86,7 @@ public class TutorialFragmentFactory {
                 return TutorialImageFragment.newInstance(
                         R.string.identificationHelp,
                         R.string.nextPreviousHelp,
-                        drawableResId);
+                        drawableId);
             // inter-trial pause
             case 6:
                 return TutorialImageFragment.newInstance(
@@ -89,6 +100,9 @@ public class TutorialFragmentFactory {
                         R.string.nextPreviousHelp,
                         null);
         }
-        return new TutorialImageFragment();
+        throw new IllegalArgumentException(String.format(
+                "Page properties do not match any setup; paradigm: %s, position: %d",
+                type.toString(),
+                position));
     }
 }

@@ -1,40 +1,36 @@
 package cz.nudz.www.trainingapp.tutorial;
 
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
-import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 
-public class TutorialPagerActivity extends BaseActivity {
+public class TutorialPagerFragment extends Fragment {
 
-    private static final int PAGE_COUNT = 8;
+    public static final String TAG = TutorialPagerFragment.class.getSimpleName();
 
     private ViewPager pager;
     private TutorialPagerAdapter pagerAdapter;
     private TutorialPagerActivityBinding binding;
 
-    public static void startActivity(Context context) {
-        Intent intent = new Intent(context, TutorialPagerActivity.class);
-        context.startActivity(intent);
-    }
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.tutorial_pager_activity);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_pager_activity, container, false);
 
         pager = binding.tutorialActivityPager;
-        pagerAdapter = new TutorialPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new TutorialPagerAdapter(getChildFragmentManager());
         pager.setAdapter(pagerAdapter);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -45,7 +41,7 @@ public class TutorialPagerActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position + 1 == PAGE_COUNT) {
+                if (position + 1 == TutorialFragmentFactory.TOTAL_PAGE_COUNT) {
                     binding.tutorialActivityNextBtn.setEnabled(false);
                 } else {
                     binding.tutorialActivityNextBtn.setEnabled(true);
@@ -65,8 +61,9 @@ public class TutorialPagerActivity extends BaseActivity {
         });
 
         binding.tutorialActivityPrevBtn.setOnClickListener(v -> pager.setCurrentItem(getCurrentPage() - 1));
-
         binding.tutorialActivityNextBtn.setOnClickListener(v -> pager.setCurrentItem(getCurrentPage() + 1));
+
+        return binding.getRoot();
     }
 
     private int getCurrentPage() {
@@ -87,7 +84,7 @@ public class TutorialPagerActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return TutorialFragmentFactory.TOTAL_PAGE_COUNT;
         }
     }
 }

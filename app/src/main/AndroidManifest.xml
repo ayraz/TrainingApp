@@ -19,7 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".tutorial.TutorialPagerActivity" />
         <!-- Training mustn't be interrupted by rotation/keyboard/etc. -->
         <activity
             android:name=".training.TrainingActivity"
