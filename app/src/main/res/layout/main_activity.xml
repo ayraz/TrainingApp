@@ -20,7 +20,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="4dp" >
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline"
@@ -33,12 +34,26 @@
                 android:id="@+id/menuList"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:paddingBottom="4dp"
-                android:paddingTop="4dp"
                 android:background="#eee"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/fragmentContainer" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:progress="1"
+                android:max="100"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/fragmentContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <FrameLayout
                 android:id="@+id/fragmentContainer"
@@ -47,11 +62,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/menuList"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/progressBar">
 
             </FrameLayout>
 
         </android.support.constraint.ConstraintLayout>
-
     </LinearLayout>
 </layout>
