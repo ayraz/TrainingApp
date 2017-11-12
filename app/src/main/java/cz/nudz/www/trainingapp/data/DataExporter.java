@@ -3,6 +3,7 @@ package cz.nudz.www.trainingapp.data;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +26,21 @@ import cz.nudz.www.trainingapp.utils.Utils;
 
 public class DataExporter {
 
+    private AsyncTask<String, Integer, Void> task;
+
+    public interface DataExportListener {
+
+        void onExportStart();
+
+        void onExportFinish();
+
+        void onExportProgressUpdate(Integer progress);
+    }
+
     private final String TAG = DataExporter.class.getSimpleName();
     private final AppCompatActivity activity;
     private final TrainingAppDbHelper dbHelper;
+    private final DataExportListener listener;
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -49,9 +62,10 @@ public class DataExporter {
             "WHERE u.username = ?";;
 
 
-    public DataExporter(BaseActivity activity) {
+    public DataExporter(BaseActivity activity, DataExportListener listener) {
         this.activity = activity;
         this.dbHelper = activity.getHelper();
+        this.listener = listener;
     }
 
     /**
@@ -68,31 +82,11 @@ public class DataExporter {
         String fileName = "TrainingData.csv";
         String filePath = baseDir + File.separator + fileName;
 
-        try {
-            try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(queryString, new String[]{username});
-                 CSVWriter writer = new CSVWriter(new FileWriter(filePath, false), ';')) {
-                writer.writeNext(cursor.getColumnNames());
-                while (cursor.moveToNext()) {
-                    String[] row = new String[COLUMN_COUNT];
-                    for (int i = 0; i < COLUMN_COUNT; ++i) {
-                        String value = cursor.getString(i);
-                        if (!Utils.isNullOrEmpty(value)) {
-                            row[i] = value;
-                        } else {
-                            row[i] = "N/A";
-                        }
-                    }
-                    writer.writeNext(row);
-                }
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-            Utils.showErrorDialog(activity, null, e.getMessage());
-            return;
-        }
+        task = new AsyncExport().execute(username, filePath);
+    }
 
-        Toast toast = Toast.makeText(activity, R.string.dataExportSuccess, Toast.LENGTH_LONG);
-        toast.show();
+    public void cancel() {
+        task.cancel(true);
     }
 
     /**
@@ -127,5 +121,60 @@ public class DataExporter {
             return false;
         }
         return true;
+    }
+
+    private class AsyncExport extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String username = strings[0];
+            String filePath = strings[1];
+            try {
+                try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(queryString, new String[]{username});
+                     CSVWriter writer = new CSVWriter(new FileWriter(filePath, false), ';')) {
+                    writer.writeNext(cursor.getColumnNames());
+                    final int count = cursor.getCount();
+                    int counter = 0;
+                    while (cursor.moveToNext()) {
+                        String[] row = new String[COLUMN_COUNT];
+                        for (int i = 0; i < COLUMN_COUNT; ++i) {
+                            String value = cursor.getString(i);
+                            if (!Utils.isNullOrEmpty(value)) {
+                                row[i] = value;
+                            } else {
+                                row[i] = "N/A";
+                            }
+                        }
+                        writer.writeNext(row);
+                        publishProgress((int) ((counter / (float) count) * 100));
+                        ++counter;
+                    }
+                }
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+                Utils.showErrorDialog(activity, null, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            listener.onExportProgressUpdate(values[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            listener.onExportStart();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            listener.onExportFinish();
+            Toast toast = Toast.makeText(activity, R.string.dataExportSuccess, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 }

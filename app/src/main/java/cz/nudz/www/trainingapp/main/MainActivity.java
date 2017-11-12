@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,7 +71,22 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
-        dataExporter = new DataExporter(this);
+        dataExporter = new DataExporter(this, new DataExporter.DataExportListener() {
+            @Override
+            public void onExportStart() {
+                binding.progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onExportFinish() {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onExportProgressUpdate(Integer progress) {
+                binding.progressBar.setProgress(progress);
+            }
+        });
         firstParadigm = ParadigmSet.getAt(0);
         containerId = binding.fragmentContainer.getId();
 
@@ -124,6 +140,12 @@ public class MainActivity extends BaseActivity implements
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         menuCardAdapter.setActiveOptionPosition(savedInstanceState.getIntegerArrayList(KEY_ACTIVE_OPTION_POS));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataExporter.cancel();
     }
 
     @Override
