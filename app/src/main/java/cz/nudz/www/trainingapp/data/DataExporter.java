@@ -86,7 +86,9 @@ public class DataExporter {
     }
 
     public void cancel() {
-        task.cancel(true);
+        if (task != null) {
+            task.cancel(true);
+        }
     }
 
     /**
