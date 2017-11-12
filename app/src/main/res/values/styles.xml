@@ -27,4 +27,8 @@
     <style name="AppTheme.CardButton" parent="Base.Widget.AppCompat.Button">
         <item name="colorButtonNormal">@color/white</item>
     </style>
+
+    <style name="AppTheme.LightBlueAccent">
+        <item name="colorAccent">@color/lightBlue</item>
+    </style>
 </resources>

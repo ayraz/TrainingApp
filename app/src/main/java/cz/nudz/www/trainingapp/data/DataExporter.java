@@ -53,7 +53,7 @@ public class DataExporter {
             "ts.id AS [sessionId], ts.startDate AS [sessionStartDate], ts.endDate AS [sessionEndDate], ts.isFinished AS [isSessionFinished], " +
             "p.id AS [paradigmId], p.startDate AS [paradigmStartDate], p.endDate AS [paradigmEndDate], p.paradigmType AS [paradigmType], p.pauseDurationMillis AS [paradigmPauseDuration], " +
             "s.id AS [sequenceId], s.startDate AS [sequenceStartDate], s.endDate AS [sequenceEndDate], s.difficulty AS [difficulty], " +
-            "t.id AS [trialId], t.isChangingTrial AS [trialChanged], t.isCorrect AS [trialTesponse], t.responseTimeMillis AS [trialResponseTime], t.stimuliJSON, t.changedStimulusJSON " +
+            "t.id AS [trialId], t.isChangingTrial AS [trialChanged], t.isCorrect AS [trialResponse], t.responseTimeMillis AS [trialResponseTime], t.stimuliJSON, t.changedStimulusJSON " +
             "FROM User u " +
             "JOIN TrainingSession ts ON ts.user_id = u.username " +
             "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
