@@ -1,14 +1,17 @@
 package cz.nudz.www.trainingapp.training;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,47 +19,53 @@ import java.util.List;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
+import cz.nudz.www.trainingapp.utils.Utils;
 
 public class ShapeParadigmFragment extends TrainingFragment {
 
-    private List<Drawable> drawables;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        drawables = Arrays.asList(
-                getResources().getDrawable(R.drawable.circle).mutate(),
-                getResources().getDrawable(R.drawable.ellipse).mutate(),
-                getResources().getDrawable(R.drawable.square).mutate(),
-                getResources().getDrawable(R.drawable.rect).mutate(),
-                getResources().getDrawable(R.drawable.triangle).mutate(),
-                getResources().getDrawable(R.drawable.trapezoid).mutate(),
-                getResources().getDrawable(R.drawable.pentagon).mutate(),
-                getResources().getDrawable(R.drawable.star).mutate(),
-                getResources().getDrawable(R.drawable.parallelogram).mutate(),
-                getResources().getDrawable(R.drawable.cross).mutate(),
-                getResources().getDrawable(R.drawable.rhombus).mutate(),
-                getResources().getDrawable(R.drawable.kite).mutate());
-
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
+    private static List<Integer> drawableIds = Arrays.asList(
+        R.drawable.circle,
+        R.drawable.ellipse,
+        R.drawable.square,
+        R.drawable.rect,
+        R.drawable.triangle,
+        R.drawable.trapezoid,
+        R.drawable.pentagon,
+        R.drawable.star,
+        R.drawable.parallelogram,
+        R.drawable.cross,
+        R.drawable.rhombus,
+        R.drawable.kite);
+    private List<Pair<Drawable, String>> drawablePairs = new ArrayList<>(drawableIds.size());
+    private int color;
 
     @Override
     protected void performChange(final ImageView changingStim) {
-        List<Drawable> filtered = CollectionUtils.filter(this.drawables, drawable -> !(drawable == changingStim.getDrawable()));
-        Drawable changeDrawable = filtered.get(RandomUtils.nextIntExclusive(0, filtered.size()));
+        List<Pair<Drawable, String>> filtered = CollectionUtils.filter(this.drawablePairs, drawablePair -> !(drawablePair.first == changingStim.getDrawable()));
+        final Pair<Drawable, String> randomPair = filtered.get(RandomUtils.nextIntExclusive(0, filtered.size()));
+        Drawable changeDrawable = randomPair.first;
         changingStim.setImageDrawable(changeDrawable);
+        changingStim.setTag(new Pair<>(color, randomPair.second));
     }
 
     @Override
     protected void initStimuli(List<ImageView> stimuli) {
-        Collections.shuffle(drawables);
+        color = ContextCompat.getColor(getActivity(), R.color.black);
+
+        for (int id : drawableIds) {
+            drawablePairs.add(new Pair<>(getResources().getDrawable(id).mutate(), Utils.getShapeName(id)));
+        }
+        Collections.shuffle(drawablePairs);
+
         for (int i = 0; i < stimuli.size(); ++i) {
             ImageView v = stimuli.get(i);
-            Drawable drawable = drawables.get(i % drawables.size());
+            final Pair<Drawable, String> pair = drawablePairs.get(i % drawablePairs.size());
+            Drawable drawable = pair.first;
+            String shapeName = pair.second;
 
+            v.setTag(new Pair<>(color, shapeName));
             v.setImageDrawable(drawable);
-            v.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
+            v.setColorFilter(color);
         }
     }
 }

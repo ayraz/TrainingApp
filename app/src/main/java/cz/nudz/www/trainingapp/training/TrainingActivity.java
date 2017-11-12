@@ -80,11 +80,11 @@ public class TrainingActivity extends BaseActivity implements
     private void enableImmersiveMode() {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TrainingActivity extends BaseActivity implements
                     TrainingActivity.super.onBackPressed();
                 })
                 .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
-        .create().show();
+                .create().show();
     }
 
     private void stopTrainingCallbacks() {
@@ -117,8 +117,7 @@ public class TrainingActivity extends BaseActivity implements
     public void onContinue() {
         if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
             nextSequence();
-        }
-        else if (isParadigmFinished()) {
+        } else if (isParadigmFinished()) {
             long paradigmPauseDuration = (new Date()).getTime() - paradigmPauseStartTime.getTime();
             currentParadigm.setPauseDurationMillis(paradigmPauseDuration);
             trainingRepository.updateParadigm(currentParadigm);
@@ -132,7 +131,21 @@ public class TrainingActivity extends BaseActivity implements
         sequenceCount += 1;
         trainingRepository.finishAndUpdateSequence(currentSequence);
 
-        if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
+        // PARADIGM FINISHED
+        if (isParadigmFinished()) {
+            trainingRepository.finishAndUpdateParadigm(currentParadigm);
+            // SESSION FINISHED
+            if (isTrainingFinished()) {
+                trainingRepository.finishAndUpdateSession(currentSession);
+                super.onBackPressed();
+                // TODO: handle end of training properly..
+            } else {
+                paradigmPauseStartTime = new Date();
+                // next cannot be null because end of training is handled above..
+                showFragment(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null), PauseFragment.TAG);
+            }
+        // SEQUENCE FINISHED
+        } else if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
             Difficulty newDifficulty = Utils.adjustDifficulty(answers, currentDifficulty);
             Adjustment adjustment = Adjustment.SAME;
             if (newDifficulty != null) {
@@ -146,22 +159,13 @@ public class TrainingActivity extends BaseActivity implements
                 // TODO: handle max level
             }
             showFragment(containerId, PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
-        } else if (isTrainingFinished()) {
-            trainingRepository.finishAndUpdateSession(currentSession);
-            super.onBackPressed();
-            // TODO: handle end of training properly..
-        } else if (isParadigmFinished()) {
-            trainingRepository.finishAndUpdateParadigm(currentParadigm);
-            paradigmPauseStartTime = new Date();
-            // next cannot be null because end of training is handled above..
-            showFragment(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null), PauseFragment.TAG);
         }
     }
 
     @Override
     public void onTrialFinished(int trialCount) {
         // TODO remove after debug
-        binding.trialCount.setText(String.format("Trial #: %s", String.valueOf(trialCount+1)));
+        binding.trialCount.setText(String.format("Trial #: %s", String.valueOf(trialCount + 1)));
     }
 
     private boolean isTrainingFinished() {
@@ -177,7 +181,7 @@ public class TrainingActivity extends BaseActivity implements
 
         showFragment(containerId, TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
         // TODO remove after debug
-        binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount+1)));
+        binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount + 1)));
     }
 
     private void nextParadigm() {

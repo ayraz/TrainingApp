@@ -3,6 +3,7 @@ package cz.nudz.www.trainingapp.training;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +22,22 @@ import android.widget.ImageView;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.Trial;
-import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
+import cz.nudz.www.trainingapp.data.tables.Trial;
 import cz.nudz.www.trainingapp.databinding.TrainingFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.enums.Side;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 import cz.nudz.www.trainingapp.utils.Utils;
 
@@ -54,6 +62,7 @@ public abstract class TrainingFragment extends Fragment {
     private static final int RIGHT_GRID_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
     private static final double DEBUG_SLOW = 0;
+    private static final double SPEED_FACTOR = 1;
 
     private TrainingFragmentBinding binding;
     private ConstraintLayout[] grids;
@@ -71,17 +80,20 @@ public abstract class TrainingFragment extends Fragment {
     private int stimSize;
     private TrialRunner trialRunner;
     private boolean isTrainingMode;
+    private ParadigmType paradigmType;
 
     public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty) {
         TrainingFragment fragment = ParadigmType.toTrainingFragment(paradigmType);
         Bundle args = new Bundle();
-        args.putString(KEY_DIFFICULTY , difficulty.toString());
+        args.putString(KEY_DIFFICULTY, difficulty.toString());
+        args.putString(TrainingActivity.KEY_PARADIGM, paradigmType.toString());
         fragment.setArguments(args);
         return fragment;
     }
 
     /**
      * Only use in trial mode.
+     *
      * @param paradigmType
      * @param difficulty
      * @param trialCount
@@ -128,15 +140,17 @@ public abstract class TrainingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.training_fragment, container, false);
+
+        trialCount = TrainingActivity.DEFAULT_TRIAL_COUNT;
+        answers = new ArrayList<>(trialCount);
         grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
-        trialCount = TrainingActivity.DEFAULT_TRIAL_COUNT;
+        paradigmType = ParadigmType.valueOf(getArguments().getString(TrainingActivity.KEY_PARADIGM));
         isTrainingMode = true;
         if (getArguments().containsKey(KEY_TRIAL_COUNT)) {
             trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
             isTrainingMode = false;
         }
-        answers = new ArrayList<>(trialCount);
 
         /*
          * Using this onExpired as an indicator that layout has finished...
@@ -160,7 +174,7 @@ public abstract class TrainingFragment extends Fragment {
                         binding.trainingFragmentLeftGrid.getHeight());
 
                 cellSize = Utils.optimalContainingSquareSize(gridSize, gridSize, halfStimCount);
-                // each cell can contain 4 actual stimuli; this excess space is for 'pseudo-randomness'..
+                // each cell has enough space for 4 actual stimuli; this excess is for 'pseudo-randomness'..
                 // simulated with padding inside the cell.
                 paddingStart = halfStimCount <= 4 ? TrainingActivity.DEFAULT_TRIAL_COUNT : TrainingActivity.DEFAULT_TRIAL_COUNT / 2;
                 stimSize = (cellSize / 2) - paddingStart;
@@ -170,7 +184,7 @@ public abstract class TrainingFragment extends Fragment {
 
             }
         });
-        
+
         return binding.getRoot();
     }
 
@@ -191,8 +205,10 @@ public abstract class TrainingFragment extends Fragment {
         }
 
         private void executeTrial() {
-            final List<List<ImageView>> stimuli = setupGridViews();
+            // clear grids before new trial starts
+            for (ViewGroup grid : grids) grid.removeAllViews();
 
+            final List<List<ImageView>> stimuli = setupGridViews();
             // merge stimuli from both grids
             final List<ImageView> allStimuli = new ArrayList<>(stimuli.get(LEFT_GRID_INDEX));
             allStimuli.addAll(stimuli.get(RIGHT_GRID_INDEX));
@@ -202,110 +218,162 @@ public abstract class TrainingFragment extends Fragment {
             lastAddedStim.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                // prevent event loop
-                lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    // prevent event loop
+                    lastAddedStim.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                currentTrial = new Trial(difficulty);
+                    initStimuli(allStimuli);
+                    initTrialObject();
 
-                Utils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                    Utils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
                     // user answer handlers have to be set trial-wise
-                binding.trainingFragmentSameBtn.setOnClickListener(v -> handleAnswerSubmission(!currentTrial.isChanging()));
+                    binding.trainingFragmentSameBtn.setOnClickListener(v ->
+                            handleAnswerSubmission(!currentTrial.isChangingTrial()));
+                    binding.trainingFragmentDifferentBtn.setOnClickListener(v ->
+                            handleAnswerSubmission(currentTrial.isChangingTrial()));
 
-                binding.trainingFragmentDifferentBtn.setOnClickListener(v -> handleAnswerSubmission(currentTrial.isChanging()));
+                    // START THE TRIAL...
+                    final View cue;
+                    switch (currentTrial.getCuedSide()) {
+                        case LEFT:
+                            cue = binding.trainingFragmentCueLeft;
+                            break;
+                        case RIGHT:
+                            cue = binding.trainingFragmentCueRight;
+                            break;
+                        default:
+                            throw new IllegalStateException(String.format(
+                                    "Trials's cueSide state is invalid: {0}", currentTrial.getCuedSide().toString()));
+                    }
+                    cue.setVisibility(View.VISIBLE);
 
-                initStimuli(allStimuli);
-
-                // START THE TRIAL...
-                final View cue;
-                switch (currentTrial.getCueSide()) {
-                    case LEFT:
-                        cue = binding.trainingFragmentCueLeft;
-                        break;
-                    case RIGHT:
-                        cue = binding.trainingFragmentCueRight;
-                        break;
-                    default:
-                        throw new IllegalStateException(String.format(
-                                "Trials's cueSide state is invalid: {0}", currentTrial.getCueSide().toString()));
-                }
-                cue.setVisibility(View.VISIBLE);
-
-                // CUE PAUSE
-                handler.postDelayed(() -> {
-                    cue.setVisibility(View.INVISIBLE);
-
-                    // MEMORY ARRAY
+                    // CUE PAUSE
                     handler.postDelayed(() -> {
-                        final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                        Utils.setViewsVisible(true, views);
+                        cue.setVisibility(View.INVISIBLE);
 
-                        // RETENTION INTERVAL
+                        // MEMORY ARRAY
                         handler.postDelayed(() -> {
-                            Utils.setViewsVisible(false, views);
+                            final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
+                            Utils.setViewsVisible(true, views);
 
-                            if (currentTrial.isChanging()) {
-                                // pick random stim in cued grid
-                                int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
-
-                                final ImageView changingStim = currentTrial.getCueSide() == LEFT
-                                        ? stimuli.get(LEFT_GRID_INDEX).get(index)
-                                        : stimuli.get(RIGHT_GRID_INDEX).get(index);
-
-                                performChange(changingStim);
-                            }
-
-                            // TEST ARRAY
+                            // RETENTION INTERVAL
                             handler.postDelayed(() -> {
-                                responseStartTime = new Date();
-                                Utils.setViewsVisible(true, views);
-                                Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                                Utils.setViewsVisible(false, views);
 
-                                // TRIAL END
+                                if (currentTrial.isChangingTrial()) {
+                                    // pick random stim in cued grid
+                                    int index = RandomUtils.nextIntExclusive(0, stimuli.get(0).size());
+
+                                    final ImageView changingStim = currentTrial.getCuedSide() == LEFT
+                                            ? stimuli.get(LEFT_GRID_INDEX).get(index)
+                                            : stimuli.get(RIGHT_GRID_INDEX).get(index);
+
+                                    performChange(changingStim);
+                                    try {
+                                        final JSONObject jsonStimulus = getJSONStimulus(changingStim);
+                                        currentTrial.setChangedStimulus(jsonStimulus);
+                                    } catch (JSONException e) {
+                                        Log.e(TrainingFragment.TAG, e.getMessage());
+                                    }
+                                }
+
+                                // TEST ARRAY
                                 handler.postDelayed(() -> {
-                                    Utils.setViewsVisible(false, views);
+                                    responseStartTime = new Date();
+                                    Utils.setViewsVisible(true, views);
+                                    Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
 
-                                    // insert null answer if user did not answer this trial
-                                    if (answers.size() == i)
-                                        handleAnswerSubmission(null);
+                                    // TRIAL END
+                                    handler.postDelayed(() -> {
+                                        Utils.setViewsVisible(false, views);
 
-                                    // START NEXT TRIAL
-                                    handler.postDelayed(
-                                            TrialRunner.this,
-                                            (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
+                                        // insert null answer if user did not answer this trial
+                                        if (answers.size() == i)
+                                            handleAnswerSubmission(null);
 
-                                    if (listener != null) listener.onTrialFinished(i);
-                                    i += 1;
+                                        // START NEXT TRIAL
+                                        handler.postDelayed(
+                                                TrialRunner.this,
+                                                (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
 
-                                }, (int) (TEST_INTERVAL * DEBUG_SLOW));
+                                        if (listener != null) listener.onTrialFinished(i);
+                                        i += 1;
 
-                            }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
+                                    }, (int) (TEST_INTERVAL * DEBUG_SLOW * (SPEED_FACTOR / 2)));
 
-                        }, (int) (MEMORIZATION_INTERVAL * DEBUG_SLOW));
+                                }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
 
-                    }, (int) (CUE_INTERVAL * DEBUG_SLOW));
+                            }, (int) (MEMORIZATION_INTERVAL * DEBUG_SLOW * SPEED_FACTOR));
 
-                }, (int) (POST_CUE_PAUSE * DEBUG_SLOW));
+                        }, (int) (CUE_INTERVAL * DEBUG_SLOW * SPEED_FACTOR));
+
+                    }, (int) (POST_CUE_PAUSE * DEBUG_SLOW));
                 }
             });
+        }
+
+        private void initTrialObject() {
+            currentTrial = new Trial();
+            currentTrial.setCuedSide(Math.random() < 0.5 ? Side.LEFT : Side.RIGHT);
+            currentTrial.setChangingTrial(Math.random() < 0.5 ? false : true);
+            try {
+                final JSONArray jsonArray = new JSONArray();
+                for (ViewGroup grid : grids) {
+                    final JSONArray gridArray = new JSONArray();
+                    for (int i = 0; i < grid.getChildCount(); ++i) {
+                        final ImageView stim = (ImageView) ((FrameLayout) grid.getChildAt(i)).getChildAt(0);
+                        // get the global (relative to window) positions
+                        final JSONObject stimJSON = getJSONStimulus(stim);
+                        gridArray.put(stimJSON);
+                    }
+                    jsonArray.put(gridArray);
+                }
+                currentTrial.setStimuli(jsonArray);
+            } catch (JSONException e) {
+                Log.e(TrainingFragment.TAG, e.getMessage());
+            }
+        }
+
+        @NonNull
+        private JSONObject getJSONStimulus(ImageView stim) throws JSONException {
+            final JSONObject stimJSON = new JSONObject();
+            stimJSON.put("id", stim.getId());
+
+            Rect rect = new Rect();
+            stim.getGlobalVisibleRect(rect);
+            stimJSON.put("width", rect.width());
+            stimJSON.put("height", rect.height());
+            stimJSON.put("left", rect.left);
+            stimJSON.put("top", rect.top);
+            stimJSON.put("right", rect.right);
+            stimJSON.put("bottom", rect.bottom);
+
+            // we stored (during init step) color and shape's name in stim view's tag
+            final Pair<Integer, String> colorShapePair = (Pair<Integer, String>) stim.getTag();
+            stimJSON.put("color", new JSONArray(Arrays.asList(
+                    Color.red(colorShapePair.first),
+                    Color.green(colorShapePair.first),
+                    Color.blue(colorShapePair.first)
+            )));
+            stimJSON.put("rotation", stim.getRotation());
+            stimJSON.put("shape", colorShapePair.second);
+            return stimJSON;
         }
 
         private void handleAnswerSubmission(Boolean answer) {
             // allow only one answer per trial
             disableAnswerBtns();
             answers.add(answer);
+
             if (isTrainingMode) {
                 // response time in millis
                 long trialResponseTime = (new Date()).getTime() - responseStartTime.getTime();
-
                 // TODO: remove this hardcoded dependency
                 TrainingActivity parentActivity = (TrainingActivity) getActivity();
-                RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao = parentActivity.getDbHelper().getTrialAnswerDao();
-                TrialAnswer trialAnswer = new TrialAnswer();
-                trialAnswer.setSequence(parentActivity.getCurrentSequence());
-                trialAnswer.setCorrect(answers.get(answers.size() - 1));
-                trialAnswer.setChangingTrial(currentTrial.isChanging());
-                trialAnswer.setResponseTimeMillis(answer != null ? trialResponseTime : null);
-                trialAnswerDao.create(trialAnswer);
+                RuntimeExceptionDao<Trial, Integer> trialDao = parentActivity.getDbHelper().getTrialDao();
+                currentTrial.setSequence(parentActivity.getCurrentSequence());
+                currentTrial.setCorrect(answer);
+                currentTrial.setResponseTimeMillis(answer != null ? trialResponseTime : null);
+                trialDao.create(currentTrial);
             }
         }
 

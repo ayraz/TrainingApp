@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
-import cz.nudz.www.trainingapp.data.tables.TrialAnswer;
+import cz.nudz.www.trainingapp.data.tables.Trial;
 import cz.nudz.www.trainingapp.data.tables.User;
 
 /**
@@ -23,7 +23,7 @@ import cz.nudz.www.trainingapp.data.tables.User;
 public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String TAG = TrainingAppDbHelper.class.getSimpleName();
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "TrainingApp.db";
 
     public TrainingAppDbHelper(Context context) {
@@ -38,7 +38,7 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, TrainingSession.class);
             TableUtils.createTable(connectionSource, Paradigm.class);
             TableUtils.createTable(connectionSource, Sequence.class);
-            TableUtils.createTable(connectionSource, TrialAnswer.class);
+            TableUtils.createTable(connectionSource, Trial.class);
         } catch (SQLException e) {
             logger.error(TAG, "Couldn't create a table", e);
             throw new RuntimeException(e);
@@ -53,7 +53,7 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, TrainingSession.class, true);
             TableUtils.dropTable(connectionSource, Paradigm.class, true);
             TableUtils.dropTable(connectionSource, Sequence.class, true);
-            TableUtils.dropTable(connectionSource, TrialAnswer.class, true);
+            TableUtils.dropTable(connectionSource, Trial.class, true);
             // after we drop the old databases, we create the new ones
             onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
     private RuntimeExceptionDao<TrainingSession, Integer> trainingSessionDao;
     private RuntimeExceptionDao<Paradigm, Integer> paradigmDao;
     private RuntimeExceptionDao<Sequence, Integer> sequenceDao;
-    private RuntimeExceptionDao<TrialAnswer, Integer> trialAnswerDao;
+    private RuntimeExceptionDao<Trial, Integer> trialDao;
 
     public RuntimeExceptionDao<User, String> getUserDao() {
         if (userDao == null){
@@ -97,10 +97,10 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
         return sequenceDao;
     }
 
-    public RuntimeExceptionDao<TrialAnswer, Integer> getTrialAnswerDao() {
-        if (trialAnswerDao == null) {
-            trialAnswerDao = getRuntimeExceptionDao(TrialAnswer.class);
+    public RuntimeExceptionDao<Trial, Integer> getTrialDao() {
+        if (trialDao == null) {
+            trialDao = getRuntimeExceptionDao(Trial.class);
         }
-        return trialAnswerDao;
+        return trialDao;
     }
 }

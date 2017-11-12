@@ -90,9 +90,8 @@ public class TrainingRepository {
     }
 
     public void finishAndUpdateParadigm(Paradigm paradigm) {
-        Paradigm p = paradigmDao.queryForId(paradigm.getId());
-        p.setEndDate(new Date());
-        paradigmDao.update(p);
+        paradigm.setEndDate(new Date());
+        paradigmDao.update(paradigm);
     }
 
     public Sequence startAndStoreSequence(Paradigm paradigm, Difficulty difficulty) {
@@ -105,16 +104,14 @@ public class TrainingRepository {
     }
 
     public void finishAndUpdateSequence(Sequence sequence) {
-        Sequence seq = sequenceDao.queryForId(sequence.getId());
-        seq.setEndDate(new Date());
-        sequenceDao.update(seq);
+        sequence.setEndDate(new Date());
+        sequenceDao.update(sequence);
     }
 
     public void finishAndUpdateSession(TrainingSession trainingSession) {
-        TrainingSession ts = trainingSessionDao.queryForId(trainingSession.getId());
-        ts.setEndDate(new Date());
-        ts.setFinished(true);
-        trainingSessionDao.update(ts);
+        trainingSession.setEndDate(new Date());
+        trainingSession.setFinished(true);
+        trainingSessionDao.update(trainingSession);
     }
 
     public List<Pair<String, Integer>> getLastSessionParadigmData (String username, String paradigmType) {

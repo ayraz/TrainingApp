@@ -1,6 +1,5 @@
 package cz.nudz.www.trainingapp.utils;
 
-import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +8,7 @@ import android.view.View;
 
 import java.util.List;
 
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.dialogs.AlertDialogFragment;
 import cz.nudz.www.trainingapp.dialogs.ErrorDialogFragment;
 import cz.nudz.www.trainingapp.dialogs.YesNoDialogFragment;
@@ -141,5 +141,39 @@ public class Utils {
         FragmentManager fragmentManager = context.getSupportFragmentManager();
         AlertDialogFragment yesNoDialogFragment = YesNoDialogFragment.newInstance(title, message);
         yesNoDialogFragment.show(fragmentManager, YesNoDialogFragment.TAG);
+    }
+
+    /**
+     * Gets shape name by drawable id.
+     */
+    public static String getShapeName(int drawableShapeId) {
+        switch (drawableShapeId) {
+            case R.drawable.circle:
+                return "circle";
+            case R.drawable.ellipse:
+                return "ellipse";
+            case R.drawable.square:
+                return "square";
+            case R.drawable.rect:
+                return "rect";
+            case R.drawable.triangle:
+                return "triangle";
+            case R.drawable.trapezoid:
+                return "trapezoid";
+            case R.drawable.pentagon:
+                return "pentagon";
+            case R.drawable.star:
+                return "star";
+            case R.drawable.parallelogram:
+                return "parallelogram";
+            case R.drawable.cross:
+                return "cross";
+            case R.drawable.rhombus:
+                return "rhombus";
+            case R.drawable.kite:
+                return "kite";
+            default:
+                throw new IllegalArgumentException(String.format("Drawable with id: %d, does not match any shape.", drawableShapeId));
+        }
     }
 }

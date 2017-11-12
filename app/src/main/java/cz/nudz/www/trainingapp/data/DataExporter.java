@@ -35,6 +35,18 @@ public class DataExporter {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private int COLUMN_COUNT = 20;
+    private String queryString = "SELECT username AS [username], " +
+            "ts.id AS [sessionId], ts.startDate AS [sessionStartDate], ts.endDate AS [sessionEndDate], ts.isFinished AS [isSessionFinished], " +
+            "p.id AS [paradigmId], p.startDate AS [paradigmStartDate], p.endDate AS [paradigmEndDate], p.paradigmType AS [paradigmType], p.pauseDurationMillis AS [paradigmPauseDuration], " +
+            "s.id AS [sequenceId], s.startDate AS [sequenceStartDate], s.endDate AS [sequenceEndDate], s.difficulty AS [difficulty], " +
+            "t.id AS [trialId], t.isChangingTrial AS [trialChanged], t.isCorrect AS [trialTesponse], t.responseTimeMillis AS [trialResponseTime], t.stimuliJSON, t.changedStimulusJSON " +
+            "FROM User u " +
+            "JOIN TrainingSession ts ON ts.user_id = u.username " +
+            "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
+            "JOIN Sequence s ON s.paradigm_id = p.id " +
+            "JOIN Trial t ON t.sequence_id = s.id " +
+            "WHERE u.username = ?";;
 
 
     public DataExporter(BaseActivity activity) {
@@ -56,25 +68,13 @@ public class DataExporter {
         String fileName = "TrainingData.csv";
         String filePath = baseDir + File.separator + fileName;
 
-        File f = new File(filePath);
         try {
-            final int colCount = 14;
-
-            try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery("SELECT username AS [Username], " +
-                    "ts.startDate AS [Session Start Date], ts.endDate AS [Session End Date], ts.isFinished AS [Is Finished], " +
-                    "p.startDate AS [Paradigm Start Date], p.endDate AS [Paradigm End Date], p.paradigmType AS [Paradigm Type], p.pauseDurationMillis AS [Paradigm Pause], " +
-                    "s.startDate AS [Sequence Start Date], s.endDate AS [Sequence End Date], s.difficulty AS [Difficulty], " +
-                    "ta.isChangingTrial AS [Trial Changed], ta.isCorrect AS [Trial Answer Correct], ta.responseTimeMillis AS [Trial Response Time] " +
-                    "FROM User u " +
-                    "JOIN TrainingSession ts ON ts.user_id = u.username " +
-                    "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
-                    "JOIN Sequence s ON s.paradigm_id = p.id " +
-                    "JOIN TrialAnswer ta ON ta.sequence_id = s.id " +
-                    "WHERE u.username = ?", new String[]{username}); CSVWriter writer = new CSVWriter(new FileWriter(filePath, false), ';')) {
+            try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(queryString, new String[]{username});
+                 CSVWriter writer = new CSVWriter(new FileWriter(filePath, false), ';')) {
                 writer.writeNext(cursor.getColumnNames());
                 while (cursor.moveToNext()) {
-                    String[] row = new String[colCount];
-                    for (int i = 0; i < colCount; ++i) {
+                    String[] row = new String[COLUMN_COUNT];
+                    for (int i = 0; i < COLUMN_COUNT; ++i) {
                         String value = cursor.getString(i);
                         if (!Utils.isNullOrEmpty(value)) {
                             row[i] = value;
