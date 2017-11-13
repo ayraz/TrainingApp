@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
-import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 public class TutorialPagerFragment extends Fragment {
 
@@ -78,8 +77,7 @@ public class TutorialPagerFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            // TODO: remove hardcoded paradigm type
-            return TutorialFragmentFactory.createTutorialFragment(ParadigmType.SHAPE, position);
+            return TutorialFragmentFactory.createTutorialFragment(position);
         }
 
         @Override
