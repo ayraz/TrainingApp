@@ -5,9 +5,8 @@
     android:padding="16dp"
     tools:context="cz.nudz.www.trainingapp.main.HomeFragment">
 
-    <TextView
-        android:id="@+id/welcomeText"
-        android:textSize="16sp"
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
