@@ -46,4 +46,13 @@ public final class RandomUtils {
         int randomInt = rand.nextInt(max - min) + min;
         return randomInt;
     }
+
+    /**
+     * Returns a random boolean value from a normal distribution with mean 0 and standard deviation 1.
+     * The results may be either positive or negative, with both being equally likely.
+     * @return
+     */
+    public static boolean nextGaussianBool() {
+        return rand.nextGaussian() < 0 ? false : true;
+    }
 }

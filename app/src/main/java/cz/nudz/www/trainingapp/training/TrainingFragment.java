@@ -153,7 +153,7 @@ public abstract class TrainingFragment extends Fragment {
         }
 
         /*
-         * Using this onExpired as an indicator that layout has finished...
+         * Using this callback as an indicator that layout has finished...
          * meaning that we can use views' measures, etc. at this point.
          * see: https://stackoverflow.com/questions/7733813/how-can-you-tell-when-a-layout-has-been-drawn
          */
@@ -313,8 +313,8 @@ public abstract class TrainingFragment extends Fragment {
 
         private void initTrialObject() {
             currentTrial = new Trial();
-            currentTrial.setCuedSide(Math.random() < 0.5 ? Side.LEFT : Side.RIGHT);
-            currentTrial.setChangingTrial(Math.random() < 0.5 ? false : true);
+            currentTrial.setCuedSide(RandomUtils.nextGaussianBool() ? Side.LEFT : Side.RIGHT);
+            currentTrial.setChangingTrial(RandomUtils.nextGaussianBool());
             try {
                 final JSONArray jsonArray = new JSONArray();
                 for (ViewGroup grid : grids) {
@@ -420,9 +420,9 @@ public abstract class TrainingFragment extends Fragment {
         }
     }
 
-    protected abstract void performChange(ImageView changingStim);
-
     protected abstract void initStimuli(List<ImageView> stimuli);
+
+    protected abstract void performChange(ImageView changingStim);
 
     private void addViewToGrid(View v, ConstraintLayout grid, Rect position, int viewSize) {
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(viewSize, viewSize);

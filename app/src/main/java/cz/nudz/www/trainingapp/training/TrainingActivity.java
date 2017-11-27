@@ -72,9 +72,6 @@ public class TrainingActivity extends BaseActivity implements
         currentSession = trainingRepository.startAndStoreTrainingSession(username);
         currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
         nextSequence();
-
-        // TODO remove after debug
-        binding.paradigm.setText(currentParadigmType.toString());
     }
 
     private void enableImmersiveMode() {
@@ -197,7 +194,7 @@ public class TrainingActivity extends BaseActivity implements
             nextSequence();
 
             // TODO remove after debug
-            binding.paradigm.setText(currentParadigmType.toString());
+            binding.paradigmCount.setText(currentParadigmType.toString());
         } else {
             Utils.showErrorDialog(this, null, getString(R.string.errorNoParadigmsLeft));
         }
