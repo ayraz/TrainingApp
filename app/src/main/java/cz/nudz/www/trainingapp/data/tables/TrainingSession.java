@@ -27,6 +27,12 @@ public class TrainingSession {
     @DatabaseField(canBeNull = false, foreign = true)
     private User user;
 
+    @DatabaseField()
+    private int effortAnswer;
+
+    @DatabaseField()
+    private int difficultyAnswer;
+
     public TrainingSession() {}
 
     public int getId() {
@@ -67,5 +73,21 @@ public class TrainingSession {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getEffortAnswer() {
+        return effortAnswer;
+    }
+
+    public void setEffortAnswer(int effortAnswer) {
+        this.effortAnswer = effortAnswer;
+    }
+
+    public int getDifficultyAnswer() {
+        return difficultyAnswer;
+    }
+
+    public void setDifficultyAnswer(int difficultyAnswer) {
+        this.difficultyAnswer = difficultyAnswer;
     }
 }

@@ -8,6 +8,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/appBackground</item>
+        <item name="android:textViewStyle">@style/TextStyle</item>
     </style>
 
     <style name="MainScreenButton" parent="">
@@ -30,5 +31,13 @@
 
     <style name="AppTheme.LightBlueAccent">
         <item name="colorAccent">@color/lightBlue</item>
+    </style>
+    <style name="TextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

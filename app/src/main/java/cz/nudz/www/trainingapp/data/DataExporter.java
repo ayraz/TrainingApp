@@ -48,9 +48,9 @@ public class DataExporter {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private int COLUMN_COUNT = 20;
-    private String queryString = "SELECT username AS [username], " +
-            "ts.id AS [sessionId], ts.startDate AS [sessionStartDate], ts.endDate AS [sessionEndDate], ts.isFinished AS [isSessionFinished], " +
+    private static final int COLUMN_COUNT = 22;
+    private static final String queryString = "SELECT username AS [username], " +
+            "ts.id AS [sessionId], ts.startDate AS [sessionStartDate], ts.endDate AS [sessionEndDate], ts.isFinished AS [isSessionFinished], ts.effortAnswer, ts.difficultyAnswer, " +
             "p.id AS [paradigmId], p.startDate AS [paradigmStartDate], p.endDate AS [paradigmEndDate], p.paradigmType AS [paradigmType], p.pauseDurationMillis AS [paradigmPauseDuration], " +
             "s.id AS [sequenceId], s.startDate AS [sequenceStartDate], s.endDate AS [sequenceEndDate], s.difficulty AS [difficulty], " +
             "t.id AS [trialId], t.isChangingTrial AS [trialChanged], t.isCorrect AS [trialResponse], t.responseTimeMillis AS [trialResponseTime], t.stimuliJSON, t.changedStimulusJSON " +

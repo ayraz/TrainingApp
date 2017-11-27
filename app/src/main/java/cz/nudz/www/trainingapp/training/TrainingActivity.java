@@ -20,6 +20,7 @@ import cz.nudz.www.trainingapp.data.TrainingRepository;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
+import cz.nudz.www.trainingapp.databinding.QuestionnaireFragmentBinding;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.Difficulty;
@@ -29,7 +30,8 @@ import cz.nudz.www.trainingapp.utils.Utils;
 
 public class TrainingActivity extends BaseActivity implements
         TrainingFragment.TrainingFragmentListener,
-        CountDownFragment.CountDownListener {
+        CountDownFragment.CountDownListener,
+        QuestionnaireFragment.QuestionnaireListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
     public static final int DEFAULT_SEQUENCE_COUNT = 7;
@@ -134,8 +136,7 @@ public class TrainingActivity extends BaseActivity implements
             // SESSION FINISHED
             if (isTrainingFinished()) {
                 trainingRepository.finishAndUpdateSession(currentSession);
-                super.onBackPressed();
-                // TODO: handle end of training properly..
+                showFragment(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
             } else {
                 paradigmPauseStartTime = new Date();
                 // next cannot be null because end of training is handled above..
@@ -206,5 +207,14 @@ public class TrainingActivity extends BaseActivity implements
 
     public TrainingAppDbHelper getDbHelper() {
         return getHelper();
+    }
+
+    @Override
+    public void onQuestionnairSubmission(int effort, int difficulty) {
+        currentSession.setEffortAnswer(effort);
+        currentSession.setDifficultyAnswer(difficulty);
+        getDbHelper().getTrainingSessionDao().update(currentSession);
+        super.onBackPressed();
+        // TODO: handle end of training properly..
     }
 }

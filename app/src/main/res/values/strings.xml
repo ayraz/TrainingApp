@@ -78,4 +78,10 @@
     <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninku.</string>
     <string name="trainingStartsInTitle">Výcvik začne za:</string>
     <string name="startImmediatelyBtnText">začít okamžitě</string>
+    <string name="saveBtnText">Uložit</string>
+    <string name="questionnaireTitle">Zkuste ohodnotit od 1 do 5…</string>
+    <string name="effortQuestionText">Vaše úsilí a snahu při tréninku:</string>
+    <string name="difficultyQuestionText">Náročnost/obtížnost tréninku:</string>
+    <string name="answerQuestionnaireErrorTitle">Některé otázky nejsou zodpovězeny</string>
+    <string name="answerQuestionnaireErrorText">Odpovězte na všechny otázky před uložením.</string>
 </resources>
