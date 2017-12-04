@@ -13,9 +13,11 @@
         Jakmile dokončíte alespoň jednu tréninkovou relaci, budete moci zobrazit přehled výsledků z části <b>&quot;Výsledky&quot;</b>.]]></string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
-    <string name="createUserEmptyUsernameMessage">Pole uživatelského jména nesmí být prázdné!</string>
-    <string name="createUserMessage">Uživatel již neexistuje, chcete ho vytvořit?</string>
-    <string name="createUserTitle">Vytvořit uživatele?</string>
+    <string name="emptyUsernameError">Pole uživatelského jména nesmí být prázdné!</string>
+    <string name="newUserTitle">Nový Uživatel</string>
+    <string name="userAlreadyExistsError">Uživatel s daným uživatelským jménem již existuje.</string>
+    <string name="createUserBtnText">Vytvořit uživatele</string>
+    <string name="userDoesNotExistError">Tento uživatel neexistuje.</string>
     <string name="difficultyLoweredMessage">VEDETE SE DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
@@ -64,7 +66,7 @@
     <string name="positionParadigmPerformanceSummary">Shrnutí výkonu pozičních paradigmat</string>
     <string name="shapeParadigmPerformanceSummary">Shrnutí výkonu tvarových paradigmat</string>
     <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
-    <string name="usernameLabel">Uživatelské jméno: </string>
+    <string name="usernameLabel">Uživatelské Jméno</string>
     <string name="loginBtnText">Přihlásit se</string>
     <string name="difficultyLabel">Úroveň: </string>
     <string name="tryColorParadigmBtn">Vyzkoušet "Barvu"</string>

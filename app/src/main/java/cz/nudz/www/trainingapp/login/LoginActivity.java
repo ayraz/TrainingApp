@@ -1,4 +1,4 @@
-package cz.nudz.www.trainingapp;
+package cz.nudz.www.trainingapp.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,17 +12,20 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import cz.nudz.www.trainingapp.BaseActivity;
+import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.main.MainActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
 import cz.nudz.www.trainingapp.dialogs.YesNoDialogFragment;
 
-public class LoginActivity extends BaseActivity implements YesNoDialogFragment.YesNoDialogFragmentListener {
+public class LoginActivity extends BaseActivity implements
+        SignupFragment.SignupListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private LoginActivityBinding binding;
-    private String enteredUsername;
+    private String username;
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, LoginActivity.class);
@@ -37,8 +40,11 @@ public class LoginActivity extends BaseActivity implements YesNoDialogFragment.Y
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
-        binding.loginBtn.setOnClickListener(v -> login());
-        binding.lastLoginAsBtn.setOnClickListener(v -> binding.username.setText(binding.lastLoginAsBtn.getText()));
+        binding.btnLogin.setOnClickListener(v -> login());
+
+        binding.lastLoginAsBtn.setBackgroundColor(android.R.color.transparent);
+        binding.lastLoginAsBtn.setOnClickListener(v ->
+                binding.inputName.setText(binding.lastLoginAsBtn.getText()));
 
         // set last user btn help
         try {
@@ -56,20 +62,26 @@ public class LoginActivity extends BaseActivity implements YesNoDialogFragment.Y
     }
 
     private void login() {
-        enteredUsername = binding.username.getText().toString();
-        if (Utils.isNullOrEmpty(enteredUsername)) {
-            Utils.showErrorDialog(this, null, getString(R.string.createUserEmptyUsernameMessage));
+        username = binding.inputName.getText().toString();
+        if (Utils.isNullOrEmpty(username)) {
+            Utils.showErrorDialog(this, null,
+                    getString(R.string.emptyUsernameError));
+        } else if (username.equals("##")) {
+            // special user creation mode
+            final SignupFragment signupFragment = new SignupFragment();
+            signupFragment.show(getSupportFragmentManager(), SignupFragment.TAG);
         } else {
             try {
                 final RuntimeExceptionDao<User, String> userDao = getHelper().getUserDao();
-                final User user = userDao.queryForId(enteredUsername);
+                final User user = userDao.queryForId(username);
                 if (user == null) {
-                    Utils.showYesNoDialog(this, getString(R.string.createUserTitle), getString(R.string.createUserMessage));
+                    Utils.showErrorDialog(this, null,
+                            getString(R.string.userDoesNotExistError));
                 } else {
                     startUserSession(user);
                 }
             } catch (RuntimeException e) {
-                Log.e(TAG, "Couldn't query for user", e);
+                Log.e(TAG, "Couldn't get user", e);
                 Utils.showErrorDialog(this, null, e.getMessage());
             }
 
@@ -86,10 +98,10 @@ public class LoginActivity extends BaseActivity implements YesNoDialogFragment.Y
     }
 
     @Override
-    public void onYes() {
+    public void onUserCreated(String username) {
         // create and store new user
         User newUser = new User();
-        newUser.setUsername(enteredUsername);
+        newUser.setUsername(username);
         Date now = new Date();
         newUser.setRegistrationDate(now);
         newUser.setLastLoginDate(now);

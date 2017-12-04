@@ -2,12 +2,11 @@ package cz.nudz.www.trainingapp;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Handler;
 import android.widget.Toast;
 
 import java.util.HashMap;
 
-import cz.nudz.www.trainingapp.utils.Utils;
+import cz.nudz.www.trainingapp.login.LoginActivity;
 
 /**
  * Created by artem on 21-Sep-17.
