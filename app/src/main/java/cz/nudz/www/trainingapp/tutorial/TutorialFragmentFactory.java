@@ -27,8 +27,20 @@ public class TutorialFragmentFactory {
         switch (position) {
             // start help
             case 0:
+                int startHelpText = 0;
+                switch (paradigmType) {
+                    case SHAPE:
+                        startHelpText = R.string.shapeParadigmStartHelp;
+                        break;
+                    case COLOR:
+                        startHelpText = R.string.colorParadigmStartHelp;
+                        break;
+                    case POSITION:
+                        startHelpText = R.string.positionParadigmStartHelp;
+                        break;
+                }
                 return TutorialImageFragment.newInstance(
-                        R.string.shapeParadigmStartHelp,
+                        startHelpText,
                         R.string.nextHelp,
                         null);
             // cue help

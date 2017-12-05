@@ -39,6 +39,12 @@ public class LoginActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // if there is existing session, spare user's time..
+        if (getSessionManager().isLoggedIn()) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
         binding.btnLogin.setOnClickListener(v -> login());
 

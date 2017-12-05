@@ -51,6 +51,10 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
         activity = (BaseActivity) getActivity();
         trainingRepository = new TrainingRepository(activity, activity.getHelper());
 
+        binding.colorChart.setNoDataText(getString(R.string.noChartDataAvailableText));
+        binding.positionChart.setNoDataText(getString(R.string.noChartDataAvailableText));
+        binding.shapeChart.setNoDataText(getString(R.string.noChartDataAvailableText));
+
         return binding.getRoot();
     }
 
@@ -133,7 +137,9 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
             super.onPostExecute(results);
             if (results.isEmpty()) {
                 if (toast == null) {
-                    toast = Toast.makeText(activity, R.string.notEnoughTrainingDataMessage, Toast.LENGTH_LONG);
+                    toast = Toast.makeText(activity,
+                            R.string.notEnoughTrainingDataMessage,
+                            Toast.LENGTH_LONG);
                     if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         final int activityWidth = activity.getWindow().getDecorView().getRootView().getWidth();
                         toast.setGravity(

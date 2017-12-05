@@ -78,6 +78,7 @@
     <string name="levelProgressionLabel">postup úrovně v úkolu</string>
     <string name="maxLevelReachedLabel">maximální dosažena úroveň v úkolu</string>
     <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninku.</string>
+    <string name="noChartDataAvailableText">Žádné údaje grafu nejsou k dispozici</string>
     <string name="trainingStartsInTitle">Výcvik začne za:</string>
     <string name="startImmediatelyBtnText">začít okamžitě</string>
     <string name="saveBtnText">Uložit</string>
