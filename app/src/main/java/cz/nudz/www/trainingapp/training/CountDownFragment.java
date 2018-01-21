@@ -90,10 +90,23 @@ public class CountDownFragment extends DialogFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onResume() {
+        super.onResume();
+        if (countDownTimer != null) {
+            countDownTimer.start();
+        }
+    }
+
+    @Override
+    public void onPause() {
         countDownTimer.cancel();
+        super.onPause();
+    }
+
+    @Override
+    public void onDetach() {
         listener = null;
+        super.onDetach();
     }
 
     @Override
