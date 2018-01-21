@@ -1,6 +1,8 @@
 package cz.nudz.www.trainingapp;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -109,5 +111,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public boolean isFragmentShown(String tag) {
         return getSupportFragmentManager().findFragmentByTag(tag) != null;
+    }
+
+    public boolean isAppInLockTaskMode() {
+        ActivityManager activityManager = (ActivityManager)
+                this.getSystemService(Context.ACTIVITY_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // For SDK version 23 and above.
+            return activityManager.getLockTaskModeState()
+                    != ActivityManager.LOCK_TASK_MODE_NONE;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // When SDK version >= 21. This API is deprecated in 23.
+            return activityManager.isInLockTaskMode();
+        }
+        return false;
     }
 }

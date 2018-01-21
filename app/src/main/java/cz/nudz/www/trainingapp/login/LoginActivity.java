@@ -29,10 +29,8 @@ public class LoginActivity extends BaseActivity implements
 
     public static void startActivity(Context context) {
         Intent i = new Intent(context, LoginActivity.class);
-        // Closing all activities on top this one
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         // Start new app task history
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(i);
     }
 

@@ -2,6 +2,7 @@ package cz.nudz.www.trainingapp.main;
 
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -118,7 +119,9 @@ public class MainActivity extends BaseActivity implements
             binding.menuList.setAdapter(menuCardAdapter);
             final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             binding.menuList.setLayoutManager(layoutManager);
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !isAppInLockTaskMode()) {
+                startLockTask();
+            }
             if (savedInstanceState == null) {
                 // navigate to welcome fragment
                 menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
