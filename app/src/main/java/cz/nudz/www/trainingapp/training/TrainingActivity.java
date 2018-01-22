@@ -67,11 +67,11 @@ public class TrainingActivity extends BaseActivity implements
 
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
         username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
-        trainingRepository = new TrainingRepository(this, getDbHelper());
+        trainingRepository = new TrainingRepository(this);
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         containerId = binding.trainingActivityFragmentContainer.getId();
 
-        currentSession = trainingRepository.startAndStoreTrainingSession(username);
+        currentSession = trainingRepository.startAndStoreTrainingSession();
         currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
         nextSequence();
     }

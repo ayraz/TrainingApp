@@ -87,4 +87,5 @@
     <string name="difficultyQuestionText">Náročnost/obtížnost tréninku:</string>
     <string name="answerQuestionnaireErrorTitle">Některé otázky nejsou zodpovězeny</string>
     <string name="answerQuestionnaireErrorText">Odpovězte na všechny otázky před uložením.</string>
+
 </resources>

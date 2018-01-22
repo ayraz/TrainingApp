@@ -49,7 +49,7 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container, false);
         activity = (BaseActivity) getActivity();
-        trainingRepository = new TrainingRepository(activity, activity.getHelper());
+        trainingRepository = new TrainingRepository(activity);
 
         binding.colorChart.setNoDataText(getString(R.string.noChartDataAvailableText));
         binding.positionChart.setNoDataText(getString(R.string.noChartDataAvailableText));

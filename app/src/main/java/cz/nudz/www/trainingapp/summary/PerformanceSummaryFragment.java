@@ -76,7 +76,7 @@ public class PerformanceSummaryFragment extends LineChartFragment<String, Intege
 
         @Override
         protected List<Pair<String, Integer>> doInBackground(String... strings) {
-            return trainingRepository.getAllSessionParadigmData(activity.getSessionManager().getUsername(), ParadigmType.COLOR.toString());
+            return trainingRepository.getAllSessionParadigmData(ParadigmType.COLOR.toString());
         }
     }
 }
