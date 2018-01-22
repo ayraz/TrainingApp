@@ -14,13 +14,11 @@ import java.util.List;
 
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
 import cz.nudz.www.trainingapp.data.TrainingRepository;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
-import cz.nudz.www.trainingapp.databinding.QuestionnaireFragmentBinding;
 import cz.nudz.www.trainingapp.databinding.TrainingActivityBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.Difficulty;
@@ -31,7 +29,8 @@ import cz.nudz.www.trainingapp.utils.Utils;
 public class TrainingActivity extends BaseActivity implements
         TrainingFragment.TrainingFragmentListener,
         CountDownFragment.CountDownListener,
-        QuestionnaireFragment.QuestionnaireListener {
+        QuestionnaireFragment.QuestionnaireListener,
+        BadgeFragment.BadgeFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
     public static final int DEFAULT_SEQUENCE_COUNT = 7;
@@ -39,8 +38,7 @@ public class TrainingActivity extends BaseActivity implements
 
     private TrainingActivityBinding binding;
     private int sequenceCount = 0;
-    private String username;
-    private TrainingRepository trainingRepository;
+    private TrainingRepository tr;
 
     private ParadigmType currentParadigmType;
     // each paradigm starts with lowest difficulty.
@@ -66,13 +64,12 @@ public class TrainingActivity extends BaseActivity implements
         enableImmersiveMode();
 
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-        username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
-        trainingRepository = new TrainingRepository(this, getDbHelper());
+        tr = new TrainingRepository(this);
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         containerId = binding.trainingActivityFragmentContainer.getId();
 
-        currentSession = trainingRepository.startAndStoreTrainingSession(username);
-        currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
+        currentSession = tr.startAndStoreTrainingSession();
+        currentParadigm = tr.startAndStoreParadigm(currentSession, currentParadigmType);
         nextSequence();
     }
 
@@ -119,7 +116,7 @@ public class TrainingActivity extends BaseActivity implements
         } else if (isParadigmFinished()) {
             long paradigmPauseDuration = (new Date()).getTime() - paradigmPauseStartTime.getTime();
             currentParadigm.setPauseDurationMillis(paradigmPauseDuration);
-            trainingRepository.updateParadigm(currentParadigm);
+            tr.updateParadigm(currentParadigm);
 
             nextParadigm();
         }
@@ -128,19 +125,25 @@ public class TrainingActivity extends BaseActivity implements
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
         sequenceCount += 1;
-        trainingRepository.finishAndUpdateSequence(currentSequence);
+        tr.finishAndUpdateSequence(currentSequence);
 
         // PARADIGM FINISHED
         if (isParadigmFinished()) {
-            trainingRepository.finishAndUpdateParadigm(currentParadigm);
+            tr.finishAndUpdateParadigm(currentParadigm);
             // SESSION FINISHED
             if (isTrainingFinished()) {
-                trainingRepository.finishAndUpdateSession(currentSession);
-                showFragment(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
+                tr.finishAndUpdateSession(currentSession);
+                if (tr.doManySessionsExist()) {
+                    BadgeFragment badgeFragment = new BadgeFragment();
+                    badgeFragment.show(getSupportFragmentManager(), BadgeFragment.TAG);
+                } else {
+                    showQuestionnaire();
+                }
             } else {
                 paradigmPauseStartTime = new Date();
                 // next cannot be null because end of training is handled above..
-                showFragment(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType), null), PauseFragment.TAG);
+                showFragment(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType),
+                        null), PauseFragment.TAG);
             }
         // SEQUENCE FINISHED
         } else if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
@@ -175,7 +178,7 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private void nextSequence() {
-        currentSequence = trainingRepository.startAndStoreSequence(currentParadigm, currentDifficulty);
+        currentSequence = tr.startAndStoreSequence(currentParadigm, currentDifficulty);
 
         showFragment(containerId, TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
         // TODO remove after debug
@@ -190,7 +193,7 @@ public class TrainingActivity extends BaseActivity implements
             currentParadigmType = next;
             currentDifficulty = Difficulty.ONE;
 
-            currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, next);
+            currentParadigm = tr.startAndStoreParadigm(currentSession, next);
 
             nextSequence();
 
@@ -216,5 +219,14 @@ public class TrainingActivity extends BaseActivity implements
         getDbHelper().getTrainingSessionDao().update(currentSession);
         super.onBackPressed();
         // TODO: handle end of training properly..
+    }
+
+    @Override
+    public void onOkClick() {
+        showQuestionnaire();
+    }
+
+    private void showQuestionnaire() {
+        showFragment(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
     }
 }

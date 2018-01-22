@@ -40,4 +40,9 @@
     <style name="TitleText" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <!--<item name="colorControlNormal">@color/indigo</item>-->
+        <!--<item name="colorControlActivated">@color/pink</item>-->
+    </style>
 </resources>

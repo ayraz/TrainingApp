@@ -61,7 +61,7 @@ public abstract class TrainingFragment extends Fragment {
     private static final int LEFT_GRID_INDEX = 0;
     private static final int RIGHT_GRID_INDEX = 1;
     // Do not set to 0, unless you want to nullify other intervals..
-    private static final double DEBUG_SLOW = 0;
+    private static final double DEBUG_SLOW = 1;
     private static final double SPEED_FACTOR = 1;
 
     private TrainingFragmentBinding binding;

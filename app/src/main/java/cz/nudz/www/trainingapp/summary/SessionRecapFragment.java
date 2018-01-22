@@ -56,7 +56,7 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
     }
 
     private AsyncTask<String, Integer, List<Pair<String, Integer>>> executeTask(LineChart chart, ParadigmType paradigmType) {
-        return new RecapTask(results -> setChartData(results, chart, paradigmType)).execute(activity.getSessionManager().getUsername(), paradigmType.toString());
+        return new RecapTask(results -> setChartData(results, chart, paradigmType)).execute(paradigmType.toString());
     }
 
     private class RecapTask extends ChartLoadTask {
@@ -67,7 +67,7 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
 
         @Override
         protected List<Pair<String, Integer>> doInBackground(String... strings) {
-            return trainingRepository.getLastSessionParadigmData(strings[0], strings[1]);
+            return trainingRepository.getLastSessionParadigmData(strings[1]);
         }
     }
 }
