@@ -88,23 +88,32 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void showFragment(int containerId, Fragment fragment, String tag) {
         if (!isFragmentShown(tag)) {
-            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag);
+            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag, false);
             transaction.commit();
         }
     }
 
-    public void showAndStackFragment(int containerId, Fragment fragment, String tag) {
+    public void showFragmentWithAnim(int containerId, Fragment fragment, String tag) {
         if (!isFragmentShown(tag)) {
-            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag);
+            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag, true);
+            transaction.commit();
+        }
+    }
+
+    public void showFragmentWithAnimAndHistory(int containerId, Fragment fragment, String tag) {
+        if (!isFragmentShown(tag)) {
+            FragmentTransaction transaction = replaceFragment(containerId, fragment, tag, true);
             transaction.addToBackStack(tag);
             transaction.commit();
         }
     }
 
     @NonNull
-    private FragmentTransaction replaceFragment(int containerId, Fragment fragment, String tag) {
+    private FragmentTransaction replaceFragment(int containerId, Fragment fragment, String tag, boolean anim) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        if (anim) {
+            transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        }
         transaction.replace(containerId, fragment, tag);
         return transaction;
     }

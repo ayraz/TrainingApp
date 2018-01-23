@@ -18,7 +18,6 @@ import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.main.MainActivity;
 import cz.nudz.www.trainingapp.utils.Utils;
-import cz.nudz.www.trainingapp.dialogs.YesNoDialogFragment;
 
 public class LoginActivity extends BaseActivity implements
         SignupFragment.SignupListener {
@@ -39,9 +38,9 @@ public class LoginActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
 
         // if there is existing session, spare user's time..
-        if (getSessionManager().isLoggedIn()) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
+//        if (getSessionManager().isLoggedIn()) {
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
 
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
         binding.btnLogin.setOnClickListener(v -> login());

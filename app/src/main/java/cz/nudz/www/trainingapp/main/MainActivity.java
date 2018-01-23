@@ -95,24 +95,31 @@ public class MainActivity extends BaseActivity implements
         if (getSessionManager().checkLogin()) {
             setSupportActionBar(binding.appBar);
             menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
+                if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                    FragmentManager.BackStackEntry lastEntry = getSupportFragmentManager().
+                            getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
+                    if (lastEntry.getName().equals(TrainingFragment.TAG)) {
+                        getSupportFragmentManager().popBackStack();
+                    }
+                }
                 switch (optionStringId) {
                     case R.string.introOptionTitle:
-                        showFragment(containerId, new HomeFragment(), HomeFragment.TAG);
+                        showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
                         break;
                     case R.string.trainingOptionTitle:
-                        showFragment(containerId, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
+                        showFragmentWithAnim(containerId, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
                         break;
                     case R.string.tutorialOptionTitle:
-                        showFragment(containerId, new TutorialPagerFragment(), TutorialPagerFragment.TAG);
+                        showFragmentWithAnim(containerId, new TutorialPagerFragment(), TutorialPagerFragment.TAG);
                         break;
                     case R.string.trialOptionTitle:
-                        showFragment(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
+                        showFragmentWithAnim(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
-                        showFragment(containerId, new SessionRecapFragment(), SessionRecapFragment.TAG);
+                        showFragmentWithAnim(containerId, new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
-                        showFragment(containerId, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
+                        showFragmentWithAnim(containerId, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                 }
             });
@@ -125,7 +132,7 @@ public class MainActivity extends BaseActivity implements
             if (savedInstanceState == null) {
                 // navigate to welcome fragment
                 menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
-                showFragment(containerId, new HomeFragment(), HomeFragment.TAG);
+                showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
             }
         }
     }
@@ -163,7 +170,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty) {
-        showAndStackFragment(binding.fragmentContainer.getId(),
+        showFragmentWithAnimAndHistory(binding.fragmentContainer.getId(),
                 TrainingFragment.newInstance(paradigmType, difficulty, 3),
                 TrainingFragment.TAG);
     }
@@ -175,7 +182,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void startTraining() {
-        showAndStackFragment(containerId,
+        showFragmentWithAnimAndHistory(containerId,
                 CountDownFragment.newInstance(10 * 1000, getString(R.string.trainingStartsInTitle), getString(R.string.startImmediatelyBtnText)),
                 CountDownFragment.TAG);
     }

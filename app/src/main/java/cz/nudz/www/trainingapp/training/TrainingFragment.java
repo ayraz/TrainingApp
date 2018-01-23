@@ -180,8 +180,8 @@ public abstract class TrainingFragment extends Fragment {
                 stimSize = (cellSize / 2) - paddingStart;
 
                 trialRunner = new TrialRunner();
-                trialRunner.run();
-
+                // give user half second to focus
+                handler.postDelayed(trialRunner, 500);
             }
         });
 

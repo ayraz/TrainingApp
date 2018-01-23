@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -142,7 +143,7 @@ public class TrainingActivity extends BaseActivity implements
             } else {
                 paradigmPauseStartTime = new Date();
                 // next cannot be null because end of training is handled above..
-                showFragment(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType),
+                showFragmentWithAnim(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType),
                         null), PauseFragment.TAG);
             }
         // SEQUENCE FINISHED
@@ -159,7 +160,7 @@ public class TrainingActivity extends BaseActivity implements
             } else {
                 // TODO: handle max level
             }
-            showFragment(containerId, PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
+            showFragmentWithAnim(containerId, PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
         }
     }
 
@@ -180,7 +181,8 @@ public class TrainingActivity extends BaseActivity implements
     private void nextSequence() {
         currentSequence = tr.startAndStoreSequence(currentParadigm, currentDifficulty);
 
-        showFragment(containerId, TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
+        showFragment(containerId,
+                TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount + 1)));
     }
@@ -227,6 +229,6 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private void showQuestionnaire() {
-        showFragment(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
+        showFragmentWithAnim(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
     }
 }

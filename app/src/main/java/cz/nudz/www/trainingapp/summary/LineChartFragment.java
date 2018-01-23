@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.summary;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
@@ -30,6 +31,7 @@ import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.TrainingRepository;
 import cz.nudz.www.trainingapp.databinding.ChartFragmentBinding;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.utils.Utils;
 
 /**
  * Created by P8P67 on 11/5/2017.
@@ -51,11 +53,16 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
         activity = (BaseActivity) getActivity();
         trainingRepository = new TrainingRepository(activity);
 
-        binding.colorChart.setNoDataText(getString(R.string.noChartDataAvailableText));
-        binding.positionChart.setNoDataText(getString(R.string.noChartDataAvailableText));
-        binding.shapeChart.setNoDataText(getString(R.string.noChartDataAvailableText));
+        setChartNoData(binding.colorChart, binding.positionChart, binding.shapeChart);
 
         return binding.getRoot();
+    }
+
+    private void setChartNoData(LineChart... charts) {
+        for (LineChart c : charts) {
+            c.setNoDataText(getString(R.string.noChartDataAvailableText));
+            c.setNoDataTextColor(R.color.red);
+        }
     }
 
     @Override
@@ -140,19 +147,12 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
                     toast = Toast.makeText(activity,
                             R.string.notEnoughTrainingDataMessage,
                             Toast.LENGTH_LONG);
-                    if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        final int activityWidth = activity.getWindow().getDecorView().getRootView().getWidth();
-                        toast.setGravity(
-                            Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM,
-                            (activityWidth - binding.getRoot().getWidth()) / 2,
-                            32);
-                    }
+                    Utils.adjustToastPosition(activity, binding.getRoot(), toast);
                     toast.show();
                 }
                 return;
             }
             listener.onComplete(results);
         }
-
     }
 }
