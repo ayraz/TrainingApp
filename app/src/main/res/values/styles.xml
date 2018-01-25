@@ -42,7 +42,12 @@
     </style>
 
     <style name="RatingBar" parent="Theme.AppCompat">
+<<<<<<< HEAD
         <item name="colorControlNormal">@color/indigo</item>
         <item name="colorControlActivated">@color/pink</item>
+=======
+        <!--<item name="colorControlNormal">@color/indigo</item>-->
+        <!--<item name="colorControlActivated">@color/pink</item>-->
+>>>>>>> ba2787d3db4a87ef3949c2204a9155c645dbab3c
     </style>
 </resources>

@@ -2,18 +2,21 @@ package cz.nudz.www.trainingapp.data;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.drm.DrmStore;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
@@ -121,22 +124,9 @@ public class TrainingRepository {
     }
 
     public List<Pair<String, Integer>> getLastSessionParadigmData (String paradigmType) {
-        List<Pair<String, Integer>> result = new ArrayList<>(TrainingActivity.DEFAULT_SEQUENCE_COUNT);
-        iterateLastSessionParadigm(paradigmType, new Action2() {
-            @Override
-            public void call(Cursor cursor, int i) {
-                result.add(new Pair<>(
-                        context.getString(R.string.sequence) + " " + i + ".",
-                        cursor.getInt(cursor.getColumnIndex("difficulty"))
-                ));
-            }
-        });
-        return result;
-    }
-
-    private void iterateLastSessionParadigm(String paradigmType, Action2 action) {
         try (Cursor cursor = dbHelper.getReadableDatabase().rawQuery(lastSessionDataQuery,
                 new String[] { sessionManager.getUsername(), paradigmType })) {
+            List<Pair<String, Integer>> result = new ArrayList<>(TrainingActivity.DEFAULT_SEQUENCE_COUNT);
             if (cursor.moveToFirst()) {
                 final int paradigmId = cursor.getInt(cursor.getColumnIndex("paradigmId"));
                 int i = 1;
@@ -144,9 +134,14 @@ public class TrainingRepository {
                     // if at any point we get a sequence from different paradigm, the query must be wrong.
                     if (paradigmId != cursor.getInt(cursor.getColumnIndex("paradigmId")))
                         throw new IllegalStateException("Sequences are from distinct paradigms; broken query.");
-                    action.call(cursor, i);
+
+                    result.add(new Pair<>(
+                            context.getString(R.string.sequence) + " " + i + ".",
+                            cursor.getInt(cursor.getColumnIndex("difficulty"))
+                    ));
                 }
             }
+            return result;
         }
     }
 
@@ -177,59 +172,107 @@ public class TrainingRepository {
         return getTrainingSessionDao().countOf() >= 2;
     }
 
-    private void iterateAllLastSessionParadigms(Action2 action) {
-        for (ParadigmType type : ParadigmType.values()) {
-            iterateLastSessionParadigm(type.toString(), action);
+    private Paradigm getLastParadigm(ParadigmType type) {
+        try {
+            QueryBuilder<Paradigm, Integer> pQb = getFinishedParadigmByType(type);
+            return pQb.queryForFirst();
+        } catch (SQLException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE, e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean isShortPauseCondition() {
+    private Paradigm getPenultimateParadigm(ParadigmType type) {
+        try {
+            QueryBuilder<Paradigm, Integer> pQb = getFinishedParadigmByType(type);
+            List<Paradigm> query = pQb.limit(2L).query();
+            // take second record
+            return query.get(1);
+        } catch (SQLException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE, e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @NonNull
+    private QueryBuilder<Paradigm, Integer> getFinishedParadigmByType(ParadigmType type) throws SQLException {
+        QueryBuilder<User, String> uQb = getUserDao().queryBuilder();
+        uQb.where().eq("username", sessionManager.getUsername());
+        QueryBuilder<TrainingSession, Integer> tsQb = getTrainingSessionDao().queryBuilder();
+        tsQb.join(uQb).where().eq("isFinished", true);
+        tsQb.orderBy("startDate", false);
+        QueryBuilder<Paradigm, Integer> pQb = getParadigmDao().queryBuilder();
+        pQb.join(tsQb).where().eq("paradigmType", type);
+        return pQb;
+    }
+
+    private List<Sequence> getSequences(int paradigmId) {
+        try {
+            return getSequenceDao().queryBuilder()
+                    .where().eq("paradigm_id", paradigmId).query();
+        } catch (SQLException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE, e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * During all inter-paradigm pauses the user hasn’t taken a pause which was
+     * longer than 15 seconds.
+     * @return
+     */
+    public boolean hasOnlyShortPauses() {
         // final array hack to simulate closure
-        final boolean[] longPause = {false};
+        boolean longPause = false;
         final int ALLOWED_PAUSE = 15; // seconds
-        iterateAllLastSessionParadigms((cursor, sequenceCount) -> {
-            final long pauseDurationMillis = cursor.getLong(
-                    cursor.getColumnIndex("pauseDurationMillis"));
-            longPause[0] = longPause[0] || ((pauseDurationMillis / 1000) > ALLOWED_PAUSE);
-            // all sequence records reference same paradigm, check only first
-//            break;
-        });
-        return !longPause[0];
+        for (ParadigmType type : ParadigmType.values()) {
+            Paradigm paradigm = getLastParadigm(type);
+            longPause = longPause || ((paradigm.getPauseDurationMillis() / 1000) > ALLOWED_PAUSE);
+        }
+        return !longPause;
     }
 
     /**
      * The user increased the difficulty level in each paradigm at least once during
      * the training session.
      */
-    public boolean isAllParadigmImprovedCondition() {
-        final boolean[] colorRaised = {false};
-        final boolean positionRaised = false;
-        final boolean shapeRaised = false;
-
-        int difficulty = Difficulty.toInteger(Difficulty.ONE);
-        iterateLastSessionParadigm(ParadigmType.COLOR.toString(), (cursor, sequenceCount) -> {
-            colorRaised[0] = colorRaised[0]
-                    || (cursor.getInt(cursor.getColumnIndex("difficulty")) > difficulty);
-        });
-
-        difficulty = Difficulty.toInteger(Difficulty.ONE);
-        iterateLastSessionParadigm(ParadigmType.POSITION.toString(), (cursor, sequenceCount) -> {
-            colorRaised[0] = colorRaised[0]
-                    || (cursor.getInt(cursor.getColumnIndex("difficulty")) > difficulty);
-        });
-
-        difficulty = Difficulty.toInteger(Difficulty.ONE);
-        iterateLastSessionParadigm(ParadigmType.COLOR.toString(), (cursor, sequenceCount) -> {
-            colorRaised[0] = colorRaised[0]
-                    || (cursor.getInt(cursor.getColumnIndex("difficulty")) > difficulty);
-        });
-
-        return colorRaised[0] && positionRaised && shapeRaised;
+    public boolean hasRaisedDiffInAllParadigms() {
+        boolean allRaised = true;
+        for (ParadigmType type : ParadigmType.values()) {
+            List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
+            List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
+            int currMaxDiff = sequenceMaxDifficulty(currSeq);
+            int prevMaxDiff = sequenceMaxDifficulty(prevSeq);
+            allRaised = allRaised && (currMaxDiff > prevMaxDiff);
+        }
+        return allRaised;
     }
 
-    private interface Action2 {
+    /**
+     * The aggregate results of this session are same or better than those of the
+     * previous.
+     * @return
+     */
+    public boolean isCurrentSessionSameOrBetter() {
+        int currSum = 0;
+        int prevSum = 0;
+        for (ParadigmType type : ParadigmType.values()) {
+            List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
+            List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
+            currSum += sequenceMaxDifficulty(currSeq);
+            prevSum += sequenceMaxDifficulty(prevSeq);
+        }
+        return prevSum <= currSum;
+    }
 
-        void call(Cursor cursor, int sequenceCount);
+    private int sequenceMaxDifficulty(List<Sequence> sequences) {
+        int max = 1;
+        for (Sequence s : sequences) {
+            if (s.getDifficulty() > max) {
+                max = s.getDifficulty();
+            }
+        }
+        return max;
     }
 
     public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() {

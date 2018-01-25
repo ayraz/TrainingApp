@@ -4,12 +4,22 @@
     tools:context="cz.nudz.www.trainingapp.training.BadgeFragment">
 
     <LinearLayout
+<<<<<<< HEAD
         android:layout_width="wrap_content"
+=======
+        android:layout_width="250dp"
+>>>>>>> ba2787d3db4a87ef3949c2204a9155c645dbab3c
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
         <RatingBar
+<<<<<<< HEAD
+=======
+            android:id="@+id/ratingBar"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+>>>>>>> ba2787d3db4a87ef3949c2204a9155c645dbab3c
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -18,10 +28,29 @@
             android:rating="0"
             android:stepSize="1" />
 
+<<<<<<< HEAD
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="You have gained 3 stars:\n- For this.\n- This.\n- And this." />
+=======
+        <TextView
+            android:id="@+id/ratingMessage"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="You have gained 3 stars:\n- For this.\n- This.\n- And this." />
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/ok"/>
+>>>>>>> ba2787d3db4a87ef3949c2204a9155c645dbab3c
 
     </LinearLayout>
 </layout>
