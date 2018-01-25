@@ -87,12 +87,8 @@
     <string name="difficultyQuestionText">Náročnost/obtížnost tréninku:</string>
     <string name="answerQuestionnaireErrorTitle">Některé otázky nejsou zodpovězeny</string>
     <string name="answerQuestionnaireErrorText">Odpovězte na všechny otázky před uložením.</string>
-<<<<<<< HEAD
-
-=======
     <string name="ratingNoConditionReachedText">Tentokrát jste nedosáhli ratingových podmínek.\nMožná budete mít příště větší štěstí.</string>
     <string name="ratingSumConditionText">Souhrnné výsledky tohoto tréninku jsou stejné nebo lepší než výsledky předchozího.</string>
     <string name="ratingPauseConditionText">Během jednotlivých úloh jste si nedali pausu která byla delší než 15 sekund.</string>
     <string name="ratingAllParadigmsRaisedText">Zvýšili jste obtížnost v každém úkolu alespoň jednou během tréninku v porovnání s předchozím zasedáním.</string>
->>>>>>> ba2787d3db4a87ef3949c2204a9155c645dbab3c
 </resources>

@@ -65,22 +65,12 @@ public class TrainingActivity extends BaseActivity implements
         enableImmersiveMode();
 
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-<<<<<<< HEAD
-        username = getSessionManager().getUserDetails().get(SessionManager.KEY_USERNAME);
-        trainingRepository = new TrainingRepository(this);
-        currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
-        containerId = binding.trainingActivityFragmentContainer.getId();
-
-        currentSession = trainingRepository.startAndStoreTrainingSession();
-        currentParadigm = trainingRepository.startAndStoreParadigm(currentSession, currentParadigmType);
-=======
         tr = new TrainingRepository(this);
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         containerId = binding.trainingActivityFragmentContainer.getId();
 
         currentSession = tr.startAndStoreTrainingSession();
         currentParadigm = tr.startAndStoreParadigm(currentSession, currentParadigmType);
->>>>>>> ba2787d3db4a87ef3949c2204a9155c645dbab3c
         nextSequence();
     }
 
