@@ -11,6 +11,7 @@
         <li>&nbsp;<b>Režim výuky</b> - to vás provede každou etapou tréninku (viz tuto možnost před začátkem skutečného tréninku).</li>
         <li>&nbsp;<b>Režim zkušební verze</b> - zde můžete zvolit libovolný z dostupných výcvikových úkolů a vyzkoušet několik z nich (výsledky nejsou zaznamenávány).</li>
         Jakmile dokončíte alespoň jednu tréninkovou relaci, budete moci zobrazit přehled výsledků z části <b>&quot;Výsledky&quot;</b>.]]></string>
+    <string name="tutorialPrepareForTrialText">Následující zkušební verze bude běžet normalní rychlosti, která je poměrně rychlá, připravte se…</string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
     <string name="emptyUsernameError">Pole uživatelského jména nesmí být prázdné!</string>

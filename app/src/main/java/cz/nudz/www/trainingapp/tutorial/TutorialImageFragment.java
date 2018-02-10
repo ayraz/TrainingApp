@@ -26,7 +26,6 @@ public class TutorialImageFragment extends Fragment {
     private static final String TUTORIAL_DRAWABLE_ID = "TUTORIAL_DRAWABLE_ID";
 
     private int topTextId;
-    private int bottomTextId;
     private Integer drawableId;
     private TutorialImageFragmentBinding binding;
 
@@ -39,24 +38,15 @@ public class TutorialImageFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param topTextId Must be a valid string id.
-     * @param bottomTextId Must be a valid string id.
      * @param drawableId Optional center image drawable resource id.
      * @return A new instance of fragment TutorialFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static TutorialImageFragment newInstance(
-            int topTextId,
-            int bottomTextId,
-            @Nullable Integer drawableId) {
+    public static TutorialImageFragment newInstance(int topTextId, @Nullable Integer drawableId) {
 
         TutorialImageFragment fragment = new TutorialImageFragment();
         Bundle args = new Bundle();
-
         args.putInt(TUTORIAL_TOP_TEXT_ID, topTextId);
-        args.putInt(TUTORIAL_BOTTOM_TEXT_ID, bottomTextId);
-        if (drawableId != null)
-            args.putInt(TUTORIAL_DRAWABLE_ID, drawableId);
-
+        if (drawableId != null) args.putInt(TUTORIAL_DRAWABLE_ID, drawableId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +55,6 @@ public class TutorialImageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         topTextId = getArguments().getInt(TUTORIAL_TOP_TEXT_ID);
-        bottomTextId = getArguments().getInt(TUTORIAL_BOTTOM_TEXT_ID);
         if (getArguments().containsKey(TUTORIAL_DRAWABLE_ID)){
             drawableId = getArguments().getInt(TUTORIAL_DRAWABLE_ID);
         }
@@ -77,7 +66,6 @@ public class TutorialImageFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_image_fragment, container, false);
 
         binding.tutorialFragmentTopText.setText(Html.fromHtml(getString(topTextId)));
-        binding.tutorialFragmentBottomText.setText(Html.fromHtml(getString(bottomTextId)));
         if (drawableId != null && !drawableId.equals(0)) {
             Drawable drawable = getResources().getDrawable(drawableId);
             binding.tutorialFragmentImage.setImageDrawable(drawable);

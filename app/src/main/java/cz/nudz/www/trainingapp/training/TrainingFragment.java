@@ -151,7 +151,7 @@ public abstract class TrainingFragment extends Fragment {
             trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
             isTrainingMode = false;
         }
-
+binding.trainingFragmentDifferentBtn.setLongClickable(false);
         /*
          * Using this callback as an indicator that layout has finished...
          * meaning that we can use views' measures, etc. at this point.
@@ -224,12 +224,18 @@ public abstract class TrainingFragment extends Fragment {
                     initStimuli(allStimuli);
                     initTrialObject();
 
-                    Utils.enableViews(false, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+                    Utils.enableViews(false,
+                            binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+
                     // user answer handlers have to be set trial-wise
                     binding.trainingFragmentSameBtn.setOnClickListener(v ->
                             handleAnswerSubmission(!currentTrial.isChangingTrial()));
+                    // android resets longClickable to true when setOnClickListener gets attached
+                    binding.trainingFragmentSameBtn.setLongClickable(false);
+
                     binding.trainingFragmentDifferentBtn.setOnClickListener(v ->
                             handleAnswerSubmission(currentTrial.isChangingTrial()));
+                    binding.trainingFragmentDifferentBtn.setLongClickable(false);
 
                     // START THE TRIAL...
                     final View cue;
