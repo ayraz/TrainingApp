@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.tutorial;
 
+import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,10 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.TutorialPagerActivityBinding;
+import cz.nudz.www.trainingapp.training.CountDownFragment;
+import cz.nudz.www.trainingapp.training.TrainingFragment;
+import cz.nudz.www.trainingapp.utils.Utils;
 
-public class TutorialPagerFragment extends Fragment {
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+public class TutorialPagerFragment extends Fragment implements
+        CountDownFragment.CountDownListener,
+        TrainingFragment.TrainingFragmentListener{
 
     public static final String TAG = TutorialPagerFragment.class.getSimpleName();
 
@@ -27,6 +38,7 @@ public class TutorialPagerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.tutorial_pager_activity, container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         pager = binding.tutorialActivityPager;
         pagerAdapter = new TutorialPagerAdapter(getChildFragmentManager());
@@ -62,11 +74,57 @@ public class TutorialPagerFragment extends Fragment {
         binding.tutorialActivityPrevBtn.setOnClickListener(v -> pager.setCurrentItem(getCurrentPage() - 1));
         binding.tutorialActivityNextBtn.setOnClickListener(v -> pager.setCurrentItem(getCurrentPage() + 1));
 
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                final Fragment fragment = TutorialFragmentFactory.createTutorialFragment(position);
+                if (fragment instanceof CountDownFragment || fragment instanceof TrainingFragment) {
+                    Utils.setViewsVisibility(GONE,
+                            binding.tutorialActivityNextBtn,
+                            binding.tutorialActivityPrevBtn);
+                } else {
+                    Utils.setViewsVisibility(VISIBLE,
+                            binding.tutorialActivityNextBtn,
+                            binding.tutorialActivityPrevBtn);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         return binding.getRoot();
     }
 
     private int getCurrentPage() {
         return pager.getCurrentItem();
+    }
+
+    @Override
+    public void onExpired() {
+        nextPage();
+    }
+
+    @Override
+    public void onContinue() {
+        nextPage();
+    }
+
+    @Override
+    public void onSequenceFinished(List<Boolean> answers) {
+        // TODO: how they did..
+        nextPage();
+    }
+
+    private void nextPage() {
+        pager.setCurrentItem(getCurrentPage() + 1);
     }
 
     private class TutorialPagerAdapter extends FragmentStatePagerAdapter {

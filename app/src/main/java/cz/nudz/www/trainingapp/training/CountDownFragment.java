@@ -5,7 +5,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,41 @@ public class CountDownFragment extends DialogFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Fragment parentFragment = getParentFragment();
+        if (null != parentFragment) {
+            onAttachToParentFragment(parentFragment);
+        }
+    }
+
+    /**
+     * If there is a parent fragment in between this one and host activity, let it handle events.
+     * @param fragment
+     */
+    protected void onAttachToParentFragment(Fragment fragment) {
+        if (fragment instanceof CountDownListener) {
+            listener = (CountDownListener) fragment;
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible) {
+        super.setUserVisibleHint(visible);
+        // This hack is required because this fragment is reused in a viewpager which pre-creates fragments..
+        // for smooth swiping, meaning that we would start count down before the fragment is visible.
+        if (visible && isResumed()) {
+            // assuming this is not getting called when not in viewpager...
+            if (countDownTimer != null) {
+                countDownTimer.start();
+            }
+        }
+        if (!visible && getParentFragment() != null) {
+            countDownTimer.cancel();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -78,7 +115,6 @@ public class CountDownFragment extends DialogFragment {
                 dismiss();
             }
         };
-        countDownTimer.start();
 
         binding.continueBtn.setOnClickListener(v -> {
             countDownTimer.cancel();
@@ -92,6 +128,9 @@ public class CountDownFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (!getUserVisibleHint()) {
+            return;
+        }
         if (countDownTimer != null) {
             countDownTimer.start();
         }

@@ -19,6 +19,7 @@ import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.utils.Utils;
 
+import static android.view.View.INVISIBLE;
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
 /**
@@ -77,7 +78,7 @@ public class MessageFragment extends Fragment {
         if (isFirstParadigm() && !isSequencePause) {
             binding.warningFragmentStartTrainingBtn.setOnClickListener(v -> listener.startTraining());
         } else {
-            Utils.setViewsVisible(false,
+            Utils.setViewsVisibility(INVISIBLE,
                     binding.warningFragmentWarning,
                     binding.warningFragmentStartTrainingBtn);
         }

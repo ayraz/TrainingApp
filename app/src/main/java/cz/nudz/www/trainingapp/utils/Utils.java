@@ -99,9 +99,9 @@ public class Utils {
         return adjustment;
     }
 
-    public static void setViewsVisible(boolean visible, View... views) {
+    public static void setViewsVisibility(int visibility, View... views) {
         for (View v : views) {
-            v.setVisibility(visible ? View.VISIBLE: View.INVISIBLE);
+            v.setVisibility(visibility);
         }
     }
 

@@ -1,5 +1,6 @@
 package cz.nudz.www.trainingapp.main;
 
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
@@ -95,10 +96,13 @@ public class MainActivity extends BaseActivity implements
         if (getSessionManager().checkLogin()) {
             setSupportActionBar(binding.appBar);
             menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
+                // unlock orientation if it was locked
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                    FragmentManager.BackStackEntry lastEntry = getSupportFragmentManager().
-                            getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
-                    if (lastEntry.getName().equals(TrainingFragment.TAG)) {
+                    FragmentManager.BackStackEntry lastEntry = getSupportFragmentManager()
+                            .getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
+                    if (lastEntry.getName().equals(TrainingFragment.TAG)
+                        || lastEntry.getName().equals(CountDownFragment.TAG)) {
                         getSupportFragmentManager().popBackStack();
                     }
                 }
@@ -183,7 +187,9 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void startTraining() {
         showFragmentWithAnimAndHistory(containerId,
-                CountDownFragment.newInstance(10 * 1000, getString(R.string.trainingStartsInTitle), getString(R.string.startImmediatelyBtnText)),
+                CountDownFragment.newInstance(10 * 1000,
+                        getString(R.string.trainingStartsInTitle),
+                        getString(R.string.startImmediatelyBtnText)),
                 CountDownFragment.TAG);
     }
 

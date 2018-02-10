@@ -2,16 +2,13 @@ package cz.nudz.www.trainingapp.tutorial;
 
 import android.support.v4.app.Fragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.TrainingApp;
+import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
-import cz.nudz.www.trainingapp.training.MessageFragment;
+import cz.nudz.www.trainingapp.training.CountDownFragment;
+import cz.nudz.www.trainingapp.training.TrainingFragment;
 
 /**
  * Created by aa250602 on 10/5/17.
@@ -19,7 +16,7 @@ import cz.nudz.www.trainingapp.training.MessageFragment;
 
 public class TutorialFragmentFactory {
 
-    public static final int PAGE_COUNT_PER_PARADIGM = 8;
+    public static final int PAGE_COUNT_PER_PARADIGM = 10;
     public static final int TOTAL_PAGE_COUNT = PAGE_COUNT_PER_PARADIGM * ParadigmSet.size();
 
     public static Fragment createTutorialFragment(int position) {
@@ -100,6 +97,12 @@ public class TutorialFragmentFactory {
             case 7:
                 return TutorialMessageFragment.newInstance(
                         R.string.nowYouTryMessage, R.string.tutorialPrepareForTrialText);
+            case 8:
+                return CountDownFragment.newInstance(5 * 1000,
+                        TrainingApp.getContext().getString(R.string.trainingStartsInTitle),
+                        TrainingApp.getContext().getString(R.string.startImmediatelyBtnText));
+            case 9:
+                return TrainingFragment.newInstance(paradigmType, Difficulty.ONE, 1);
         }
         throw new IllegalArgumentException(String.format(
                 "Page properties do not match any setup; paradigm: %s, position: %d",

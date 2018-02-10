@@ -11,49 +11,35 @@
             android:id="@+id/tutorialActivityPager"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/tutorialActivitySeparator"
+            app:layout_constraintBottom_toTopOf="@+id/tutorialActivityNextBtn"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
         </android.support.v4.view.ViewPager>
 
         <Button
             android:id="@+id/tutorialActivityNextBtn"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:gravity="center"
             android:text="@string/nextBtnText"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tutorialActivitySeparator"
             app:layout_constraintLeft_toRightOf="@+id/tutorialActivityPrevBtn"
-            app:layout_constraintRight_toRightOf="parent">
-        </Button>
-
+            app:layout_constraintRight_toRightOf="parent" />
 
         <Button
             android:id="@+id/tutorialActivityPrevBtn"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:gravity="center"
             android:text="@string/prevBtnText"
             android:textSize="20sp"
             android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tutorialActivitySeparator"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/tutorialActivityNextBtn"
-            app:layout_constraintVertical_bias="0.485">
-        </Button>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/tutorialActivitySeparator"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.90" />
+            app:layout_constraintRight_toLeftOf="@+id/tutorialActivityNextBtn" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

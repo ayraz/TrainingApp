@@ -18,7 +18,7 @@ public class ErrorDialogFragment extends AlertDialogFragment {
 
     public static ErrorDialogFragment newInstance(@Nullable String title, @NonNull String message) {
         Bundle args = AlertDialogFragment.bundleArguments(
-                title != null ? title : TrainingApp.getContext().get().getString(R.string.errorTitle),
+                title != null ? title : TrainingApp.getContext().getString(R.string.errorTitle),
                 message);
         ErrorDialogFragment errorDialogFragment = new ErrorDialogFragment();
         errorDialogFragment.setArguments(args);

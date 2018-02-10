@@ -41,6 +41,8 @@ import cz.nudz.www.trainingapp.enums.Side;
 import cz.nudz.www.trainingapp.utils.RandomUtils;
 import cz.nudz.www.trainingapp.utils.Utils;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static cz.nudz.www.trainingapp.enums.Side.LEFT;
 
 public abstract class TrainingFragment extends Fragment {
@@ -82,7 +84,8 @@ public abstract class TrainingFragment extends Fragment {
     private boolean isTrainingMode;
     private ParadigmType paradigmType;
 
-    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty) {
+    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType,
+                                               @NonNull Difficulty difficulty) {
         TrainingFragment fragment = ParadigmType.toTrainingFragment(paradigmType);
         Bundle args = new Bundle();
         args.putString(KEY_DIFFICULTY, difficulty.toString());
@@ -99,7 +102,8 @@ public abstract class TrainingFragment extends Fragment {
      * @param trialCount
      * @return
      */
-    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType, @NonNull Difficulty difficulty, int trialCount) {
+    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType,
+                                               @NonNull Difficulty difficulty, int trialCount) {
         TrainingFragment fragment = TrainingFragment.newInstance(paradigmType, difficulty);
         fragment.getArguments().putInt(KEY_TRIAL_COUNT, trialCount);
         return fragment;
@@ -108,7 +112,6 @@ public abstract class TrainingFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         // lock screen orientation to landscape for trials
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -119,21 +122,23 @@ public abstract class TrainingFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        // unlock screen orientation once trials/tutorials are finished (when it is not training)
-        if (!(listener instanceof TrainingActivity)) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        }
+        unlockScreen();
         super.onDetach();
-    }
-
-    public void removePendingCallbacks() {
-        this.handler.removeCallbacksAndMessages(null);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         removePendingCallbacks();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Fragment parentFragment = getParentFragment();
+        if (null != parentFragment) {
+            onAttachToParentFragment(parentFragment);
+        }
     }
 
     @Nullable
@@ -151,7 +156,42 @@ public abstract class TrainingFragment extends Fragment {
             trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
             isTrainingMode = false;
         }
-binding.trainingFragmentDifferentBtn.setLongClickable(false);
+
+        return binding.getRoot();
+    }
+
+    /**
+     * If there is a parent fragment in between this one and host activity, let it handle events.
+     * @param fragment
+     */
+    protected void onAttachToParentFragment(Fragment fragment) {
+        if (fragment instanceof TrainingFragmentListener) {
+            listener = (TrainingFragmentListener) fragment;
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible) {
+        super.setUserVisibleHint(visible);
+        // This hack is required because this fragment is reused in a viewpager which pre-creates fragments..
+        // for smooth swiping, meaning that we would start count down before the fragment is visible.
+        if (visible && isResumed()) {
+            onResume();
+        }
+        // pager next/previous view
+        if (!visible && getParentFragment() != null) {
+            removePendingCallbacks();
+            unlockScreen();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!getUserVisibleHint()) {
+            return;
+        }
+
         /*
          * Using this callback as an indicator that layout has finished...
          * meaning that we can use views' measures, etc. at this point.
@@ -184,8 +224,6 @@ binding.trainingFragmentDifferentBtn.setLongClickable(false);
                 handler.postDelayed(trialRunner, 500);
             }
         });
-
-        return binding.getRoot();
     }
 
     private class TrialRunner implements Runnable {
@@ -250,7 +288,7 @@ binding.trainingFragmentDifferentBtn.setLongClickable(false);
                             throw new IllegalStateException(String.format(
                                     "Trials's cueSide state is invalid: {0}", currentTrial.getCuedSide().toString()));
                     }
-                    cue.setVisibility(View.VISIBLE);
+                    cue.setVisibility(VISIBLE);
 
                     // CUE PAUSE
                     handler.postDelayed(() -> {
@@ -259,11 +297,11 @@ binding.trainingFragmentDifferentBtn.setLongClickable(false);
                         // MEMORY ARRAY
                         handler.postDelayed(() -> {
                             final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
-                            Utils.setViewsVisible(true, views);
+                            Utils.setViewsVisibility(VISIBLE, views);
 
                             // RETENTION INTERVAL
                             handler.postDelayed(() -> {
-                                Utils.setViewsVisible(false, views);
+                                Utils.setViewsVisibility(INVISIBLE, views);
 
                                 if (currentTrial.isChangingTrial()) {
                                     // pick random stim in cued grid
@@ -285,24 +323,23 @@ binding.trainingFragmentDifferentBtn.setLongClickable(false);
                                 // TEST ARRAY
                                 handler.postDelayed(() -> {
                                     responseStartTime = new Date();
-                                    Utils.setViewsVisible(true, views);
+                                    Utils.setViewsVisibility(VISIBLE, views);
                                     Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
 
                                     // TRIAL END
                                     handler.postDelayed(() -> {
-                                        Utils.setViewsVisible(false, views);
+                                        Utils.setViewsVisibility(INVISIBLE, views);
 
                                         // insert null answer if user did not answer this trial
-                                        if (answers.size() == i)
-                                            handleAnswerSubmission(null);
+                                        if (answers.size() == i) handleAnswerSubmission(null);
+
+                                        if (listener != null) listener.onTrialFinished(i);
+                                        i += 1;
 
                                         // START NEXT TRIAL
                                         handler.postDelayed(
                                                 TrialRunner.this,
                                                 (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
-
-                                        if (listener != null) listener.onTrialFinished(i);
-                                        i += 1;
 
                                     }, (int) (TEST_INTERVAL * DEBUG_SLOW * (SPEED_FACTOR / 2)));
 
@@ -473,11 +510,25 @@ binding.trainingFragmentDifferentBtn.setLongClickable(false);
         return positions;
     }
 
+    /**
+     *  Unlock screen orientation once trials/tutorials are finished (when it is not training)
+     */
+    private void unlockScreen() {
+        // TODO: FIXME, this makes the fragment enter infinite loop of pause/resume
+//        if (!(listener instanceof TrainingActivity)) {
+//            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+//        }
+    }
+
+    public void removePendingCallbacks() {
+        this.handler.removeCallbacksAndMessages(null);
+    }
+
     public interface TrainingFragmentListener {
 
         void onSequenceFinished(List<Boolean> answers);
 
-        default void onTrialFinished(int trialCount) {
+        default void onTrialFinished(int count) {
             // do nothing
         }
     }
