@@ -233,6 +233,22 @@ public abstract class TrainingFragment extends Fragment {
         private Trial currentTrial;
         private Date responseStartTime;
 
+        TrialRunner() {
+            binding.trainingFragmentSameBtn.setOnClickListener(
+                    (v) -> handleAnswerSubmission(!currentTrial.isChangingTrial()));
+            binding.trainingFragmentSameBtn.setOnLongClickListener(view -> {
+                view.callOnClick();
+                return true;
+            });
+
+            binding.trainingFragmentDifferentBtn.setOnClickListener((
+                    v) -> handleAnswerSubmission(currentTrial.isChangingTrial()));
+            binding.trainingFragmentDifferentBtn.setOnLongClickListener(view -> {
+                view.callOnClick();
+                return true;
+            });
+        }
+
         @Override
         public void run() {
             if (i < trialCount) {
@@ -243,6 +259,10 @@ public abstract class TrainingFragment extends Fragment {
         }
 
         private void executeTrial() {
+            disableAnswerBtns();
+            // workaround for stuck pressed button state
+            refreshAnswerBtns();
+
             // clear grids before new trial starts
             for (ViewGroup grid : grids) grid.removeAllViews();
 
@@ -262,19 +282,6 @@ public abstract class TrainingFragment extends Fragment {
                     initStimuli(allStimuli);
                     initTrialObject();
 
-                    Utils.enableViews(false,
-                            binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
-
-                    // user answer handlers have to be set trial-wise
-                    binding.trainingFragmentSameBtn.setOnClickListener(v ->
-                            handleAnswerSubmission(!currentTrial.isChangingTrial()));
-                    // android resets longClickable to true when setOnClickListener gets attached
-                    binding.trainingFragmentSameBtn.setLongClickable(false);
-
-                    binding.trainingFragmentDifferentBtn.setOnClickListener(v ->
-                            handleAnswerSubmission(currentTrial.isChangingTrial()));
-                    binding.trainingFragmentDifferentBtn.setLongClickable(false);
-
                     // START THE TRIAL...
                     final View cue;
                     switch (currentTrial.getCuedSide()) {
@@ -286,7 +293,8 @@ public abstract class TrainingFragment extends Fragment {
                             break;
                         default:
                             throw new IllegalStateException(String.format(
-                                    "Trials's cueSide state is invalid: {0}", currentTrial.getCuedSide().toString()));
+                                    "Trials's cueSide state is invalid: {0}",
+                                    currentTrial.getCuedSide().toString()));
                     }
                     cue.setVisibility(VISIBLE);
 
@@ -324,8 +332,7 @@ public abstract class TrainingFragment extends Fragment {
                                 handler.postDelayed(() -> {
                                     responseStartTime = new Date();
                                     Utils.setViewsVisibility(VISIBLE, views);
-                                    Utils.enableViews(true, binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
-
+                                    enableAnswerBtns();
                                     // TRIAL END
                                     handler.postDelayed(() -> {
                                         Utils.setViewsVisibility(INVISIBLE, views);
@@ -405,6 +412,7 @@ public abstract class TrainingFragment extends Fragment {
         private void handleAnswerSubmission(Boolean answer) {
             // allow only one answer per trial
             disableAnswerBtns();
+
             answers.add(answer);
 
             if (isTrainingMode) {
@@ -460,6 +468,26 @@ public abstract class TrainingFragment extends Fragment {
         private void disableAnswerBtns() {
             binding.trainingFragmentDifferentBtn.setClickable(false);
             binding.trainingFragmentSameBtn.setClickable(false);
+            binding.trainingFragmentDifferentBtn.setLongClickable(false);
+            binding.trainingFragmentSameBtn.setLongClickable(false);
+        }
+
+        private void refreshAnswerBtns() {
+            binding.trainingFragmentSameBtn.cancelLongPress();
+            binding.trainingFragmentDifferentBtn.cancelLongPress();
+            binding.trainingFragmentSameBtn.clearAnimation();
+            binding.trainingFragmentDifferentBtn.clearAnimation();
+            Utils.setViewsVisibility(INVISIBLE,
+                    binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+            Utils.setViewsVisibility(VISIBLE,
+                    binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+        }
+
+        private void enableAnswerBtns() {
+            binding.trainingFragmentDifferentBtn.setClickable(true);
+            binding.trainingFragmentSameBtn.setClickable(true);
+            binding.trainingFragmentDifferentBtn.setLongClickable(true);
+            binding.trainingFragmentSameBtn.setLongClickable(true);
         }
     }
 
