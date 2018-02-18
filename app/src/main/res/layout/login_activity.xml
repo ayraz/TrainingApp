@@ -31,7 +31,7 @@
                 android:textSize="40sp"
                 android:textStyle="italic"
                 android:typeface="normal"
-                android:text="Training App"/>
+                android:text="@string/app_name"/>
 
             <!--  Username Label -->
             <android.support.design.widget.TextInputLayout

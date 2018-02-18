@@ -1,16 +1,18 @@
 <resources>
-    <string name="app_name">Training App</string>
+    <string name="app_name">FILTER IT</string>
     <string name="color">Barva</string>
     <string name="position">Pozice</string>
     <string name="shape">Tvar</string>
     <string name="sequence">Řada</string>
     <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
-    <string name="welcomeText"><![CDATA[<h1>Ahoj a vítej v TrainingApp,</h1>
-        Právě teď jste na hlavní obrazovce, můžete se zde pohybovat všemi možnostmi aplikace:<br/><br/>
-        <li>&nbsp;<b>Tréninkový režim</b> - zde můžete zahájit skutečný trénink, který bude zaznamenán.</li>
-        <li>&nbsp;<b>Režim výuky</b> - to vás provede každou etapou tréninku (viz tuto možnost před začátkem skutečného tréninku).</li>
-        <li>&nbsp;<b>Režim zkušební verze</b> - zde můžete zvolit libovolný z dostupných výcvikových úkolů a vyzkoušet několik z nich (výsledky nejsou zaznamenávány).</li>
-        Jakmile dokončíte alespoň jednu tréninkovou relaci, budete moci zobrazit přehled výsledků z části <b>&quot;Výsledky&quot;</b>.]]></string>
+    <string name="welcomeText"><![CDATA[<h1>Vítejte v aplikaci Filter It!</h1>
+        Právě se nacházíte na hlavní obrazovce, kde si můžete vybrat jednu z možností:
+        <li>&nbsp;<b>TRÉNINK</b> - pro zahájení tréninku</li>
+        <li>&nbsp;<b>INSTRUKCE</b> - pro podrobné vysvětlení jednotlivých úkolů</li>
+        <li>&nbsp;<b>ZÁCVIK</b> - pro nezávazné vyzkoušení jednotlivých úkolů a úrovní</li>
+        </br>
+        Jak se Vám dařilo v jednotlivých úkolech zjistíte v části "Výsledky"]]>
+    </string>
     <string name="tutorialPrepareForTrialText">Následující zkušební verze bude běžet normalní rychlosti, která je poměrně rychlá, připravte se…</string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
@@ -19,7 +21,7 @@
     <string name="userAlreadyExistsError">Uživatel s daným uživatelským jménem již existuje.</string>
     <string name="createUserBtnText">Vytvořit uživatele</string>
     <string name="userDoesNotExistError">Tento uživatel neexistuje.</string>
-    <string name="difficultyLoweredMessage">VEDETE SE DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
+    <string name="difficultyLoweredMessage">VEDETE SI DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
     <string name="errorGenericMessage">Jejda, bohužel něco nefungovalo.</string>
@@ -28,20 +30,20 @@
     <string name="errorTitle">Chyba</string>
     <string name="goBackBtnText">Vrátit se</string>
     <string name="trainingOptionTitle">Trénink</string>
-    <string name="trialOptionTitle">Zacvík</string>
+    <string name="trialOptionTitle">Zácvik</string>
     <string name="tutorialOptionTitle">Instrukce</string>
     <string name="introOptionTitle">Úvod</string>
-    <string name="lastSessionPerformanceOptionTitle">Poslední Seance</string>
-    <string name="allSessionsPerformanceOptionTitle">Všechny Seance</string>
-    <string name="lastSessionColorResultsTitle">Výsledky z poslední seance - Barva</string>
-    <string name="lastSessionPositionResultsTitle">Výsledky z poslední seance - Pozice</string>
-    <string name="lastSessionShapeResultsTitle">Výsledky z poslední seance - Tvar</string>
+    <string name="lastSessionPerformanceOptionTitle">Poslední Trénink</string>
+    <string name="allSessionsPerformanceOptionTitle">Všechny Tréninky</string>
+    <string name="lastSessionColorResultsTitle">Výsledky posledního tréninku - Barva</string>
+    <string name="lastSessionPositionResultsTitle">Výsledky posledního tréninku - Pozice</string>
+    <string name="lastSessionShapeResultsTitle">Výsledky posledního tréninku - Tvar</string>
     <string name="no">NE</string>
     <string name="ok">OK</string>
     <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
     <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
-    <string name="selectParadigmTypeForTrialTitle">Výběr paradigmatu pro vyzkoušení</string>
+    <string name="selectParadigmTypeForTrialTitle">Výběr úkolu pro zácvik</string>
     <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
     <string name="startTrainingBtnText">Začít trénink</string>
     <string name="nextBtnText">Další</string>
@@ -51,11 +53,11 @@
     <string name="interTrialPauseHelp">Pauza – krátký odpočinek před dalším úkolem.</string>
     <string name="longerPause">Delší pauza.</string>
     <string name="memorizeHelp">Snažte si zapamatovat tvary podnětů na daných pozicích a straně určené šipkou.</string>
-    <string name="nextHelp">Pro pokračování na instrukce stiskněte šipku.</string>
-    <string name="nextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>
+    <!--<string name="nextHelp">Pro pokračování na instrukce stiskněte šipku.</string>-->
+    <!--<string name="nextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>-->
     <string name="nowYouTryMessage"><![CDATA[<b>NYNÍ, KDYŽ UŽ VÍTE, JAK NA TO,\nMŮŽETE SI VYZKOUŠET PÁR ZÁCVIČNÝCH ÚKOLŮ</b>]]></string>
     <string name="shortPause">Krátká pauza.</string>
-    <string name="continueBtnText">Rozumím, přejit k trenínku.</string>
+    <string name="continueBtnText">Rozumím, přejít k tréninku.</string>
     <string name="warningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
     <string name="yes">ano</string>
     <string name="actionExportData">Export výcvikových údaju</string>
@@ -88,8 +90,8 @@
     <string name="difficultyQuestionText">Náročnost/obtížnost tréninku:</string>
     <string name="answerQuestionnaireErrorTitle">Některé otázky nejsou zodpovězeny</string>
     <string name="answerQuestionnaireErrorText">Odpovězte na všechny otázky před uložením.</string>
-    <string name="ratingNoConditionReachedText">Tentokrát jste nedosáhli ratingových podmínek.\nMožná budete mít příště větší štěstí.</string>
+    <string name="ratingNoConditionReachedText">Tentokrát jste nedosáhli podmínek pro splnění výzev.\nMožná budete mít příště větší štěstí.</string>
     <string name="ratingSumConditionText">Souhrnné výsledky tohoto tréninku jsou stejné nebo lepší než výsledky předchozího.</string>
-    <string name="ratingPauseConditionText">Během jednotlivých úloh jste si nedali pausu která byla delší než 15 sekund.</string>
+    <string name="ratingPauseConditionText">Během jednotlivých úloh jste si nedali pauzu která byla delší než 15 sekund.</string>
     <string name="ratingAllParadigmsRaisedText">Zvýšili jste obtížnost v každém úkolu alespoň jednou během tréninku v porovnání s předchozím zasedáním.</string>
 </resources>
