@@ -154,7 +154,7 @@ public class DataExporter {
                 }
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
-                Utils.showErrorDialog(activity, null, e.getMessage());
+                Utils.showAlertDialog(activity, null, e.getMessage());
             }
             return null;
         }

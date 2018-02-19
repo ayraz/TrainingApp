@@ -255,6 +255,7 @@ public abstract class TrainingFragment extends Fragment {
                 executeTrial();
             } else if (listener != null) {
                 listener.onSequenceFinished(answers);
+                answers.clear();
             }
         }
 

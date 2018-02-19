@@ -31,6 +31,7 @@ import cz.nudz.www.trainingapp.training.TrainingFragment;
 import cz.nudz.www.trainingapp.training.MessageFragment;
 import cz.nudz.www.trainingapp.trial.TrialSelectionFragment;
 import cz.nudz.www.trainingapp.tutorial.TutorialPagerFragment;
+import cz.nudz.www.trainingapp.utils.Utils;
 
 public class MainActivity extends BaseActivity implements
         TrialSelectionFragment.OnTrialSelectedListener,
@@ -99,8 +100,7 @@ public class MainActivity extends BaseActivity implements
                 // unlock orientation if it was locked
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                    FragmentManager.BackStackEntry lastEntry = getSupportFragmentManager()
-                            .getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
+                    FragmentManager.BackStackEntry lastEntry = getLastFragment();
                     if (lastEntry.getName().equals(TrainingFragment.TAG)
                         || lastEntry.getName().equals(CountDownFragment.TAG)) {
                         getSupportFragmentManager().popBackStack();
@@ -141,6 +141,11 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+    private FragmentManager.BackStackEntry getLastFragment() {
+        return getSupportFragmentManager()
+                .getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -175,13 +180,16 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty) {
         showFragmentWithAnimAndHistory(binding.fragmentContainer.getId(),
-                TrainingFragment.newInstance(paradigmType, difficulty, 3),
+                TrainingFragment.newInstance(paradigmType,
+                        difficulty, TrialSelectionFragment.TEST_TRIAL_COUNT),
                 TrainingFragment.TAG);
     }
 
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
         getSupportFragmentManager().popBackStack();
+        Utils.showSequenceFeedback(answers, TrialSelectionFragment.TEST_TRIAL_COUNT, this,
+                getSupportFragmentManager().findFragmentByTag(getLastFragment().getName()).getView());
     }
 
     @Override

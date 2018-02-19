@@ -1,5 +1,7 @@
 package cz.nudz.www.trainingapp.tutorial;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,9 +11,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class TutorialPagerFragment extends Fragment implements
         TrainingFragment.TrainingFragmentListener{
 
     public static final String TAG = TutorialPagerFragment.class.getSimpleName();
+    public static final int TUTORIAL_TRIAL_COUNT = 2;
 
     private ViewPager pager;
     private TutorialPagerAdapter pagerAdapter;
@@ -52,12 +57,6 @@ public class TutorialPagerFragment extends Fragment implements
 
             @Override
             public void onPageSelected(int position) {
-                if (position + 1 == TutorialFragmentFactory.TOTAL_PAGE_COUNT) {
-                    binding.tutorialActivityNextBtn.setEnabled(false);
-                } else {
-                    binding.tutorialActivityNextBtn.setEnabled(true);
-                }
-
                 if (position == 0) {
                     binding.tutorialActivityPrevBtn.setEnabled(false);
                 } else {
@@ -119,12 +118,14 @@ public class TutorialPagerFragment extends Fragment implements
 
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
-        // TODO: how they did..
+        Utils.showSequenceFeedback(answers, TUTORIAL_TRIAL_COUNT, getActivity(), binding.getRoot());
         nextPage();
     }
 
     private void nextPage() {
-        pager.setCurrentItem(getCurrentPage() + 1);
+        pager.setCurrentItem(getCurrentPage() != TutorialFragmentFactory.TOTAL_PAGE_COUNT - 1
+                ? getCurrentPage() + 1
+                : 0);
     }
 
     private class TutorialPagerAdapter extends FragmentStatePagerAdapter {

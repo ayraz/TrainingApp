@@ -44,12 +44,12 @@ public class SignupFragment extends DialogFragment {
         binding.btnSignup.setOnClickListener(view -> {
             final String username = binding.inputName.getText().toString();
             if (Utils.isNullOrEmpty(username)) {
-                Utils.showErrorDialog(activity, null, getString(R.string.emptyUsernameError));
+                Utils.showAlertDialog(activity, null, getString(R.string.emptyUsernameError));
             } else {
                 final RuntimeExceptionDao<User, String> userDao = activity.getHelper().getUserDao();
                 final User user = userDao.queryForId(username);
                 if (user != null) {
-                    Utils.showErrorDialog(activity, null,
+                    Utils.showAlertDialog(activity, null,
                             getString(R.string.userAlreadyExistsError));
                 } else if (listner != null) {
                     listner.onUserCreated(username);

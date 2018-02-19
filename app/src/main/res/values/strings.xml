@@ -94,4 +94,5 @@
     <string name="ratingSumConditionText">Souhrnné výsledky tohoto tréninku jsou stejné nebo lepší než výsledky předchozího.</string>
     <string name="ratingPauseConditionText">Během jednotlivých úloh jste si nedali pauzu která byla delší než 15 sekund.</string>
     <string name="ratingAllParadigmsRaisedText">Zvýšili jste obtížnost v každém úkolu alespoň jednou během tréninku v porovnání s předchozím zasedáním.</string>
+    <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
 </resources>

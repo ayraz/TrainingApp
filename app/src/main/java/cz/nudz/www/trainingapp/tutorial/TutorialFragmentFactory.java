@@ -102,7 +102,9 @@ public class TutorialFragmentFactory {
                         TrainingApp.getContext().getString(R.string.trainingStartsInTitle),
                         TrainingApp.getContext().getString(R.string.startImmediatelyBtnText));
             case 9:
-                return TrainingFragment.newInstance(paradigmType, Difficulty.ONE, 1);
+                return TrainingFragment.newInstance(paradigmType,
+                        Difficulty.ONE,
+                        TutorialPagerFragment.TUTORIAL_TRIAL_COUNT);
         }
         throw new IllegalArgumentException(String.format(
                 "Page properties do not match any setup; paradigm: %s, position: %d",

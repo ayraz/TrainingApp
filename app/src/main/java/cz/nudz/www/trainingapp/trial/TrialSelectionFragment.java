@@ -24,12 +24,8 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
  */
 public class TrialSelectionFragment extends DialogFragment {
 
-    public interface OnTrialSelectedListener {
-
-        void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty);
-    }
-
     public static final String TAG = TrialSelectionFragment.class.getSimpleName();
+    public static final int TEST_TRIAL_COUNT = 3;
 
     private TrialSelectionFragmentBinding binding;
     private OnTrialSelectedListener listener;
@@ -57,5 +53,10 @@ public class TrialSelectionFragment extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " + OnTrialSelectedListener.class.getSimpleName());
         }
+    }
+
+    public interface OnTrialSelectedListener {
+
+        void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty);
     }
 }

@@ -60,14 +60,14 @@ public class LoginActivity extends BaseActivity implements
             }
         } catch (SQLException e) {
             Log.e(TAG, e.getMessage());
-            Utils.showErrorDialog(this, null, e.getMessage());
+            Utils.showAlertDialog(this, null, e.getMessage());
         }
     }
 
     private void login() {
         username = binding.inputName.getText().toString();
         if (Utils.isNullOrEmpty(username)) {
-            Utils.showErrorDialog(this, null,
+            Utils.showAlertDialog(this, null,
                     getString(R.string.emptyUsernameError));
         } else if (username.equals("##")) {
             // special user creation mode
@@ -78,14 +78,14 @@ public class LoginActivity extends BaseActivity implements
                 final RuntimeExceptionDao<User, String> userDao = getHelper().getUserDao();
                 final User user = userDao.queryForId(username);
                 if (user == null) {
-                    Utils.showErrorDialog(this, null,
+                    Utils.showAlertDialog(this, null,
                             getString(R.string.userDoesNotExistError));
                 } else {
                     startUserSession(user);
                 }
             } catch (RuntimeException e) {
                 Log.e(TAG, "Couldn't get user", e);
-                Utils.showErrorDialog(this, null, e.getMessage());
+                Utils.showAlertDialog(this, null, e.getMessage());
             }
 
         }

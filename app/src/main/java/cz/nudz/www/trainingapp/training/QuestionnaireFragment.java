@@ -2,7 +2,6 @@ package cz.nudz.www.trainingapp.training;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -46,7 +45,7 @@ public class QuestionnaireFragment extends Fragment {
                     listener.onQuestionnairSubmission(effortAnswer, diffAnswer);
                 }
             } else {
-                Utils.showErrorDialog((BaseActivity) getActivity(),
+                Utils.showAlertDialog((BaseActivity) getActivity(),
                         getString(R.string.answerQuestionnaireErrorTitle),
                         getString(R.string.answerQuestionnaireErrorText));
             }

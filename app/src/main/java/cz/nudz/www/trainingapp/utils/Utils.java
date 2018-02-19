@@ -1,17 +1,22 @@
 package cz.nudz.www.trainingapp.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.List;
 
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.dialogs.AlertDialogFragment;
 import cz.nudz.www.trainingapp.dialogs.ErrorDialogFragment;
@@ -129,7 +134,7 @@ public class Utils {
      * @param title
      * @param message
      */
-    public static void showErrorDialog(AppCompatActivity context, @Nullable String title, @NonNull String message) {
+    public static void showAlertDialog(AppCompatActivity context, @Nullable String title, @NonNull String message) {
         FragmentManager fragmentManager = context.getSupportFragmentManager();
         AlertDialogFragment errorDialogFragment = ErrorDialogFragment.newInstance(title, message);
         errorDialogFragment.show(fragmentManager, ErrorDialogFragment.TAG);
@@ -189,5 +194,28 @@ public class Utils {
                     (activityWidth - root.getWidth()) / 2,
                     32);
         }
+    }
+
+    public static AlertDialog adjustDialogPosition(Activity activity, View root, AlertDialog dialog) {
+        final int activityWidth = activity.getWindow().getDecorView().getRootView().getWidth();
+        final WindowManager.LayoutParams attributes = dialog.getWindow().getAttributes();
+        attributes.gravity = Gravity.CENTER;
+        attributes.x = (activityWidth - root.getWidth()) / 2;
+        return dialog;
+    }
+
+    public static void showSequenceFeedback(List<Boolean> answers, int trialCount,
+                                      Activity activity, View root) {
+        int correctCount = 0;
+        for (Boolean a : answers) {
+            if (a != null && a) ++correctCount;
+        }
+        Utils.adjustDialogPosition(activity, root, new AlertDialog.Builder(activity)
+                .setMessage(Html.fromHtml(String.format(
+                        activity.getString(R.string.correntTrialAnswerRatio),
+                        correctCount, trialCount)))
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {})
+                .create())
+                .show();
     }
 }
