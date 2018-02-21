@@ -240,12 +240,26 @@ public class TrainingRepository {
         boolean allRaised = true;
         for (ParadigmType type : ParadigmType.values()) {
             List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
+            int currMaxDiff = sequenceMaxDifficulty(currSeq);
+            allRaised = allRaised && (currMaxDiff > Difficulty.toInteger(Difficulty.ONE));
+        }
+        return allRaised;
+    }
+
+    /**
+     * The user increased the difficulty level in each paradigm at least once during
+     * the training session compared to previous paradigm.
+     */
+    public boolean hasImprovedInAllParadigms() {
+        boolean allImproved = true;
+        for (ParadigmType type : ParadigmType.values()) {
+            List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
             List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
             int currMaxDiff = sequenceMaxDifficulty(currSeq);
             int prevMaxDiff = sequenceMaxDifficulty(prevSeq);
-            allRaised = allRaised && (currMaxDiff > prevMaxDiff);
+            allImproved = allImproved && (currMaxDiff > prevMaxDiff);
         }
-        return allRaised;
+        return allImproved;
     }
 
     /**
