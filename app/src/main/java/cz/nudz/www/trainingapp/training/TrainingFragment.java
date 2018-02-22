@@ -54,10 +54,10 @@ public abstract class TrainingFragment extends Fragment {
 
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
-    private static final int POST_CUE_PAUSE = 100;
+    private static final int POST_CUE_PAUSE = 250;
     private static final int MEMORIZATION_INTERVAL = 100;
     private static final int RETENTION_INTERVAL = 900;
-    private static final int TEST_INTERVAL = 2000;
+    private static final int TEST_INTERVAL = 10000;
 
     private static final int POST_TRIAL_PAUSE = 2000;
     private static final int LEFT_GRID_INDEX = 0;
@@ -232,17 +232,24 @@ public abstract class TrainingFragment extends Fragment {
         private int i = 0;
         private Trial currentTrial;
         private Date responseStartTime;
+        private View[] views;
 
         TrialRunner() {
-            binding.trainingFragmentSameBtn.setOnClickListener(
-                    (v) -> handleAnswerSubmission(!currentTrial.isChangingTrial()));
+            binding.trainingFragmentSameBtn.setOnClickListener((v) -> {
+                handleAnswerSubmission(!currentTrial.isChangingTrial());
+                removePendingCallbacks();
+                queueNextTrial();
+            });
             binding.trainingFragmentSameBtn.setOnLongClickListener(view -> {
                 view.callOnClick();
                 return true;
             });
 
-            binding.trainingFragmentDifferentBtn.setOnClickListener((
-                    v) -> handleAnswerSubmission(currentTrial.isChangingTrial()));
+            binding.trainingFragmentDifferentBtn.setOnClickListener((v) -> {
+                handleAnswerSubmission(currentTrial.isChangingTrial());
+                removePendingCallbacks();
+                queueNextTrial();
+            });
             binding.trainingFragmentDifferentBtn.setOnLongClickListener(view -> {
                 view.callOnClick();
                 return true;
@@ -305,7 +312,7 @@ public abstract class TrainingFragment extends Fragment {
 
                         // MEMORY ARRAY
                         handler.postDelayed(() -> {
-                            final View[] views = allStimuli.toArray(new View[allStimuli.size()]);
+                            views = allStimuli.toArray(new View[allStimuli.size()]);
                             Utils.setViewsVisibility(VISIBLE, views);
 
                             // RETENTION INTERVAL
@@ -336,18 +343,8 @@ public abstract class TrainingFragment extends Fragment {
                                     enableAnswerBtns();
                                     // TRIAL END
                                     handler.postDelayed(() -> {
-                                        Utils.setViewsVisibility(INVISIBLE, views);
-
-                                        // insert null answer if user did not answer this trial
-                                        if (answers.size() == i) handleAnswerSubmission(null);
-
-                                        if (listener != null) listener.onTrialFinished(i);
-                                        i += 1;
-
                                         // START NEXT TRIAL
-                                        handler.postDelayed(
-                                                TrialRunner.this,
-                                                (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
+                                        queueNextTrial();
 
                                     }, (int) (TEST_INTERVAL * DEBUG_SLOW * (SPEED_FACTOR / 2)));
 
@@ -360,6 +357,19 @@ public abstract class TrainingFragment extends Fragment {
                     }, (int) (POST_CUE_PAUSE * DEBUG_SLOW));
                 }
             });
+        }
+
+        private void queueNextTrial() {
+            Utils.setViewsVisibility(INVISIBLE, views);
+
+            // insert null answer if user did not answer this trial
+            if (answers.size() == i) handleAnswerSubmission(null);
+
+            if (listener != null) listener.onTrialFinished(i);
+            i += 1;
+
+            handler.postDelayed(TrialRunner.this,
+                (int) (POST_TRIAL_PAUSE * DEBUG_SLOW));
         }
 
         private void initTrialObject() {
