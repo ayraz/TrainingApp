@@ -39,9 +39,9 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
                 new Pair<>(R.string.introOptionTitle, R.drawable.icons8_home)
         ));
         CARD_OPTIONS_MAP.put(R.string.modesCardTitle, Arrays.asList(
-            new Pair<>(R.string.trainingOptionTitle, R.drawable.icons8_barbell),
             new Pair<>(R.string.tutorialOptionTitle, R.drawable.icons8_course),
-            new Pair<>(R.string.trialOptionTitle, R.drawable.icons8_survey)
+            new Pair<>(R.string.trialOptionTitle, R.drawable.icons8_survey),
+            new Pair<>(R.string.trainingOptionTitle, R.drawable.icons8_barbell)
         ));
         CARD_OPTIONS_MAP.put(R.string.resultsCardTitle, Arrays.asList(
             new Pair<>(R.string.lastSessionPerformanceOptionTitle, R.drawable.icons8_area_chart),
