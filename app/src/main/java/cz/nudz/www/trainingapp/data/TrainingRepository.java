@@ -169,7 +169,14 @@ public class TrainingRepository {
     }
 
     public boolean doManySessionsExist() {
-        return getTrainingSessionDao().countOf() >= 2;
+        try {
+            return getTrainingSessionDao().queryBuilder()
+                    .join(getCurrentUserQB()).where().eq("isFinished", true)
+                    .countOf() >= 2;
+        } catch (SQLException e) {
+            Log.e(TAG, "Could not get finished session count.");
+            return false;
+        }
     }
 
     private Paradigm getLastParadigm(ParadigmType type) {
@@ -196,14 +203,20 @@ public class TrainingRepository {
 
     @NonNull
     private QueryBuilder<Paradigm, Integer> getFinishedParadigmByType(ParadigmType type) throws SQLException {
-        QueryBuilder<User, String> uQb = getUserDao().queryBuilder();
-        uQb.where().eq("username", sessionManager.getUsername());
+        QueryBuilder<User, String> uQb = getCurrentUserQB();
         QueryBuilder<TrainingSession, Integer> tsQb = getTrainingSessionDao().queryBuilder();
         tsQb.join(uQb).where().eq("isFinished", true);
         tsQb.orderBy("startDate", false);
         QueryBuilder<Paradigm, Integer> pQb = getParadigmDao().queryBuilder();
         pQb.join(tsQb).where().eq("paradigmType", type);
         return pQb;
+    }
+
+    @NonNull
+    private QueryBuilder<User, String> getCurrentUserQB() throws SQLException {
+        QueryBuilder<User, String> uQb = getUserDao().queryBuilder();
+        uQb.where().eq("username", sessionManager.getUsername());
+        return uQb;
     }
 
     private List<Sequence> getSequences(int paradigmId) {
