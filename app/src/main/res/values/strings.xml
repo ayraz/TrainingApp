@@ -4,7 +4,7 @@
     <string name="position">Pozice</string>
     <string name="shape">Tvar</string>
     <string name="sequence">Řada</string>
-    <string name="colorParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu BARVY PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="startHelpColorParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>BARVY</b>]]> podnětů na jedné straně obrazovky.</string>
     <string name="welcomeText"><![CDATA[<h1>Vítejte v aplikaci Filter It!</h1>
         Právě se nacházíte na hlavní obrazovce, kde si můžete vybrat jednu z možností:
         <li>&nbsp;<b>TRÉNINK</b> - pro zahájení tréninku</li>
@@ -15,7 +15,7 @@
     </string>
     <string name="tutorialPrepareForTrialText">Následující zkušební verze bude běžet normalní rychlosti, která je poměrně rychlá, připravte se…</string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
-    <string name="countDownFragmentMessageText">Výcvik se stane neplatným za: </string>
+    <string name="countDownFragmentMessageText">Výcvik se ukončí jako neplatný za: </string>
     <string name="emptyUsernameError">Pole uživatelského jména nesmí být prázdné!</string>
     <string name="newUserTitle">Nový Uživatel</string>
     <string name="userAlreadyExistsError">Uživatel s daným uživatelským jménem již existuje.</string>
@@ -35,28 +35,35 @@
     <string name="introOptionTitle">Úvod</string>
     <string name="lastSessionPerformanceOptionTitle">Poslední Trénink</string>
     <string name="allSessionsPerformanceOptionTitle">Všechny Tréninky</string>
-    <string name="lastSessionColorResultsTitle">Výsledky posledního tréninku - Barva</string>
-    <string name="lastSessionPositionResultsTitle">Výsledky posledního tréninku - Pozice</string>
-    <string name="lastSessionShapeResultsTitle">Výsledky posledního tréninku - Tvar</string>
+    <string name="lastSessionColorResultsTitle">Výsledky posledního tréninku - BARVA</string>
+    <string name="lastSessionPositionResultsTitle">Výsledky posledního tréninku - POZICE</string>
+    <string name="lastSessionShapeResultsTitle">Výsledky posledního tréninku - TVAR</string>
+    <string name="allSessionsColorResultsTitle">Přehled výsledků všech tréninků – BARVA</string>
+    <string name="allSessionsPositionResultsTitle">Přehled výsledků všech tréninků – POZICE</string>
+    <string name="allSessionsShapeResultsTitle">Přehled výsledků všech tréninků – TVAR</string>
     <string name="no">NE</string>
     <string name="ok">OK</string>
-    <string name="positionParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu POZICE PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="startHelpPositionParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>POZICE</b>]]> podnětů na jedné straně obrazovky.</string>
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
     <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
     <string name="selectParadigmTypeForTrialTitle">Výběr úkolu pro zácvik</string>
-    <string name="shapeParadigmStartHelp">V tomto experimentu bude Vaším úkolem zapamatovat si podněty na straně určené šipkou a následně identifikovat <![CDATA[<b>změnu TVARU PODNĚTŮ</b>]]> na té dané straně.</string>
+    <string name="startHelpShapeParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>TVARU</b>]]> podnětů na jedné straně obrazovky.</string>
     <string name="startTrainingBtnText">Začít trénink</string>
     <string name="nextBtnText">Další</string>
     <string name="prevBtnText">Předchozí</string>
-    <string name="cueHelp">Šipka určuje stranu pro zapamatování tvaru podnětů na daných pozicích.</string>
-    <string name="identificationHelp"><b>Identifikace změny</b> – stejné či rozdílné?</string>
-    <string name="interTrialPauseHelp">Pauza – krátký odpočinek před dalším úkolem.</string>
-    <string name="longerPause">Delší pauza.</string>
-    <string name="memorizeHelp">Snažte si zapamatovat tvary podnětů na daných pozicích a straně určené šipkou.</string>
-    <!--<string name="nextHelp">Pro pokračování na instrukce stiskněte šipku.</string>-->
-    <!--<string name="nextPreviousHelp">Pro pokračování nebo návrat na předchozí obrazovku jednu z šipek.</string>-->
+    <string name="cueHelpColorParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování barvy podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
+    <string name="cueHelpPositionParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování pozice podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
+    <string name="cueHelpShapeParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování tvaru podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
+    <string name="identificationHelpColorParadigm"><b>TEST</b> – Změnily se barvy na straně označené šipkou oproti předloze nebo jsou stejné?</string>
+    <string name="identificationHelpShapeParadigm"><b>TEST</b> – Změnily se tvary na straně označené šipkou oproti předloze nebo jsou stejné?</string>
+    <string name="identificationHelpPositionParadigm"><b>TEST</b> – Změnily se pozice na straně označené šipkou oproti předloze nebo jsou stejné?</string>
+    <string name="interTrialPauseHelp">Pauza – krátký odpočinek před dalším pokusem.</string>
+    <string name="longerPause">Delší pauza, na obrazovce vidíte pouze fixační kříž.</string>
+    <string name="memorizeColorHelp">PŘEDLOHA - Snažte si zapamatovat barvy podnětů na straně určené šipkou.</string>
+    <string name="memorizePositionHelp">PŘEDLOHA - Snažte si zapamatovat pozice podnětů na straně určené šipkou.</string>
+    <string name="memorizeShapeHelp">PŘEDLOHA - Snažte si zapamatovat tvary podnětů na straně určené šipkou.</string>
     <string name="nowYouTryMessage"><![CDATA[<b>NYNÍ, KDYŽ UŽ VÍTE, JAK NA TO,\nMŮŽETE SI VYZKOUŠET PÁR ZÁCVIČNÝCH ÚKOLŮ</b>]]></string>
-    <string name="shortPause">Krátká pauza.</string>
+    <string name="shortPause">Krátká pauza, na obrazovce vidíte pouze fixační kříž.</string>
     <string name="continueBtnText">Rozumím, přejít k tréninku.</string>
     <string name="warningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
     <string name="yes">ano</string>
@@ -80,7 +87,7 @@
     <string name="resultsCardTitle">Výsledky</string>
     <string name="levelProgressionLabel">postup úrovně v úkolu</string>
     <string name="maxLevelReachedLabel">maximální dosažena úroveň v úkolu</string>
-    <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninku.</string>
+    <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninků.</string>
     <string name="noChartDataAvailableText">Žádné údaje grafu nejsou k dispozici</string>
     <string name="trainingStartsInTitle">Výcvik začne za:</string>
     <string name="startImmediatelyBtnText">začít okamžitě</string>
@@ -89,10 +96,10 @@
     <string name="effortQuestionText">Vaše úsilí a snahu při tréninku:</string>
     <string name="difficultyQuestionText">Náročnost/obtížnost tréninku:</string>
     <string name="answerQuestionnaireErrorTitle">Některé otázky nejsou zodpovězeny</string>
-    <string name="answerQuestionnaireErrorText">Odpovězte na všechny otázky před uložením.</string>
+    <string name="answerQuestionnaireErrorText">Před uložením zodpovězte všechny otázky, prosím.</string>
     <string name="ratingNoConditionReachedText">Tentokrát jste nedosáhli podmínek pro splnění výzev.\nMožná budete mít příště větší štěstí.</string>
     <string name="ratingSumConditionText">Souhrnné výsledky tohoto tréninku jsou stejné nebo lepší než výsledky předchozího.</string>
-    <string name="ratingPauseConditionText">Během jednotlivých úloh jste si nedali pauzu která byla delší než 15 sekund.</string>
+    <string name="ratingPauseConditionText">Během tréninku jste neudělali pauzu delší než 15 vteřin.</string>
     <string name="ratingAllParadigmsRaisedText">Zvýšili jste obtížnost v každém úkolu alespoň jednou během tréninku v porovnání s předchozím zasedáním.</string>
     <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
 </resources>

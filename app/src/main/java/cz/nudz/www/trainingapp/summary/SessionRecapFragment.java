@@ -38,6 +38,10 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
         tasks.add(executeTask(binding.positionChart, ParadigmType.POSITION));
         tasks.add(executeTask(binding.shapeChart, ParadigmType.SHAPE));
 
+        binding.colorChartTitle.setText(R.string.lastSessionColorResultsTitle);
+        binding.positionChartTitle.setText(R.string.lastSessionPositionResultsTitle);
+        binding.shapeChartTitle.setText(R.string.lastSessionShapeResultsTitle);
+
         return root;
     }
 

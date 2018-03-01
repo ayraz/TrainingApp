@@ -30,20 +30,32 @@ public class TutorialFragmentFactory {
                 int startHelpText = 0;
                 switch (paradigmType) {
                     case SHAPE:
-                        startHelpText = R.string.shapeParadigmStartHelp;
+                        startHelpText = R.string.startHelpShapeParadigm;
                         break;
                     case COLOR:
-                        startHelpText = R.string.colorParadigmStartHelp;
+                        startHelpText = R.string.startHelpColorParadigm;
                         break;
                     case POSITION:
-                        startHelpText = R.string.positionParadigmStartHelp;
+                        startHelpText = R.string.startHelpPositionParadigm;
                         break;
                 }
                 return TutorialMessageFragment.newInstance(startHelpText);
             // cue help
             case 1:
+                int cueHelp = 0;
+                switch (paradigmType) {
+                    case SHAPE:
+                        cueHelp = R.string.cueHelpShapeParadigm;
+                        break;
+                    case COLOR:
+                        cueHelp = R.string.cueHelpColorParadigm;
+                        break;
+                    case POSITION:
+                        cueHelp = R.string.cueHelpPositionParadigm;
+                        break;
+                }
                 return TutorialImageFragment.newInstance(
-                        R.string.cueHelp,
+                        cueHelp,
                         R.drawable.cue);
             // short pause
             case 2:
@@ -52,19 +64,23 @@ public class TutorialFragmentFactory {
                         R.drawable.pause);
             // memory help
             case 3:
+                int memorizeHelp = 0;
                 switch (paradigmType) {
                     case SHAPE:
                         drawableId = R.drawable.shape_memory_array;
+                        memorizeHelp = R.string.memorizeShapeHelp;
                         break;
                     case COLOR:
                         drawableId = R.drawable.color_memory_array;
+                        memorizeHelp = R.string.memorizeColorHelp;
                         break;
                     case POSITION:
                         drawableId = R.drawable.position_memory_array;
+                        memorizeHelp = R.string.memorizePositionHelp;
                         break;
                 }
                 return TutorialImageFragment.newInstance(
-                        R.string.memorizeHelp,
+                        memorizeHelp,
                         drawableId
                 );
             // longer pause
@@ -74,19 +90,23 @@ public class TutorialFragmentFactory {
                         R.drawable.pause);
             // change detection
             case 5:
+                int identificationHelp = 0;
                 switch (paradigmType) {
                     case SHAPE:
                         drawableId = R.drawable.shape_test_array;
+                        identificationHelp = R.string.identificationHelpShapeParadigm;
                         break;
                     case COLOR:
                         drawableId = R.drawable.color_test_array;
+                        identificationHelp = R.string.identificationHelpColorParadigm;
                         break;
                     case POSITION:
                         drawableId = R.drawable.position_test_array;
+                        identificationHelp = R.string.identificationHelpPositionParadigm;
                         break;
                 }
                 return TutorialImageFragment.newInstance(
-                        R.string.identificationHelp,
+                        identificationHelp,
                         drawableId);
             // inter-trial pause
             case 6:

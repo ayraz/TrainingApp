@@ -110,11 +110,11 @@ public class MessageFragment extends Fragment {
         } else {
             switch (currentParadigmType) {
                 case COLOR:
-                    return R.string.colorParadigmStartHelp;
+                    return R.string.startHelpColorParadigm;
                 case SHAPE:
-                    return R.string.shapeParadigmStartHelp;
+                    return R.string.startHelpShapeParadigm;
                 case POSITION:
-                    return R.string.positionParadigmStartHelp;
+                    return R.string.startHelpPositionParadigm;
             }
         }
         return R.string.errorGenericMessage;

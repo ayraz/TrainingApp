@@ -16,12 +16,13 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/colorChartTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:text="@string/lastSessionColorResultsTitle"/>
+                tools:text="@string/lastSessionColorResultsTitle"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/colorChart"
@@ -30,13 +31,14 @@
                 android:minHeight="300dp"/>
 
             <TextView
+                android:id="@+id/positionChartTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:layout_marginTop="24dp"
-                android:text="@string/lastSessionPositionResultsTitle"/>
+                tools:text="@string/lastSessionPositionResultsTitle"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/positionChart"
@@ -45,13 +47,14 @@
                 android:minHeight="300dp"/>
 
             <TextView
+                android:id="@+id/shapeChartTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:layout_marginTop="24dp"
-                android:text="@string/lastSessionShapeResultsTitle"/>
+                tools:text="@string/lastSessionShapeResultsTitle"/>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/shapeChart"
