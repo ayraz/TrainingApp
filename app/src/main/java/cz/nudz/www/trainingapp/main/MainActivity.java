@@ -56,6 +56,9 @@ public class MainActivity extends BaseActivity implements
                 }
                 return true;
             case R.id.action_logout:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isAppInLockTaskMode()) {
+                    stopLockTask();
+                }
                 getSessionManager().logoutUser();
                 return true;
             default:
@@ -199,6 +202,11 @@ public class MainActivity extends BaseActivity implements
                         getString(R.string.trainingStartsInTitle),
                         getString(R.string.startImmediatelyBtnText)),
                 CountDownFragment.TAG);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing, there is a logout option for leaving the app
     }
 
     @Override
