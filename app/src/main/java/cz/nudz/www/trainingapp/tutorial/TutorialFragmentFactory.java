@@ -131,4 +131,17 @@ public class TutorialFragmentFactory {
                 paradigmType.toString(),
                 position));
     }
+
+    public static int getIconByParadigm(ParadigmType type) {
+        switch (type) {
+            case COLOR:
+                return R.drawable.color_icon;
+            case POSITION:
+                return R.drawable.position_icon;
+            case SHAPE:
+                return R.drawable.shape_icon;
+            default:
+                return 0;
+        }
+    }
 }

@@ -15,6 +15,7 @@ import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.tutorial.TutorialFragmentFactory;
 
 /**
  * Created by P8P67 on 11/1/2017.
@@ -37,24 +38,22 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String title = "";
-        int drawableId = 0;
         Context context = holder.getTryBtn().getContext();
-        switch (ParadigmSet.getAt(position)) {
+        final ParadigmType type = ParadigmSet.getAt(position);
+        switch (type) {
             case COLOR:
                 title = context.getString(R.string.tryColorParadigmBtn);
-                drawableId = R.drawable.color_icon;
                 break;
             case POSITION:
                 title = context.getString(R.string.tryPositionParadigmBtn);
-                drawableId = R.drawable.position_icon;
                 break;
             case SHAPE:
                 title = context.getString(R.string.tryShapeParadigmBtn);
-                drawableId = R.drawable.shape_icon;
                 break;
         }
         holder.getTryBtn().setText(title);
 
+        int drawableId = TutorialFragmentFactory.getIconByParadigm(type);
         holder.getIcon().setImageDrawable(context.getResources().getDrawable(drawableId));
 
         String[] difficulties = new String[Difficulty.values().length];

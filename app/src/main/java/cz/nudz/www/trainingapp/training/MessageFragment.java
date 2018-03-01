@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -17,8 +18,10 @@ import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.MessageFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.tutorial.TutorialFragmentFactory;
 import cz.nudz.www.trainingapp.utils.Utils;
 
+import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 
@@ -78,12 +81,19 @@ public class MessageFragment extends Fragment {
         if (isFirstParadigm() && !isSequencePause) {
             binding.warningFragmentStartTrainingBtn.setOnClickListener(v -> listener.startTraining());
         } else {
-            Utils.setViewsVisibility(INVISIBLE,
+            // adjust view positioning using the guide
+            final ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) binding.guideline.getLayoutParams();
+            params.guidePercent = 0.5F;
+            binding.guideline.setLayoutParams(params);
+            Utils.setViewsVisibility(GONE,
                     binding.warningFragmentWarning,
                     binding.warningFragmentStartTrainingBtn);
         }
 
         binding.warningFragmentExplanation.setText(Html.fromHtml(getString(getHelpTextForParadigm())));
+
+        binding.paradigmIcon.setImageDrawable(getResources().getDrawable(
+                TutorialFragmentFactory.getIconByParadigm(currentParadigmType)));
 
         return binding.getRoot();
     }
