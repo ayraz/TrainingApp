@@ -33,8 +33,8 @@ public class TrainingActivity extends BaseActivity implements
         BadgeFragment.BadgeFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
-    public static final int DEFAULT_SEQUENCE_COUNT = 1;
-    public static final int DEFAULT_TRIAL_COUNT = 1;
+    public static final int DEFAULT_SEQUENCE_COUNT = 7;
+    public static final int DEFAULT_TRIAL_COUNT = 20;
 
     private TrainingActivityBinding binding;
     private int sequenceCount = 0;

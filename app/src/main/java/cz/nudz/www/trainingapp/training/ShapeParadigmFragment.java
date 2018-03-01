@@ -50,7 +50,7 @@ public class ShapeParadigmFragment extends TrainingFragment {
 
     @Override
     protected void initStimuli(List<ImageView> stimuli) {
-        color = ContextCompat.getColor(getActivity(), R.color.black);
+        color = ContextCompat.getColor(getActivity(), R.color.darkBlue);
 
         for (int id : drawableIds) {
             drawablePairs.add(new Pair<>(getResources().getDrawable(id).mutate(), Utils.getShapeName(id)));
