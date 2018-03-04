@@ -142,8 +142,8 @@ public class TrainingActivity extends BaseActivity implements
             } else {
                 paradigmPauseStartTime = new Date();
                 // next cannot be null because end of training is handled above..
-                showFragmentWithAnim(containerId, PauseFragment.newInstance(ParadigmSet.getNext(currentParadigmType),
-                        null), PauseFragment.TAG);
+                showFragmentWithAnim(containerId, PauseFragment.newInstance(
+                        ParadigmSet.getNext(currentParadigmType)), PauseFragment.TAG);
             }
         // SEQUENCE FINISHED
         } else if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
@@ -159,7 +159,8 @@ public class TrainingActivity extends BaseActivity implements
             } else {
                 // TODO: handle max level
             }
-            showFragmentWithAnim(containerId, PauseFragment.newInstance(currentParadigmType, adjustment), PauseFragment.TAG);
+            showFragmentWithAnim(containerId, PauseFragment.newInstance(
+                    currentParadigmType, adjustment, sequenceCount), PauseFragment.TAG);
         }
     }
 

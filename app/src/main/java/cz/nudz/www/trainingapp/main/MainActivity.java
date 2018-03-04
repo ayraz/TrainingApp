@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements
                         showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
                         break;
                     case R.string.trainingOptionTitle:
-                        showFragmentWithAnim(containerId, MessageFragment.newInstance(firstParadigm, null), MessageFragment.TAG);
+                        showFragmentWithAnim(containerId, MessageFragment.newInstance(firstParadigm), MessageFragment.TAG);
                         break;
                     case R.string.tutorialOptionTitle:
                         showFragmentWithAnim(containerId, new TutorialPagerFragment(), TutorialPagerFragment.TAG);

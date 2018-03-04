@@ -26,19 +26,19 @@ public class PauseFragment extends DialogFragment {
     private static final int PARADIGM_TIMEOUT = 3000 * 60; // 3 min
 
     private PauseFragmentBinding binding;
-    private ParadigmType currentParadigmType;
-    private boolean isSequencePause;
-    private Adjustment adjustment;
 
-    /**
-     *
-     * @param paradigmType
-     * @param adjustment Adjustment must only be passed for sequence pause, otherwise it has to be null signaling paradigm pause.
-     * @return
-     */
-    public static PauseFragment newInstance(@NonNull ParadigmType paradigmType, @Nullable Adjustment adjustment) {
+    public static PauseFragment newInstance(@NonNull ParadigmType paradigmType) {
         PauseFragment pauseFragment = new PauseFragment();
-        Bundle bundle = MessageFragment.bundleArguments(paradigmType, adjustment);
+        Bundle bundle = MessageFragment.bundleArguments(paradigmType, null, null);
+        pauseFragment.setArguments(bundle);
+        return pauseFragment;
+    }
+
+    public static PauseFragment newInstance(@NonNull ParadigmType paradigmType,
+                                            @Nullable Adjustment adjustment,
+                                            @NonNull int sequenceCount) {
+        PauseFragment pauseFragment = new PauseFragment();
+        Bundle bundle = MessageFragment.bundleArguments(paradigmType, adjustment, sequenceCount);
         pauseFragment.setArguments(bundle);
         return pauseFragment;
     }
@@ -48,21 +48,27 @@ public class PauseFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.pause_fragment, container, false);
 
-        currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
+        ParadigmType currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
+        Integer pauseDuration = 0;
+        Integer sequenceCount = 0;
+        Adjustment adjustment = null;
+        // if we have any sort of adjustment, then this is inter-sequence pause
         if (getArguments().containsKey(MessageFragment.KEY_ADJUSTMENT)) {
             adjustment = Adjustment.valueOf(getArguments().getString(MessageFragment.KEY_ADJUSTMENT));
-            isSequencePause = true;
+            sequenceCount = getArguments().getInt(MessageFragment.KEY_SEQ_COUNT);
+            pauseDuration = SEQUENCE_TIMEOUT;
         } else {
-            isSequencePause = false;
+            pauseDuration = PARADIGM_TIMEOUT;
         }
 
         FragmentManager manager = getChildFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
-        MessageFragment messageFragment = MessageFragment.newInstance(currentParadigmType, adjustment);
+        MessageFragment messageFragment = MessageFragment.newInstance(
+                currentParadigmType, adjustment, sequenceCount);
         transaction.add(R.id.pauseFragmentMessageContainer, messageFragment);
 
-        CountDownFragment countDownFragment = CountDownFragment.newInstance(isSequencePause ? SEQUENCE_TIMEOUT : PARADIGM_TIMEOUT);
+        CountDownFragment countDownFragment = CountDownFragment.newInstance(pauseDuration);
         transaction.add(R.id.pauseFragmentCountDownContainer, countDownFragment);
 
         transaction.commit();
