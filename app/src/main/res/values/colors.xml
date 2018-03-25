@@ -11,35 +11,35 @@
 
     <color name="red">#ff0000</color>
     <color name="yellow">#ffff00</color>
-    <color name="pink">#ff6699</color>
-    <color name="purple">#9900cc</color>
+    <color name="lightPink">#febeed</color>
+    <color name="darkPink">#fb15da</color>
     <color name="lightBlue">#33ccff</color>
     <color name="darkBlue">#0000ff</color>
     <color name="lightGreen">#00ff00</color>
     <color name="darkGreen">#009900</color>
-    <color name="brown">#663300</color>
+    <color name="brown">#8a4500</color>
     <color name="grey">#808080</color>
     <color name="orange">#ff8000</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="lightPurple">#c44dff</color>
-    <color name="wine">#990033</color>
+    <color name="purple">#af84fc</color>
+    <color name="petroleum">#00a8a4</color>
 
     <integer-array name="trialColors">
         <item>@color/red</item>
         <item>@color/yellow</item>
-        <item>@color/pink</item>
-        <item>@color/purple</item>
+        <item>@color/lightPink</item>
+        <item>@color/darkPink</item>
         <item>@color/lightBlue</item>
         <item>@color/darkBlue</item>
         <item>@color/lightGreen</item>
         <item>@color/darkGreen</item>
+        <item>@color/brown</item>
         <item>@color/grey</item>
         <item>@color/orange</item>
-        <item>@color/brown</item>
         <item>@color/black</item>
         <item>@color/white</item>
-        <item>@color/lightPurple</item>
-        <item>@color/wine</item>
+        <item>@color/purple</item>
+        <item>@color/petroleum</item>
     </integer-array>
 </resources>
