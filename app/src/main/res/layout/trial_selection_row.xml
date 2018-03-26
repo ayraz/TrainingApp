@@ -22,7 +22,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
             android:id="@+id/tryBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="8dp"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="@id/icon"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.55" />
+            app:layout_constraintGuide_percent="0.35" />
 
         <TextView
             android:id="@+id/textView2"
@@ -54,6 +54,7 @@
             android:text="@string/difficultyLabel"
             android:textAlignment="textEnd"
             android:textSize="20sp"
+            android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/difficultyPicker"
             app:layout_constraintHorizontal_bias="0.5"
@@ -64,11 +65,57 @@
             android:id="@+id/difficultyPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/textView3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/presentationTime"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/seekBar"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/difficultyPicker"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/seekBarText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="100ms"
+            app:layout_constraintBottom_toBottomOf="@id/seekBar"
+            app:layout_constraintEnd_toEndOf="@id/seekBar"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/seekBar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:maxHeight="20dp"
+            android:max="10"
+            android:progress="0"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            tools:layout_editor_absoluteX="888dp"
+            tools:layout_editor_absoluteY="112dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

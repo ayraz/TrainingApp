@@ -122,8 +122,7 @@ public class TutorialFragmentFactory {
                         TrainingApp.getContext().getString(R.string.trainingStartsInTitle),
                         TrainingApp.getContext().getString(R.string.startImmediatelyBtnText));
             case 9:
-                return TrainingFragment.newInstance(paradigmType,
-                        Difficulty.ONE,
+                return TrainingFragment.newInstance(paradigmType, Difficulty.ONE,
                         TutorialPagerFragment.TUTORIAL_TRIAL_COUNT);
         }
         throw new IllegalArgumentException(String.format(
