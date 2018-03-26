@@ -181,10 +181,10 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty) {
+    public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty, int presentationTime) {
         showFragmentWithAnimAndHistory(binding.fragmentContainer.getId(),
                 TrainingFragment.newInstance(paradigmType,
-                        difficulty, TrialSelectionFragment.TEST_TRIAL_COUNT),
+                        difficulty, TrialSelectionFragment.TEST_TRIAL_COUNT, presentationTime),
                 TrainingFragment.TAG);
     }
 

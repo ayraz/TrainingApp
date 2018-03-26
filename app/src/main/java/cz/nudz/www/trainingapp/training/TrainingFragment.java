@@ -51,6 +51,7 @@ public abstract class TrainingFragment extends Fragment {
 
     private static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
     private static final String KEY_TRIAL_COUNT = "KEY_TRIAL_COUNT";
+    private static final String KEY_PRESENTATION_TIME = "KEY_PRESENTATION_TIME";
 
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
@@ -72,7 +73,11 @@ public abstract class TrainingFragment extends Fragment {
     private final Handler handler = new Handler();
 
     private Difficulty difficulty;
-    private int trialCount;
+    private Integer trialCount;
+    private Integer presentationTime;
+    private boolean isTrainingMode;
+    private ParadigmType paradigmType;
+
     private List<Boolean> answers;
     private int gridSize;
     private int cellSize;
@@ -81,8 +86,6 @@ public abstract class TrainingFragment extends Fragment {
     private int paddingStart;
     private int stimSize;
     private TrialRunner trialRunner;
-    private boolean isTrainingMode;
-    private ParadigmType paradigmType;
 
     public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType,
                                                @NonNull Difficulty difficulty) {
@@ -103,9 +106,28 @@ public abstract class TrainingFragment extends Fragment {
      * @return
      */
     public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType,
-                                               @NonNull Difficulty difficulty, int trialCount) {
+                                               @NonNull Difficulty difficulty,
+                                               int trialCount) {
         TrainingFragment fragment = TrainingFragment.newInstance(paradigmType, difficulty);
         fragment.getArguments().putInt(KEY_TRIAL_COUNT, trialCount);
+        return fragment;
+    }
+
+    /**
+     * Only use in trial mode.
+     *
+     * @param paradigmType
+     * @param difficulty
+     * @param trialCount
+     * @param presentationTime
+     * @return
+     */
+    public static TrainingFragment newInstance(@NonNull ParadigmType paradigmType,
+                                               @NonNull Difficulty difficulty,
+                                               int trialCount,
+                                               int presentationTime) {
+        TrainingFragment fragment = TrainingFragment.newInstance(paradigmType, difficulty, trialCount);
+        fragment.getArguments().putInt(KEY_PRESENTATION_TIME, presentationTime);
         return fragment;
     }
 
@@ -154,6 +176,7 @@ public abstract class TrainingFragment extends Fragment {
         isTrainingMode = true;
         if (getArguments().containsKey(KEY_TRIAL_COUNT)) {
             trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
+            presentationTime = getArguments().getInt(KEY_PRESENTATION_TIME);
             isTrainingMode = false;
         }
 
@@ -350,7 +373,9 @@ public abstract class TrainingFragment extends Fragment {
 
                                 }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
 
-                            }, (int) (MEMORIZATION_INTERVAL * DEBUG_SLOW * SPEED_FACTOR));
+                            }, (int) ((presentationTime != null
+                                    ? presentationTime
+                                    : MEMORIZATION_INTERVAL) * DEBUG_SLOW * SPEED_FACTOR));
 
                         }, (int) (CUE_INTERVAL * DEBUG_SLOW * SPEED_FACTOR));
 

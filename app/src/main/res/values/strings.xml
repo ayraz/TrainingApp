@@ -103,4 +103,5 @@
     <string name="ratingAllParadigmsRaisedText">Zvýšili jste obtížnost v každém úkolu alespoň jednou během tréninku v porovnání s předchozím zasedáním.</string>
     <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
     <string name="yourProgressInTaskTitle">Váš postup v tomto úkolu:</string>
+    <string name="presentationTime">Prezentační\nčas:</string>
 </resources>
