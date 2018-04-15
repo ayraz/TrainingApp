@@ -104,4 +104,6 @@
     <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
     <string name="yourProgressInTaskTitle">Váš postup v tomto úkolu:</string>
     <string name="presentationTime">Prezentační\nčas:</string>
+    <string name="difficultyDescriptionEasy">(nejmenší)</string>
+    <string name="difficultyDescriptionHard">(největší)</string>
 </resources>
