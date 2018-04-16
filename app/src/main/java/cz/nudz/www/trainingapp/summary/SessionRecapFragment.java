@@ -24,7 +24,7 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
  */
 public class SessionRecapFragment extends LineChartFragment<String, Integer> {
 
-    public static final String TAG = SessionRecapFragment.class.getSimpleName();
+    public static final String TAG = "SessionRecapFragment";
 
     public SessionRecapFragment() {
         // Required empty public constructor

@@ -104,4 +104,6 @@
     <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
     <string name="yourProgressInTaskTitle">Váš postup v tomto úkolu:</string>
     <string name="presentationTime">Prezentační\nčas:</string>
+    <string name="thankYouForTrainingMessage">Děkujeme Vám za Vaš čas a snahu.\nPro ukončení tréninku a zobrazení Vašich výsledků stiskněte tlačítko:</string>
+    <string name="finishBtnText">KONEC</string>
 </resources>

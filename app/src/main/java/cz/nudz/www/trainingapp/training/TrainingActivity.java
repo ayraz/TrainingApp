@@ -24,13 +24,16 @@ import cz.nudz.www.trainingapp.enums.Adjustment;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.BaseActivity;
+import cz.nudz.www.trainingapp.main.MainActivity;
+import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 public class TrainingActivity extends BaseActivity implements
         TrainingFragment.TrainingFragmentListener,
         CountDownFragment.CountDownListener,
         QuestionnaireFragment.QuestionnaireListener,
-        BadgeFragment.BadgeFragmentListener {
+        BadgeFragment.BadgeFragmentListener,
+        ThankYouFragment.ThankYouFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
     public static final int DEFAULT_SEQUENCE_COUNT = 7;
@@ -219,8 +222,9 @@ public class TrainingActivity extends BaseActivity implements
         currentSession.setEffortAnswer(effort);
         currentSession.setDifficultyAnswer(difficulty);
         getDbHelper().getTrainingSessionDao().update(currentSession);
-        super.onBackPressed();
-        // TODO: handle end of training properly..
+
+        // End training session.
+        showFragmentWithAnim(containerId, new ThankYouFragment(), ThankYouFragment.TAG);
     }
 
     @Override
@@ -230,5 +234,10 @@ public class TrainingActivity extends BaseActivity implements
 
     private void showQuestionnaire() {
         showFragmentWithAnim(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
+    }
+
+    @Override
+    public void proceedToResults() {
+        MainActivity.startActivity(this, SessionRecapFragment.TAG);
     }
 }
