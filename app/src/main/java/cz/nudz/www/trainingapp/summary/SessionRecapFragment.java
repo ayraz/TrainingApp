@@ -60,7 +60,8 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
     }
 
     private AsyncTask<String, Integer, List<Pair<String, Integer>>> executeTask(LineChart chart, ParadigmType paradigmType) {
-        return new RecapTask(results -> setChartData(results, chart, paradigmType)).execute(paradigmType.toString());
+        return new RecapTask(results ->
+                setChartData(results, chart, paradigmType)).execute(paradigmType.toString());
     }
 
     private class RecapTask extends ChartLoadTask {

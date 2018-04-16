@@ -69,7 +69,8 @@ public class PerformanceSummaryFragment extends LineChartFragment<String, Intege
     }
 
     private AsyncTask<String, Integer, List<Pair<String, Integer>>> executeTask(LineChart chart, ParadigmType paradigmType) {
-        return new SummaryTask(results -> setChartData(results, chart, paradigmType)).execute(activity.getSessionManager().getUsername(), paradigmType.toString());
+        return new SummaryTask(results ->
+                setChartData(results, chart, paradigmType)).execute(paradigmType.toString());
     }
 
     private class SummaryTask extends ChartLoadTask {
@@ -80,7 +81,7 @@ public class PerformanceSummaryFragment extends LineChartFragment<String, Intege
 
         @Override
         protected List<Pair<String, Integer>> doInBackground(String... strings) {
-            return trainingRepository.getAllSessionParadigmData(ParadigmType.COLOR.toString());
+            return trainingRepository.getAllSessionParadigmData(strings[0]);
         }
     }
 }
