@@ -1,13 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <string name="welcomeText"><![CDATA[Hello, welcome to the training app.
-Right now you are on the main screen, you may navigate to all of the application\'s options from here:
-Training mode - here you can start the actual training which will be recorded.
-Tutorial mode - this will walk you through each stage of the training application (see this option before starting the actual training).
-Trial mode - here you can choose any one of available training tasks try a few of them out (results are not recorded).
-Once you fully complete at least one training session, you will be able to see you results summary from the "Results section".]]></string>
-
-
-        <string name="difficultyDescriptionEasy">(smallest)</string>
-        <string name="difficultyDescriptionHard">(greatest)</string>
+<string name="app_name">FILTER IT</string>
+<string name="color">Color</string>
+<string name="position">Orientation</string>
+<string name="shape">Shape</string>
+<string name="sequence">Sequence</string>
+<string name="startHelpColorParadigm">In this experiment you have to indicate, whether there has been a change of <![CDATA[<b>COLOR</b>]]> of stimuli on one side of the screen.</string>
+<string name="welcomeText"><![CDATA[<h1>Welcome in the application Filter It!</h1>
+        Right now you are at the main screen, you may navigate to all of the application\'s options from here:
+        <li>&nbsp;<b>TRAINING</b> - to begin a training session</li>
+        <li>&nbsp;<b>INSTRUCTIONS</b> - for detailed instructions of each task</li>
+        <li>&nbsp;<b>FAMILIARIZATION</b> - to try each task with varying levels of difficulty</li>
+        </br>
+        To see how you succeeded in each task during training session go to the section "Results"]]>
+    </string>
+<string name="tutorialPrepareForTrialText">Following trials will run in normal speed, which is quite fast, get ready…</string>
+<string name="countDownFragmentContinueBtnText">Continue with the training</string>
+<string name="countDownFragmentMessageText">The session will end as invalid in: </string>
+<string name="emptyUsernameError">Please fill in the username</string>
+<string name="newUserTitle">New User</string>
+<string name="userAlreadyExistsError">User already exists.</string>
+<string name="createUserBtnText">Create user</string>
+<string name="userDoesNotExistError">User does not exist.</string>
+<string name="difficultyLoweredMessage">YOU ARE DOING WELL,\nNOW LETS REST A LITTLE BIT</string>
+<string name="difficultyRaisedMessage">GREAT, YOU ARE DOING EXCELLENT!\nLETS INCREASE THE DIFFICULTY</string>
+<string name="difficultySameMessage">GOOD, KEEP GOING!</string>
+<string name="errorGenericMessage">Oups, something has broken.</string>
+<string name="errorNoParadigmsLeft">No more paradigms left.</string>
+<string name="errorNotLoggedIn">You are not logged in, you will be redirected to login screen.</string>
+<string name="errorTitle">Error</string>
+<string name="goBackBtnText">Back</string>
+<string name="trainingOptionTitle">Training</string>
+<string name="trialOptionTitle">Familiarization</string>
+<string name="tutorialOptionTitle">Instructions</string>
+<string name="introOptionTitle">Introduction</string>
+<string name="lastSessionPerformanceOptionTitle">Last training</string>
+<string name="allSessionsPerformanceOptionTitle">All trainings</string>
+<string name="lastSessionColorResultsTitle">Results from last training – COLOR</string>
+<string name="lastSessionPositionResultsTitle">Results from last training – ORIENTATION</string>
+<string name="lastSessionShapeResultsTitle">Results from last training – SHAPE</string>
+<string name="allSessionsColorResultsTitle">Overview of results from all trainings - COLOR</string>
+<string name="allSessionsPositionResultsTitle">Overview of results from all trainings - ORIENTATION</string>
+<string name="allSessionsShapeResultsTitle">Overview of results from all trainings - SHAPE</string>
+<string name="no">NO</string>
+<string name="ok">OK</string>
+<string name="startHelpPositionParadigm">In this experiment you have to indicate, whether there has been a change of <![CDATA[<b>ORIENTATION</b>]]> of stimuli on one side of the screen.</string>
+<string name="quitTrainingDialogMessage">Are you sure, that you want to end the session?</string>
+<string name="quitTrainingDialogTitle">End of session</string>
+<string name="selectParadigmTypeForTrialTitle">Select task for a familiarization</string>
+<string name="startHelpShapeParadigm"> In this experiment you have to indicate, whether there has been a change of <![CDATA[<b>SHAPE</b>]]> of stimuli on one side of the screen.</string>
+<string name="startTrainingBtnText">Start training</string>
+<string name="nextBtnText">Next</string>
+<string name="prevBtnText">Previous</string>
+<string name="cueHelpColorParadigm">There is a fixation cross in the middle of the screen. The arrow above it indicates side for remembering color of stimuli. In this case it is on the <![CDATA[<b>RIGHT]]> from fixation cross.</string>
+<string name="cueHelpPositionParadigm">There is a fixation cross in the middle of the screen. The arrow above it indicates side for remembering orientation of stimuli. In this case it is on the <![CDATA[<b>RIGHT]]> from fixation cross.</string>
+<string name="cueHelpShapeParadigm">There is a fixation cross in the middle of the screen. The arrow above it indicates side for remembering shape of stimuli. In this case it is on the <![CDATA[<b>RIGHT]]> from fixation cross.</string>
+<string name="identificationHelpColorParadigm"><b>TEST</b> – Are colors of stimuli on the side indicated by the arrow different from the original or same?</string>
+<string name="identificationHelpShapeParadigm"><b>TEST</b> – Are shapes of stimuli on the side indicated by the arrow different from the original or same?</string>
+<string name="identificationHelpPositionParadigm"><b>TEST</b> – Are orientations of stimuli on the side indicated by the arrow different from the original or same?</string>
+<string name="interTrialPauseHelp">Pause – short break before next trial.</string>
+<string name="longerPause">Longer pause, there is only fixation cross on the screen.</string>
+<string name="memorizeColorHelp">PREAMBLE – Try to remember colors of stimuli on the side indicated by the arrow.</string>
+<string name="memorizePositionHelp">PREAMBLE – Try to remember orientations of stimuli on the side indicated by the arrow.</string>
+<string name="memorizeShapeHelp">PREAMBLE – Try to remember shapes of stimuli on the side indicated by the arrow.</string>
+<string name="nowYouTryMessage"><![CDATA[<b>NOW, WHEN YOU KNOW HOW TO DO IT,\nYOU CAN TRY A FEW TRIALS</b>]]></string>
+<string name="shortPause">Short pause, there is only fixation cross on the screen.</string>
+<string name="continueBtnText">Understand, go to the training.</string>
+<string name="warningText">!WARNING – THE WHOLE TRAINING SESSION LASTS APPROXIMATELY 20 MINUTES!</string>
+<string name="yes">yes</string>
+<string name="actionExportData">Export training data</string>
+<string name="logout">Log out</string>
+<string name="dataExportSuccess">The data was succesfully exported.</string>
+<string name="modeSelectionTitle">Mode selection</string>
+<string name="performanceSummaryTitle">Performance summary</string>
+<string name="colorParadigmPerformanceSummary">Performance summary of color task</string>
+<string name="positionParadigmPerformanceSummary">Performance summary of orientation task</string>
+<string name="shapeParadigmPerformanceSummary">Performance summary of shape task</string>
+<string name="lastLoginAsLabel">Last login as: </string>
+<string name="usernameLabel">User Name</string>
+<string name="loginBtnText">Log in</string>
+<string name="difficultyLabel">Level: </string>
+<string name="tryColorParadigmBtn">Try "Color"</string>
+<string name="tryPositionParadigmBtn">Try "Orientation"</string>
+<string name="tryShapeParadigmBtn">Try "Shape"</string>
+<string name="mainCardTitle">Main</string>
+<string name="modesCardTitle">Modes</string>
+<string name="resultsCardTitle">Results</string>
+<string name="levelProgressionLabel">Level progression in the task</string>
+<string name="maxLevelReachedLabel">Maximum level reached in the task</string>
+<string name="notEnoughTrainingDataMessage">There is not enough training data available, please complete few training sessions first.</string>
+<string name="noChartDataAvailableText">No chart data available</string>
+<string name="trainingStartsInTitle">Training starts in:</string>
+<string name="startImmediatelyBtnText">Start immediately</string>
+<string name="saveBtnText">Save</string>
+<string name="questionnaireTitle">Please assess on the scale from 1 to 5…</string>
+<string name="effortQuestionText">Your effort during the training:</string>
+<string name="difficultyQuestionText">Perceived difficulty of the task:</string>
+<string name="answerQuestionnaireErrorTitle">Some questions were not answered</string>
+<string name="answerQuestionnaireErrorText">Before saving please answer all questions.</string>
+<string name="ratingNoConditionReachedText">This time you did not fulfill criteria to gain stars.\nNext time you will be more lucky.</string>
+<string name="ratingSumConditionText">Performance in this session is same or better than in the previous one.</string>
+<string name="ratingPauseConditionText">During the session you did not take a break longer than 15 seconds.</string>
+<string name="ratingAllParadigmsRaisedText">You increased the level at least once in each task</string>
+<string name="correntTrialAnswerRatio">You successfully answered <![CDATA[<b>%d out of %d</b>]]> trials.</string>
+<string name="yourProgressInTaskTitle">Your progress in this task:</string>
+<string name="presentationTime">Presentation\ntime:</string>
+<string name="difficultyDescriptionEasy">(smallest)</string>
+<string name="difficultyDescriptionHard">(greatest)</string>
+<string name="thankYouForTrainingMessage">Thank you for your efforts.\nTo end training session and see your results press below button:</string>
+<string name="finishBtnText">END</string>
 </resources>

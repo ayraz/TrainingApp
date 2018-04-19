@@ -85,8 +85,8 @@
     <string name="mainCardTitle">Hlavní</string>
     <string name="modesCardTitle">Režimy</string>
     <string name="resultsCardTitle">Výsledky</string>
-    <string name="levelProgressionLabel">postup úrovně v úkolu</string>
-    <string name="maxLevelReachedLabel">maximální dosažena úroveň v úkolu</string>
+    <string name="levelProgressionLabel">Postup úrovně v úkolu</string>
+    <string name="maxLevelReachedLabel">Maximální dosažena úroveň v úkolu</string>
     <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninků.</string>
     <string name="noChartDataAvailableText">Žádné údaje grafu nejsou k dispozici</string>
     <string name="trainingStartsInTitle">Výcvik začne za:</string>
@@ -104,11 +104,8 @@
     <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
     <string name="yourProgressInTaskTitle">Váš postup v tomto úkolu:</string>
     <string name="presentationTime">Prezentační\nčas:</string>
-<<<<<<< HEAD
     <string name="difficultyDescriptionEasy">(nejmenší)</string>
     <string name="difficultyDescriptionHard">(největší)</string>
-=======
     <string name="thankYouForTrainingMessage">Děkujeme Vám za Vaš čas a snahu.\nPro ukončení tréninku a zobrazení Vašich výsledků stiskněte tlačítko:</string>
     <string name="finishBtnText">KONEC</string>
->>>>>>> 114a319305e1fa5be08f063d56b80e86c9e9238b
 </resources>

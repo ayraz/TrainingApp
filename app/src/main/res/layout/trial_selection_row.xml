@@ -32,11 +32,7 @@
             android:id="@+id/tryBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
             android:layout_marginEnd="4dp"
-=======
-            android:layout_marginEnd="16dp"
->>>>>>> 114a319305e1fa5be08f063d56b80e86c9e9238b
             android:layout_marginStart="8dp"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="@id/icon"
