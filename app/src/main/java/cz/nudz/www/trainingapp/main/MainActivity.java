@@ -1,5 +1,7 @@
 package cz.nudz.www.trainingapp.main;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -40,12 +42,20 @@ public class MainActivity extends BaseActivity implements
         CountDownFragment.CountDownListener {
 
     private static final String KEY_ACTIVE_OPTION_POS = "KEY_ACTIVE_OPTION_POS";
+    private static final String KEY_INITIAL_FRAGMENT = "KEY_INITIAL_FRAGMENT";
 
     private MainActivityBinding binding;
     private DataExporter dataExporter;
     private MenuCardAdapter menuCardAdapter;
     private ParadigmType firstParadigm;
     private int containerId;
+
+    public static void startActivity(Context context, String initialFragmentTag) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(KEY_INITIAL_FRAGMENT, initialFragmentTag);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -136,7 +146,14 @@ public class MainActivity extends BaseActivity implements
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !isAppInLockTaskMode()) {
                 startLockTask();
             }
-            if (savedInstanceState == null) {
+            if (getIntent().hasExtra(KEY_INITIAL_FRAGMENT)) {
+                switch (getIntent().getStringExtra(KEY_INITIAL_FRAGMENT)) {
+                    case SessionRecapFragment.TAG:
+                        menuCardAdapter.setActiveOptionPosition(Arrays.asList(2, 0));
+                        showFragmentWithAnim(containerId, new SessionRecapFragment(), SessionRecapFragment.TAG);
+                        break;
+                }
+            } else if (savedInstanceState == null) {
                 // navigate to welcome fragment
                 menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
                 showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);

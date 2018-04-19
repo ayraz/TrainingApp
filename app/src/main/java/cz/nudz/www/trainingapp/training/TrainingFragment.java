@@ -56,14 +56,14 @@ public abstract class TrainingFragment extends Fragment {
     // Measure = milliseconds
     private static final int CUE_INTERVAL = 300;
     private static final int POST_CUE_PAUSE = 250;
-    private static final int MEMORIZATION_INTERVAL = 400;
+    private static final int MEMORIZATION_INTERVAL = 250;
     private static final int RETENTION_INTERVAL = 900;
     private static final int TEST_INTERVAL = 10000;
 
     private static final int POST_TRIAL_PAUSE = 2000;
     private static final int LEFT_GRID_INDEX = 0;
     private static final int RIGHT_GRID_INDEX = 1;
-    // Do not set to 0, unless you want to nullify other intervals..
+    // Do not set to 0, unless you want to nullify all intervals
     private static final double DEBUG_SLOW = 1;
     private static final double SPEED_FACTOR = 1;
 

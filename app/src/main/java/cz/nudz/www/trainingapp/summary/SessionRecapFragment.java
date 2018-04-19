@@ -24,7 +24,7 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
  */
 public class SessionRecapFragment extends LineChartFragment<String, Integer> {
 
-    public static final String TAG = SessionRecapFragment.class.getSimpleName();
+    public static final String TAG = "SessionRecapFragment";
 
     public SessionRecapFragment() {
         // Required empty public constructor
@@ -60,7 +60,8 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
     }
 
     private AsyncTask<String, Integer, List<Pair<String, Integer>>> executeTask(LineChart chart, ParadigmType paradigmType) {
-        return new RecapTask(results -> setChartData(results, chart, paradigmType)).execute(paradigmType.toString());
+        return new RecapTask(results ->
+                setChartData(results, chart, paradigmType)).execute(paradigmType.toString());
     }
 
     private class RecapTask extends ChartLoadTask {
