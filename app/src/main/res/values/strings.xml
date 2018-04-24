@@ -13,9 +13,9 @@
         </br>
         Jak se Vám dařilo v jednotlivých úkolech zjistíte v části "Výsledky"]]>
     </string>
-    <string name="tutorialPrepareForTrialText">Následující zkušební verze bude běžet normalní rychlosti, která je poměrně rychlá, připravte se…</string>
+    <string name="tutorialPrepareForTrialText">Následující pokusy poběží normální rychlostí, která je poměrně rychlá, připravte se…</string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
-    <string name="countDownFragmentMessageText">Výcvik se ukončí jako neplatný za: </string>
+    <string name="countDownFragmentMessageText">Trénink se ukončí jako neplatný za: </string>
     <string name="emptyUsernameError">Pole uživatelského jména nesmí být prázdné!</string>
     <string name="newUserTitle">Nový Uživatel</string>
     <string name="userAlreadyExistsError">Uživatel s daným uživatelským jménem již existuje.</string>
@@ -25,7 +25,7 @@
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
     <string name="difficultySameMessage">SKVĚLÉ, JEN TAK DÁL!</string>
     <string name="errorGenericMessage">Jejda, bohužel něco nefungovalo.</string>
-    <string name="errorNoParadigmsLeft">Žádné další paradigmy odešly.</string>
+    <string name="errorNoParadigmsLeft">Žádné další zbývající úkoly.</string>
     <string name="errorNotLoggedIn">Nejste přihlášeni, budete přesměrováni na přihlašovací obrazovku.</string>
     <string name="errorTitle">Chyba</string>
     <string name="goBackBtnText">Vrátit se</string>
@@ -72,9 +72,9 @@
     <string name="dataExportSuccess">Údaje byly úspěšně exportovány.</string>
     <string name="modeSelectionTitle">Výběr Režimu</string>
     <string name="performanceSummaryTitle">Přehled Výkonnosti</string>
-    <string name="colorParadigmPerformanceSummary">Shrnutí výkonu barevných paradigmat</string>
-    <string name="positionParadigmPerformanceSummary">Shrnutí výkonu pozičních paradigmat</string>
-    <string name="shapeParadigmPerformanceSummary">Shrnutí výkonu tvarových paradigmat</string>
+    <string name="colorParadigmPerformanceSummary">Přehled výkonu v úkolu - barva</string>
+    <string name="positionParadigmPerformanceSummary">Přehled výkonu v úkolu - pozice</string>
+    <string name="shapeParadigmPerformanceSummary">Přehled výkonu v úkolu - tvar</string>
     <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
     <string name="usernameLabel">Uživatelské Jméno</string>
     <string name="loginBtnText">Přihlásit se</string>
@@ -86,7 +86,7 @@
     <string name="modesCardTitle">Režimy</string>
     <string name="resultsCardTitle">Výsledky</string>
     <string name="levelProgressionLabel">Postup úrovně v úkolu</string>
-    <string name="maxLevelReachedLabel">Maximální dosažena úroveň v úkolu</string>
+    <string name="maxLevelReachedLabel">Nejvyšší dosažená úroveň v úkolu</string>
     <string name="notEnoughTrainingDataMessage">Nejsou k dispozici dostatečné údaje o tréninku, prosím dokončete nejprve několik tréninků.</string>
     <string name="noChartDataAvailableText">Žádné údaje grafu nejsou k dispozici</string>
     <string name="trainingStartsInTitle">Výcvik začne za:</string>
@@ -97,10 +97,10 @@
     <string name="difficultyQuestionText">Náročnost/obtížnost tréninku:</string>
     <string name="answerQuestionnaireErrorTitle">Některé otázky nejsou zodpovězeny</string>
     <string name="answerQuestionnaireErrorText">Před uložením zodpovězte všechny otázky, prosím.</string>
-    <string name="ratingNoConditionReachedText">Tentokrát jste nedosáhli podmínek pro splnění výzev.\nMožná budete mít příště větší štěstí.</string>
-    <string name="ratingSumConditionText">Souhrnné výsledky tohoto tréninku jsou stejné nebo lepší než výsledky předchozího.</string>
-    <string name="ratingPauseConditionText">Během tréninku jste neudělali pauzu delší než 15 vteřin.</string>
-    <string name="ratingAllParadigmsRaisedText">Zvýšili jste obtížnost v každém úkolu alespoň jednou během tréninku v porovnání s předchozím zasedáním.</string>
+    <string name="ratingNoConditionReachedText">Tentokrát jste nesplnil/a podmínky pro ohodnocení.\nMožná budete mít příště větší štěstí.</string>
+    <string name="ratingSumConditionText">Vaše výsledky v tomto tréninku jsou stejné či lepší než v předchozím tréninku.</string>
+    <string name="ratingPauseConditionText">Během tréninku jste neuděl/a pauzu delší než 15 vteřin.</string>
+    <string name="ratingAllParadigmsRaisedText">V každém úkolu byla úroveň zvýšena alespoň o 1.</string>
     <string name="correntTrialAnswerRatio">Odpověděli jste správně na <![CDATA[<b>%d/%d</b>]]> testů.</string>
     <string name="yourProgressInTaskTitle">Váš postup v tomto úkolu:</string>
     <string name="presentationTime">Prezentační\nčas:</string>
