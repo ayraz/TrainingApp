@@ -17,7 +17,7 @@ import cz.nudz.www.trainingapp.R;
 public class HomeFragment extends Fragment {
 
     public static final String TAG = HomeFragment.class.getSimpleName();
-    private static final String HOME_PAGE_PATH = "file:///android_asset/www/home.html";
+    private static final String WWW_PATH = "file:///android_asset/www/";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -30,7 +30,8 @@ public class HomeFragment extends Fragment {
 
         final WebView webView = root.findViewById(R.id.webView);
         webView.setBackgroundColor(Color.TRANSPARENT);
-        webView.loadUrl(HOME_PAGE_PATH);
+        // pick home file based on current locale
+        webView.loadUrl(WWW_PATH + getString(R.string.homeFile));
 
         // Inflate the layout for this fragment
         return root;

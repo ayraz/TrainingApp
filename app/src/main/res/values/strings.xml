@@ -108,4 +108,6 @@
     <string name="difficultyDescriptionHard">(největší)</string>
     <string name="thankYouForTrainingMessage">Děkujeme Vám za Vaš čas a snahu.\nPro ukončení tréninku a zobrazení Vašich výsledků stiskněte tlačítko:</string>
     <string name="finishBtnText">KONEC</string>
+
+    <string name="homeFile">home.html</string>
 </resources>
