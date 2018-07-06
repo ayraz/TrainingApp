@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
@@ -17,6 +21,7 @@ import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.LoginActivityBinding;
 import cz.nudz.www.trainingapp.main.MainActivity;
+import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.Utils;
 
 public class LoginActivity extends BaseActivity implements
@@ -45,18 +50,17 @@ public class LoginActivity extends BaseActivity implements
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
         binding.btnLogin.setOnClickListener(v -> login());
 
-        binding.lastLoginAsBtn.setBackgroundColor(android.R.color.transparent);
-        binding.lastLoginAsBtn.setOnClickListener(v ->
-                binding.inputName.setText(binding.lastLoginAsBtn.getText()));
+        binding.existingUserList.setOnItemClickListener((parent, view, position, id) ->
+                binding.inputName.setText(((TextView) view).getText()));
 
         // set last user btn help
         try {
-            List<User> lastLoginUser = getHelper().getUserDao().queryBuilder()
+            List<User> existingUsers = getHelper().getUserDao().queryBuilder()
                     .orderBy("lastLoginDate", false)
-                    .limit(1L)
                     .query();
-            if (!lastLoginUser.isEmpty()) {
-                binding.lastLoginAsBtn.setText(lastLoginUser.get(0).getUsername());
+            List<String> names = CollectionUtils.map(existingUsers, (user) -> user.getUsername());
+            if (!existingUsers.isEmpty()) {
+                binding.existingUserList.setAdapter(new ArrayAdapter<String>(this, R.layout.simple_text_line, names));
             }
         } catch (SQLException e) {
             Log.e(TAG, e.getMessage());

@@ -3,17 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="56dp"
+            android:paddingTop="40dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
@@ -65,15 +60,12 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/lastLoginAsLabel" />
 
-            <Button
-                android:id="@+id/lastLoginAsBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:layout_gravity="center_horizontal"
-                android:maxLines="1"
-                tools:text="username" />
+            <ListView
+                android:id="@+id/existingUserList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
-    </ScrollView>
+
 </layout>
 

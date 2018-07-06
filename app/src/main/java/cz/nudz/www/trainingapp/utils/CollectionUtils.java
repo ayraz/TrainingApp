@@ -5,6 +5,7 @@ import com.android.internal.util.Predicate;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by artem on 15-Jul-17.
@@ -54,5 +55,17 @@ public class CollectionUtils {
             array[i] = list.get(i);
         }
         return array;
+    }
+
+    public static <T, R> List<R> map(List<T> list, Func1<T, R> f) {
+        List<R> result = new ArrayList<>(list.size());
+        for (T e : list) {
+            result.add(f.call(e));
+        }
+        return result;
+    }
+
+    public interface Func1<T, R> {
+        R call(T in);
     }
 }
