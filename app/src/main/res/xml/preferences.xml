@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <cz.nudz.www.trainingapp.preferences.NumberPickerPreference
+        android:key="pref_trial_number"
+        android:title="Choose number of trials"
+        android:persistent="true"/>
+
+</PreferenceScreen>

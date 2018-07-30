@@ -25,6 +25,8 @@ import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.preferences.PreferenceActivity;
+import cz.nudz.www.trainingapp.preferences.SettingsFragment;
 import cz.nudz.www.trainingapp.summary.PerformanceSummaryFragment;
 import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
 import cz.nudz.www.trainingapp.training.CountDownFragment;
@@ -63,6 +65,11 @@ public class MainActivity extends BaseActivity implements
             case R.id.action_export_data:
                 if (DataExporter.verifyStoragePermissions(this)) {
                     dataExporter.export(getSessionManager().getUsername());
+                }
+                return true;
+            case R.id.action_settings:
+                if (!isFragmentShown(SettingsFragment.TAG)) {
+                    PreferenceActivity.startActivity(this);
                 }
                 return true;
             case R.id.action_logout:

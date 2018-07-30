@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -42,10 +43,7 @@ public class LoginActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // if there is existing session, spare user's time..
-//        if (getSessionManager().isLoggedIn()) {
-//            startActivity(new Intent(this, MainActivity.class));
-//        }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         binding = DataBindingUtil.setContentView(this, R.layout.login_activity);
         binding.btnLogin.setOnClickListener(v -> login());

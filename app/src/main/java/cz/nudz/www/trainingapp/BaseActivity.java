@@ -118,7 +118,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return transaction;
     }
 
-    public boolean isFragmentShown(String tag) {
+    protected boolean isFragmentShown(String tag) {
         return getSupportFragmentManager().findFragmentByTag(tag) != null;
     }
 

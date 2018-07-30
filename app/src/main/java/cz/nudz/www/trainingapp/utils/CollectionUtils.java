@@ -65,6 +65,20 @@ public class CollectionUtils {
         return result;
     }
 
+    /**
+     *
+     * @param start inclusive
+     * @param end exclusive
+     * @return
+     */
+    public static List<Integer> range(int start, int end) {
+        List<Integer> range = new ArrayList<>(end - start);
+        for (int i = start; i < end; ++i) {
+            range.add(i);
+        }
+        return range;
+    }
+
     public interface Func1<T, R> {
         R call(T in);
     }

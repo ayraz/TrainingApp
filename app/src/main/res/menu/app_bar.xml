@@ -6,6 +6,10 @@
         android:title="@string/actionExportData"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/action_settings"
+        android:title="@string/settings_option"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_logout"
         android:title="@string/logout"
         app:showAsAction="never"/>

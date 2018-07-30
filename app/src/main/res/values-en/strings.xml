@@ -110,5 +110,7 @@
 <string name="thankYouForTrainingMessage">Thank you for your efforts.\nTo end training session and see your results press below button:</string>
 <string name="finishBtnText">END</string>
 
+<string name="settings_option">Settings</string>
+
 <string name="homeFile">home_en.html</string>
 </resources>
