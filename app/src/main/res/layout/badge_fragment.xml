@@ -10,7 +10,7 @@
         android:padding="24dp">
 
         <RatingBar
-            android:theme="@style/RatingBar"
+            android:theme="@style/AppTheme.RatingBar"
             android:id="@+id/ratingBar"
             android:scaleX="1.2"
             android:scaleY="1.2"

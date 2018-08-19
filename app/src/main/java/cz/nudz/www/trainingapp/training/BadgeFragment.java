@@ -3,8 +3,6 @@ package cz.nudz.www.trainingapp.training;
 import android.app.Dialog;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -16,8 +14,7 @@ import android.view.Window;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.data.TrainingRepository;
-import cz.nudz.www.trainingapp.data.tables.TrainingSession;
+import cz.nudz.www.trainingapp.data.Repository;
 import cz.nudz.www.trainingapp.databinding.BadgeFragmentBinding;
 
 /**
@@ -64,7 +61,7 @@ public class BadgeFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.badge_fragment, container, false);
-        TrainingRepository tr = new TrainingRepository((BaseActivity) getActivity());
+        Repository tr = new Repository((BaseActivity) getActivity());
 
         int rating = 0;
         StringBuilder msg = new StringBuilder();

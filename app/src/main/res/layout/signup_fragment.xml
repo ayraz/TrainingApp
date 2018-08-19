@@ -16,12 +16,6 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
-            <!--<ImageView android:src="@drawable/logo"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="72dp"-->
-                <!--android:layout_marginBottom="24dp"-->
-                <!--android:layout_gravity="center_horizontal" />-->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,16 +38,31 @@
                     android:hint="@string/usernameLabel" />
             </android.support.design.widget.TextInputLayout>
 
-            <!-- Signup Button -->
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_signup"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:padding="12dp"
-                android:text="@string/createUserBtnText"/>
+                android:orientation="horizontal">
 
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:padding="12dp"
+                    android:text="@string/cancelBtnText"/>
+
+                <!-- Signup Button -->
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:padding="12dp"
+                    android:text="@string/createUserBtnText"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </layout>

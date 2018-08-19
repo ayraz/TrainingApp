@@ -1,14 +1,11 @@
 package cz.nudz.www.trainingapp.summary;
 
-import android.app.Activity;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +25,7 @@ import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.data.TrainingRepository;
+import cz.nudz.www.trainingapp.data.Repository;
 import cz.nudz.www.trainingapp.databinding.ChartFragmentBinding;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.utils.Utils;
@@ -44,14 +41,14 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
     protected final List<AsyncTask> tasks = new ArrayList<>();
     protected ChartFragmentBinding binding;
     protected BaseActivity activity;
-    protected TrainingRepository trainingRepository;
+    protected Repository repository;
     private Toast toast;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.chart_fragment, container, false);
         activity = (BaseActivity) getActivity();
-        trainingRepository = new TrainingRepository(activity);
+        repository = new Repository(activity);
 
         setChartNoData(binding.colorChart, binding.positionChart, binding.shapeChart);
 

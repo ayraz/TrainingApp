@@ -17,7 +17,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.R;
-import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 /**
@@ -81,7 +80,7 @@ public class PerformanceSummaryFragment extends LineChartFragment<String, Intege
 
         @Override
         protected List<Pair<String, Integer>> doInBackground(String... strings) {
-            return trainingRepository.getAllSessionParadigmData(strings[0]);
+            return repository.getAllSessionParadigmData(strings[0]);
         }
     }
 }

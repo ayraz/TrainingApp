@@ -32,9 +32,9 @@ import cz.nudz.www.trainingapp.training.TrainingActivity;
 /**
  * Created by artem on 26-Sep-17.
  */
-public class TrainingRepository {
+public class Repository {
 
-    public static final String TAG = TrainingRepository.class.getSimpleName();
+    public static final String TAG = Repository.class.getSimpleName();
 
     private final Context context;
     private final TrainingAppDbHelper dbHelper;
@@ -65,7 +65,7 @@ public class TrainingRepository {
             "ORDER BY ts.startDate DESC, s.id ASC " +
             "LIMIT " + TrainingActivity.DEFAULT_SEQUENCE_COUNT;
 
-    public TrainingRepository(BaseActivity context) {
+    public Repository(BaseActivity context) {
         this.context = context.getApplicationContext();
         this.dbHelper = context.getHelper();
         this.sessionManager = context.getSessionManager();
@@ -300,6 +300,16 @@ public class TrainingRepository {
             }
         }
         return max;
+    }
+
+    public static User createUser(final String username, RuntimeExceptionDao<User, String> userDao) {
+        User newUser = new User();
+        newUser.setUsername(username);
+        Date now = new Date();
+        newUser.setRegistrationDate(now);
+        newUser.setLastLoginDate(now);
+        userDao.create(newUser);
+        return newUser;
     }
 
     public RuntimeExceptionDao<Paradigm, Integer> getParadigmDao() {

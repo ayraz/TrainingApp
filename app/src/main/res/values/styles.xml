@@ -8,40 +8,23 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/appBackground</item>
-        <item name="android:textViewStyle">@style/TextStyle</item>
-    </style>
-
-    <style name="MainScreenButton" parent="">
-        <item name="android:layout_width">200dp</item>
-        <item name="android:layout_height">180dp</item>
-        <item name="android:gravity">bottom|center</item>
-        <item name="android:paddingTop">25dp</item>
-        <item name="android:paddingBottom">25dp</item>
-        <!--<item name="app:layout_constraintBottom_toBottomOf">parent</item>-->
-        <!--<item name="app:layout_constraintTop_toTopOf">parent</item>-->
-    </style>
-
-    <style name="CustomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
-        <item name="android:windowNoTitle">false</item>
-    </style>
-
-    <style name="AppTheme.CardButton" parent="Base.Widget.AppCompat.Button">
-        <item name="colorButtonNormal">@color/white</item>
+        <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
     </style>
 
     <style name="AppTheme.LightBlueAccent">
         <item name="colorAccent">@color/lightBlue</item>
     </style>
-    <style name="TextStyle">
+
+    <style name="AppTheme.TextStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="TitleText" parent="TextAppearance.AppCompat.Title">
+    <style name="AppTheme.TitleText" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="RatingBar" parent="Theme.AppCompat">
+    <style name="AppTheme.RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/gold</item>
     </style>

@@ -17,6 +17,7 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
+import cz.nudz.www.trainingapp.preferences.PreferenceManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -26,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static Logger logger = LoggerFactory.getLogger(OrmLiteBaseActivity.class);
 
     private SessionManager sessionManager;
+    private PreferenceManager preferenceManager;
 
     public BaseActivity() {
     }
@@ -35,6 +37,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             this.sessionManager = new SessionManager(this);
         }
         return this.sessionManager;
+    }
+
+    public PreferenceManager getPreferenceManager() {
+        if (this.preferenceManager == null) {
+            this.preferenceManager = new PreferenceManager(this);
+        }
+        return this.preferenceManager;
     }
 
     public TrainingAppDbHelper getHelper() {

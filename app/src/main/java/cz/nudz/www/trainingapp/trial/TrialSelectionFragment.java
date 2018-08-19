@@ -39,8 +39,8 @@ public class TrialSelectionFragment extends DialogFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.trial_selection_fragment, container, false);
 
         binding.paradigmTypeList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.paradigmTypeList.setAdapter(new TrialRowAdapter((v, paradigmType, difficulty, time) ->
-                listener.onTrialSelected(paradigmType, difficulty, time)));
+        binding.paradigmTypeList.setAdapter(new TrialRowAdapter((v, paradigmType, difficulty) ->
+                listener.onTrialSelected(paradigmType, difficulty)));
 
         return binding.getRoot();
     }
@@ -58,6 +58,6 @@ public class TrialSelectionFragment extends DialogFragment {
 
     public interface OnTrialSelectedListener {
 
-        void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty, int presentationTime);
+        void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty);
     }
 }

@@ -7,10 +7,7 @@ import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.NumberPicker;
-
-import java.util.ArrayList;
 
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.CollectionUtils;

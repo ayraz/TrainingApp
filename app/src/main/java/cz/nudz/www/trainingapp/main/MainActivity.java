@@ -16,17 +16,21 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
+import cz.nudz.www.trainingapp.data.Repository;
+import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
+import cz.nudz.www.trainingapp.login.SignupFragment;
 import cz.nudz.www.trainingapp.preferences.PreferenceActivity;
-import cz.nudz.www.trainingapp.preferences.SettingsFragment;
+import cz.nudz.www.trainingapp.preferences.PreferenceFragment;
 import cz.nudz.www.trainingapp.summary.PerformanceSummaryFragment;
 import cz.nudz.www.trainingapp.summary.SessionRecapFragment;
 import cz.nudz.www.trainingapp.training.CountDownFragment;
@@ -41,7 +45,8 @@ public class MainActivity extends BaseActivity implements
         TrialSelectionFragment.OnTrialSelectedListener,
         TrainingFragment.TrainingFragmentListener,
         MessageFragment.MessageFragmentListener,
-        CountDownFragment.CountDownListener {
+        CountDownFragment.CountDownListener,
+        SignupFragment.SignupListener {
 
     private static final String KEY_ACTIVE_OPTION_POS = "KEY_ACTIVE_OPTION_POS";
     private static final String KEY_INITIAL_FRAGMENT = "KEY_INITIAL_FRAGMENT";
@@ -68,7 +73,7 @@ public class MainActivity extends BaseActivity implements
                 }
                 return true;
             case R.id.action_settings:
-                if (!isFragmentShown(SettingsFragment.TAG)) {
+                if (!isFragmentShown(PreferenceFragment.TAG)) {
                     PreferenceActivity.startActivity(this);
                 }
                 return true;
@@ -78,6 +83,10 @@ public class MainActivity extends BaseActivity implements
                 }
                 getSessionManager().logoutUser();
                 return true;
+            case R.id.action_create_user: {
+                final SignupFragment signupFragment = new SignupFragment();
+                signupFragment.show(getSupportFragmentManager(), SignupFragment.TAG);
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -86,6 +95,11 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.app_bar, menu);
+
+        boolean isAdminSession = getPreferenceManager().getIsAdminSession();
+        menu.findItem(R.id.action_settings).setVisible(isAdminSession);
+        menu.findItem(R.id.action_create_user).setVisible(isAdminSession);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -205,17 +219,18 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty, int presentationTime) {
+    public void onTrialSelected(ParadigmType paradigmType, Difficulty difficulty) {
         showFragmentWithAnimAndHistory(binding.fragmentContainer.getId(),
-                TrainingFragment.newInstance(paradigmType,
-                        difficulty, TrialSelectionFragment.TEST_TRIAL_COUNT, presentationTime),
+                TrainingFragment.newInstance(paradigmType, difficulty,
+                        getPreferenceManager().getTrialCount(),
+                        getPreferenceManager().getPresentationTime()),
                 TrainingFragment.TAG);
     }
 
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
         getSupportFragmentManager().popBackStack();
-        Utils.showSequenceFeedback(answers, TrialSelectionFragment.TEST_TRIAL_COUNT, this,
+        Utils.showSequenceFeedback(answers, getPreferenceManager().getTrialCount(), this,
                 getSupportFragmentManager().findFragmentByTag(getLastFragment().getName()).getView());
     }
 
@@ -246,5 +261,11 @@ public class MainActivity extends BaseActivity implements
     private void navigateToTrainingActivity() {
         TrainingActivity.startActivity(this, firstParadigm);
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Override
+    public void onUserCreated(String username) {
+        // create and store new user
+        Repository.createUser(username, getHelper().getUserDao());
     }
 }
