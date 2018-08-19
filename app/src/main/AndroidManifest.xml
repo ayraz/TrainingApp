@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".main.MainActivity" />
-        <!-- Training mustn't be interrupted by rotation/keyboard/etc. -->
+        <!-- Training must not be interrupted by rotation, keyboard, or other config changes -->
         <activity
             android:name=".training.TrainingActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|mcc|mnc"

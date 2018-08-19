@@ -21,6 +21,7 @@
 <string name="newUserTitle">New User</string>
 <string name="userAlreadyExistsError">User already exists.</string>
 <string name="createUserBtnText">Create user</string>
+<string name="cancelBtnText">Cancel</string>
 <string name="userDoesNotExistError">User does not exist.</string>
 <string name="difficultyLoweredMessage">YOU ARE DOING WELL,\nNOW LETS REST A LITTLE BIT</string>
 <string name="difficultyRaisedMessage">GREAT, YOU ARE DOING EXCELLENT!\nLETS INCREASE THE DIFFICULTY</string>
@@ -111,6 +112,8 @@
 <string name="finishBtnText">END</string>
 
 <string name="settings_option">Settings</string>
+<string name="settings_set_trial_num">Set number of trials</string>
+<string name="settings_set_trial_presentation">Set presentation time</string>
 
 <string name="homeFile">home_en.html</string>
 </resources>

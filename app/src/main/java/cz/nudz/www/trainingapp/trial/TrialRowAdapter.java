@@ -77,8 +77,6 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
         private final ImageView icon;
         private final TextView tryBtn;
         private final NumberPicker difficultyPicker;
-        private final SeekBar seekBar;
-        private final TextView seekBarText;
 
         private int presentationTime;
 
@@ -87,32 +85,10 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
             this.tryBtn = v.findViewById(R.id.tryBtn);
             this.difficultyPicker = v.findViewById(R.id.difficultyPicker);
             this.icon = v.findViewById(R.id.icon);
-            this.seekBar = v.findViewById(R.id.seekBar);
-            this.seekBarText = v.findViewById(R.id.seekBarText);
 
             tryBtn.setOnClickListener(view -> TrialRowAdapter.this.callback.onClick(view,
                     ParadigmSet.getAt(getAdapterPosition()),
-                    Difficulty.values()[ViewHolder.this.difficultyPicker.getValue() - 1],
-                    ViewHolder.this.presentationTime));
-
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                    // map function
-                    presentationTime = progress * 50 + 100;
-                    seekBarText.setText(presentationTime + "ms");
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-            });
+                    Difficulty.values()[ViewHolder.this.difficultyPicker.getValue() - 1]));
         }
 
         public TextView getTryBtn() {
@@ -130,6 +106,6 @@ public class TrialRowAdapter extends RecyclerView.Adapter<TrialRowAdapter.ViewHo
 
     public interface OnParadigmRowClick {
 
-        void onClick(View v, ParadigmType paradigmType, Difficulty difficulty, int presentationTime);
+        void onClick(View v, ParadigmType paradigmType, Difficulty difficulty);
     }
 }

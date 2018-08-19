@@ -8,9 +8,13 @@
 
     <item android:id="@+id/action_settings"
         android:title="@string/settings_option"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_logout"
         android:title="@string/logout"
         app:showAsAction="never"/>
+
+    <item android:id="@+id/action_create_user"
+        android:title="@string/createUserBtnText"
+        app:showAsAction="ifRoom"/>
 </menu>

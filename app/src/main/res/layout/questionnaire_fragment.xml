@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/difficultyQuestion"
-            style="@style/TitleText"
+            style="@style/AppTheme.TitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -108,7 +108,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="48dp"
             android:textAlignment="center"
-            style="@style/TitleText"
+            style="@style/AppTheme.TitleText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/difficultyGrp"
@@ -198,7 +198,7 @@
 
         <TextView
             android:id="@+id/titleText"
-            style="@style/TitleText"
+            style="@style/AppTheme.TitleText"
             android:layout_width="0dp"
             android:layout_height="28dp"
             android:layout_marginBottom="8dp"

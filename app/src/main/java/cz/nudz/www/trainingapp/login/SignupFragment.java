@@ -53,9 +53,12 @@ public class SignupFragment extends DialogFragment {
                             getString(R.string.userAlreadyExistsError));
                 } else if (listner != null) {
                     listner.onUserCreated(username);
+                    dismiss();
                 }
             }
         });
+
+        binding.btnCancel.setOnClickListener(view -> dismiss());
 
         return binding.getRoot();
     }

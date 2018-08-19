@@ -20,6 +20,7 @@
     <string name="newUserTitle">Nový Uživatel</string>
     <string name="userAlreadyExistsError">Uživatel s daným uživatelským jménem již existuje.</string>
     <string name="createUserBtnText">Vytvořit uživatele</string>
+    <string name="cancelBtnText">Zrušit</string>
     <string name="userDoesNotExistError">Tento uživatel neexistuje.</string>
     <string name="difficultyLoweredMessage">VEDETE SI DOBŘE,\nTEĎ SI NA CHVÍLI TROCHU ODPOČINEME</string>
     <string name="difficultyRaisedMessage">VÝBORNĚ, TO VÁM ŠLO SKVĚLE!\nZKUSÍME ZVÝŠIT ÚROVEŇ</string>
@@ -110,6 +111,8 @@
     <string name="finishBtnText">KONEC</string>
 
     <string name="settings_option">Nastavení</string>
+    <string name="settings_set_trial_num">Nastavit počet pokusů</string>
+    <string name="settings_set_trial_presentation">Nastavit prezentační čas</string>
 
     <string name="homeFile">home.html</string>
 </resources>

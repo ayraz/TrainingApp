@@ -15,7 +15,7 @@ import java.util.List;
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.TrainingAppDbHelper;
-import cz.nudz.www.trainingapp.data.TrainingRepository;
+import cz.nudz.www.trainingapp.data.Repository;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
 import cz.nudz.www.trainingapp.data.tables.Sequence;
 import cz.nudz.www.trainingapp.data.tables.TrainingSession;
@@ -41,7 +41,7 @@ public class TrainingActivity extends BaseActivity implements
 
     private TrainingActivityBinding binding;
     private int sequenceCount = 0;
-    private TrainingRepository tr;
+    private Repository tr;
 
     private ParadigmType currentParadigmType;
     // each paradigm starts with lowest difficulty.
@@ -67,7 +67,7 @@ public class TrainingActivity extends BaseActivity implements
         enableImmersiveMode();
 
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-        tr = new TrainingRepository(this);
+        tr = new Repository(this);
         currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         containerId = binding.trainingActivityFragmentContainer.getId();
 

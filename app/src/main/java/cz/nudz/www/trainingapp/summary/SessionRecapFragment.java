@@ -72,7 +72,7 @@ public class SessionRecapFragment extends LineChartFragment<String, Integer> {
 
         @Override
         protected List<Pair<String, Integer>> doInBackground(String... strings) {
-            return trainingRepository.getLastSessionParadigmData(strings[0]);
+            return repository.getLastSessionParadigmData(strings[0]);
         }
     }
 }

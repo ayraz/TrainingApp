@@ -25,8 +25,7 @@ import cz.nudz.www.trainingapp.main.MainActivity;
 import cz.nudz.www.trainingapp.utils.CollectionUtils;
 import cz.nudz.www.trainingapp.utils.Utils;
 
-public class LoginActivity extends BaseActivity implements
-        SignupFragment.SignupListener {
+public class LoginActivity extends BaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private LoginActivityBinding binding;
@@ -71,10 +70,6 @@ public class LoginActivity extends BaseActivity implements
         if (Utils.isNullOrEmpty(username)) {
             Utils.showAlertDialog(this, null,
                     getString(R.string.emptyUsernameError));
-        } else if (username.equals("##")) {
-            // special user creation mode
-            final SignupFragment signupFragment = new SignupFragment();
-            signupFragment.show(getSupportFragmentManager(), SignupFragment.TAG);
         } else {
             try {
                 final RuntimeExceptionDao<User, String> userDao = getHelper().getUserDao();
@@ -83,6 +78,10 @@ public class LoginActivity extends BaseActivity implements
                     Utils.showAlertDialog(this, null,
                             getString(R.string.userDoesNotExistError));
                 } else {
+                    if (username.equals("##")) {
+                        // mark this session as admin
+                        getPreferenceManager().setIsAdminSession(true);
+                    }
                     startUserSession(user);
                 }
             } catch (RuntimeException e) {
@@ -100,17 +99,5 @@ public class LoginActivity extends BaseActivity implements
 
         getSessionManager().createSession(user.getUsername());
         startActivity(new Intent(this, MainActivity.class));
-    }
-
-    @Override
-    public void onUserCreated(String username) {
-        // create and store new user
-        User newUser = new User();
-        newUser.setUsername(username);
-        Date now = new Date();
-        newUser.setRegistrationDate(now);
-        newUser.setLastLoginDate(now);
-        getHelper().getUserDao().create(newUser);
-        startUserSession(newUser);
     }
 }

@@ -25,9 +25,11 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
     private static final String TAG = TrainingAppDbHelper.class.getSimpleName();
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "TrainingApp.db";
+    private final Context context;
 
     public TrainingAppDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -39,6 +41,9 @@ public class TrainingAppDbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Paradigm.class);
             TableUtils.createTable(connectionSource, Sequence.class);
             TableUtils.createTable(connectionSource, Trial.class);
+
+            // Inject admin user
+            Repository.createUser("##", getUserDao());
         } catch (SQLException e) {
             logger.error(TAG, "Couldn't create a table", e);
             throw new RuntimeException(e);

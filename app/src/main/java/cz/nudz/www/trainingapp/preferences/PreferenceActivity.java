@@ -2,12 +2,14 @@ package cz.nudz.www.trainingapp.preferences;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+
+import java.util.Date;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
+import cz.nudz.www.trainingapp.data.tables.User;
+import cz.nudz.www.trainingapp.login.SignupFragment;
 
 public class PreferenceActivity extends BaseActivity {
 
@@ -24,7 +26,7 @@ public class PreferenceActivity extends BaseActivity {
         setTitle(R.string.settings_option);
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.containerId, new SettingsFragment(), SettingsFragment.TAG)
+                .replace(R.id.containerId, new PreferenceFragment(), PreferenceFragment.TAG)
                 .commit();
     }
 }

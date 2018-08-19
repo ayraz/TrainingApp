@@ -2,9 +2,18 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <cz.nudz.www.trainingapp.preferences.NumberPickerPreference
-        android:key="pref_trial_number"
-        android:title="Choose number of trials"
+    <EditTextPreference
+        android:key="@string/pref_trial_number"
+        android:title="@string/settings_set_trial_num"
+        android:inputType="number"
+        android:persistent="true"/>
+
+    <EditTextPreference
+        android:key="@string/pref_trial_presentation_time"
+        android:title="@string/settings_set_trial_presentation"
+        android:inputType="number"
+        android:summary="How long a trial's presentation time will last in milliseconds"
+        android:dialogMessage="How long a trial's presentation time will last in milliseconds"
         android:persistent="true"/>
 
 </PreferenceScreen>
