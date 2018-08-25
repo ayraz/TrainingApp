@@ -16,7 +16,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
@@ -24,7 +23,6 @@ import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.data.Repository;
-import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
@@ -100,6 +98,9 @@ public class MainActivity extends BaseActivity implements
         menu.findItem(R.id.action_settings).setVisible(isAdminSession);
         menu.findItem(R.id.action_create_user).setVisible(isAdminSession);
 
+        getSupportActionBar().setLogo(R.drawable.icons8_filter);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -108,6 +109,7 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
+
         dataExporter = new DataExporter(this, new DataExporter.DataExportListener() {
             @Override
             public void onExportStart() {
@@ -141,16 +143,16 @@ public class MainActivity extends BaseActivity implements
                     }
                 }
                 switch (optionStringId) {
-                    case R.string.introOptionTitle:
+                    case R.string.sideMenuOptionIntro:
                         showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
                         break;
-                    case R.string.trainingOptionTitle:
+                    case R.string.sideMenuOptionTraining:
                         showFragmentWithAnim(containerId, MessageFragment.newInstance(firstParadigm), MessageFragment.TAG);
                         break;
-                    case R.string.tutorialOptionTitle:
+                    case R.string.sideMenuOptionTutorial:
                         showFragmentWithAnim(containerId, new TutorialPagerFragment(), TutorialPagerFragment.TAG);
                         break;
-                    case R.string.trialOptionTitle:
+                    case R.string.sideMenuOptionTrial:
                         showFragmentWithAnim(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:

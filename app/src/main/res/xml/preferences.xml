@@ -4,16 +4,16 @@
 
     <EditTextPreference
         android:key="@string/pref_trial_number"
-        android:title="@string/settings_set_trial_num"
+        android:title="@string/settingsSetTrialNum"
         android:inputType="number"
-        android:summary="@string/settings_set_trial_num_summary"
+        android:summary="@string/settingsSetTrialNumSummary"
         android:persistent="true"/>
 
     <EditTextPreference
         android:key="@string/pref_trial_presentation_time"
-        android:title="@string/settings_set_trial_presentation"
+        android:title="@string/settingsSetTrialPresentation"
         android:inputType="number"
-        android:summary="@string/settings_set_trial_presentation_summary"
+        android:summary="@string/settingsSetTrialPresentationSummary"
         android:persistent="true"/>
 
 </PreferenceScreen>

@@ -8,7 +8,7 @@
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_settings"
-        android:title="@string/settings_option"
+        android:title="@string/settingsOption"
         android:icon="@drawable/ic_settings_white_24dp"
         app:showAsAction="ifRoom"/>
 

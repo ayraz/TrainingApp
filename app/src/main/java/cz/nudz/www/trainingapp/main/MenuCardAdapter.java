@@ -36,12 +36,14 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
     private static final Map<Integer, List<Pair<Integer, Integer>>> CARD_OPTIONS_MAP = new HashMap<>();
     static {
         CARD_OPTIONS_MAP.put(R.string.mainCardTitle, Arrays.asList(
-                new Pair<>(R.string.introOptionTitle, R.drawable.icons8_home)
+                new Pair<>(R.string.sideMenuOptionIntro, R.drawable.icons8_home),
+                new Pair<>(R.string.sideMenuOptionAbout, R.drawable.icons8_about)
         ));
         CARD_OPTIONS_MAP.put(R.string.modesCardTitle, Arrays.asList(
-            new Pair<>(R.string.tutorialOptionTitle, R.drawable.icons8_course),
-            new Pair<>(R.string.trialOptionTitle, R.drawable.icons8_survey),
-            new Pair<>(R.string.trainingOptionTitle, R.drawable.icons8_barbell)
+            new Pair<>(R.string.sideMenuOptionTutorial, R.drawable.icons8_classroom),
+            new Pair<>(R.string.sideMenuOptionTrial, R.drawable.icons8_test_tube),
+            new Pair<>(R.string.sideMenuOptionTraining, R.drawable.icons8_barbell),
+            new Pair<>(R.string.sideMenuOptionTest, R.drawable.icons8_survey)
         ));
         CARD_OPTIONS_MAP.put(R.string.resultsCardTitle, Arrays.asList(
             new Pair<>(R.string.lastSessionPerformanceOptionTitle, R.drawable.icons8_area_chart),
@@ -147,7 +149,7 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
             holder.icon.setImageDrawable(context.getResources().getDrawable(iconId));
 
             // catch home btn for later
-            if (titleId == R.string.introOptionTitle) home = holder.itemView;
+            if (titleId == R.string.sideMenuOptionIntro) home = holder.itemView;
             // re-highlight last active view if activity was recreated
             if (activeOptionPosition != null
                 && activeOptionPosition.get(0) == positionInParent
