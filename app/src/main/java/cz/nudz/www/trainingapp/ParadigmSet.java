@@ -12,39 +12,72 @@ import cz.nudz.www.trainingapp.enums.ParadigmType;
 
 public abstract class ParadigmSet {
 
-    private final static List<ParadigmType> PARADIGM_TYPE_SET = new ArrayList<>(Arrays.asList(
+    private final static List<ParadigmType> TRAINING_PARADIGM_TYPE_SET = new ArrayList<>(Arrays.asList(
+            ParadigmType.COLOR,
+            ParadigmType.POSITION));
+
+    private final static List<ParadigmType> TEST_PARADIGM_TYPE_SET = new ArrayList<>(Arrays.asList(
+            ParadigmType.COLOR,
+            ParadigmType.SHAPE));
+
+    private final static List<ParadigmType> ALL_PARADIGM_TYPE_SET = new ArrayList<>(Arrays.asList(
             ParadigmType.COLOR,
             ParadigmType.POSITION,
             ParadigmType.SHAPE));
 
+    public enum OperationMode {
+        TRAINING,
+        TEST,
+        ALL
+    }
+
+    private static List<ParadigmType> paradigmSet;
+
+    public static void setOperationMode(final OperationMode mode) {
+        switch (mode) {
+            case TEST:
+                paradigmSet = TEST_PARADIGM_TYPE_SET;
+                break;
+            case TRAINING:
+                paradigmSet = TRAINING_PARADIGM_TYPE_SET;
+                break;
+            case ALL:
+                paradigmSet = ALL_PARADIGM_TYPE_SET;
+                break;
+            default:
+                throw new RuntimeException(String.format(mode == null
+                        ? "Mode is null" : "Invalid mode: %s", mode));
+        }
+    }
+    
     /**
      *
      * @param currentParadigmType
      * @return Returns next paradigm in a fixed sequence or null if there are no more.
      */
     public static ParadigmType getNext(ParadigmType currentParadigmType) {
-        int i = PARADIGM_TYPE_SET.indexOf(currentParadigmType);
+        int i = paradigmSet.indexOf(currentParadigmType);
         // no paradigm left
-        if (i == PARADIGM_TYPE_SET.size() - 1) {
+        if (i == paradigmSet.size() - 1) {
             return null;
         } else {
-            return PARADIGM_TYPE_SET.get(i + 1);
+            return paradigmSet.get(i + 1);
         }
     }
 
     public static ParadigmType getAt(int i) {
-        return PARADIGM_TYPE_SET.get(i);
+        return paradigmSet.get(i);
     }
 
     public static int indexOf(ParadigmType paradigmType) {
-        return PARADIGM_TYPE_SET.indexOf(paradigmType);
+        return paradigmSet.indexOf(paradigmType);
     }
 
     public static List<ParadigmType> getParadigmTypes() {
-        return new ArrayList<>(PARADIGM_TYPE_SET);
+        return new ArrayList<>(paradigmSet);
     }
 
     public static int size() {
-        return PARADIGM_TYPE_SET.size();
+        return paradigmSet.size();
     }
 }

@@ -3,7 +3,6 @@ package cz.nudz.www.trainingapp.training;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -40,7 +39,7 @@ public class MessageFragment extends Fragment {
     public static final String TAG = MessageFragment.class.getSimpleName();
 
     private MessageFragmentBinding binding;
-    private ParadigmType currentParadigmType;
+    private ParadigmType paradigmType;
     private Adjustment adjustment;
     private MessageFragmentListener listener;
     private BaseActivity parent;
@@ -93,7 +92,7 @@ public class MessageFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.message_fragment, container, false);
 
         parent = (BaseActivity) getActivity();
-        currentParadigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
+        paradigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
         if (getArguments().containsKey(KEY_ADJUSTMENT)) {
             adjustment = Adjustment.valueOf(getArguments().getString(KEY_ADJUSTMENT));
             currSeqCount = getArguments().getInt(KEY_SEQ_COUNT);
@@ -130,7 +129,7 @@ public class MessageFragment extends Fragment {
         binding.warningFragmentExplanation.setText(Html.fromHtml(getString(getHelpTextForParadigmPause())));
         binding.paradigmIcon.setVisibility(VISIBLE);
         binding.paradigmIcon.setImageDrawable(getResources().getDrawable(
-                TutorialFragmentFactory.getIconByParadigm(currentParadigmType)));
+                TutorialFragmentFactory.getIconByParadigm(paradigmType)));
     }
 
     private void adjustGuide() {
@@ -182,7 +181,7 @@ public class MessageFragment extends Fragment {
     }
 
     private int getHelpTextForParadigmPause() {
-        switch (currentParadigmType) {
+        switch (paradigmType) {
             case COLOR:
                 return R.string.startHelpColorParadigm;
             case SHAPE:
@@ -206,7 +205,7 @@ public class MessageFragment extends Fragment {
     }
 
     private boolean isFirstParadigm() {
-        return ParadigmSet.indexOf(currentParadigmType) == 0;
+        return ParadigmSet.indexOf(paradigmType) == 0;
     }
 
     private IllegalStateException error(final String message) throws IllegalStateException {

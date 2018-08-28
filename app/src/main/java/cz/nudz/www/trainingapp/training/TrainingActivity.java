@@ -36,25 +36,24 @@ public class TrainingActivity extends BaseActivity implements
         ThankYouFragment.ThankYouFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
-    public static final int DEFAULT_SEQUENCE_COUNT = 7;
-    public static final int DEFAULT_TRIAL_COUNT = 20;
+    public static final int DEFAULT_SEQUENCE_COUNT = 1;
+    public static final int DEFAULT_TRIAL_COUNT = 1;
 
     private TrainingActivityBinding binding;
-    private int sequenceCount = 0;
-    private Repository tr;
-
-    private ParadigmType currentParadigmType;
-    // each paradigm starts with lowest difficulty.
-    private Difficulty currentDifficulty = Difficulty.ONE;
-    private TrainingSession currentSession;
-    private Paradigm currentParadigm;
-    private Sequence currentSequence;
-    private Date paradigmPauseStartTime;
     private int containerId;
+    private Repository repository;
 
-    public static void startActivity(Context context, @NonNull ParadigmType paradigmType) {
+    private ParadigmType paradigmType;
+    // each paradigm starts with lowest difficulty.
+    private Difficulty difficulty = Difficulty.ONE;
+    private TrainingSession currentSession;
+    private Paradigm paradigm;
+    private Sequence sequence;
+    private Date paradigmPauseStartTime;
+    private int sequenceCount = 0;
+
+    public static void startActivity(@NonNull final Context context) {
         Intent intent = new Intent(context, TrainingActivity.class);
-        intent.putExtra(KEY_PARADIGM, paradigmType.toString());
         // do not add activity to navigation stack
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
@@ -67,12 +66,13 @@ public class TrainingActivity extends BaseActivity implements
         enableImmersiveMode();
 
         binding = DataBindingUtil.setContentView(this, R.layout.training_activity);
-        tr = new Repository(this);
-        currentParadigmType = ParadigmType.valueOf(getIntent().getStringExtra(KEY_PARADIGM));
         containerId = binding.trainingActivityFragmentContainer.getId();
+        repository = new Repository(this);
 
-        currentSession = tr.startAndStoreTrainingSession();
-        currentParadigm = tr.startAndStoreParadigm(currentSession, currentParadigmType);
+        paradigmType = ParadigmSet.getAt(0);
+
+        currentSession = repository.startAndStoreTrainingSession();
+        paradigm = repository.startAndStoreParadigm(currentSession, paradigmType);
         nextSequence();
     }
 
@@ -118,8 +118,8 @@ public class TrainingActivity extends BaseActivity implements
             nextSequence();
         } else if (isParadigmFinished()) {
             long paradigmPauseDuration = (new Date()).getTime() - paradigmPauseStartTime.getTime();
-            currentParadigm.setPauseDurationMillis(paradigmPauseDuration);
-            tr.updateParadigm(currentParadigm);
+            paradigm.setPauseDurationMillis(paradigmPauseDuration);
+            repository.updateParadigm(paradigm);
 
             nextParadigm();
         }
@@ -128,15 +128,15 @@ public class TrainingActivity extends BaseActivity implements
     @Override
     public void onSequenceFinished(List<Boolean> answers) {
         sequenceCount += 1;
-        tr.finishAndUpdateSequence(currentSequence);
+        repository.finishAndUpdateSequence(sequence);
 
         // PARADIGM FINISHED
         if (isParadigmFinished()) {
-            tr.finishAndUpdateParadigm(currentParadigm);
+            repository.finishAndUpdateParadigm(paradigm);
             // SESSION FINISHED
             if (isTrainingFinished()) {
-                tr.finishAndUpdateSession(currentSession);
-                if (tr.doManySessionsExist()) {
+                repository.finishAndUpdateSession(currentSession);
+                if (repository.doManySessionsExist()) {
                     BadgeFragment badgeFragment = new BadgeFragment();
                     badgeFragment.show(getSupportFragmentManager(), BadgeFragment.TAG);
                 } else {
@@ -146,24 +146,24 @@ public class TrainingActivity extends BaseActivity implements
                 paradigmPauseStartTime = new Date();
                 // next cannot be null because end of training is handled above..
                 showFragmentWithAnim(containerId, PauseFragment.newInstance(
-                        ParadigmSet.getNext(currentParadigmType)), PauseFragment.TAG);
+                        ParadigmSet.getNext(paradigmType)), PauseFragment.TAG);
             }
         // SEQUENCE FINISHED
         } else if (sequenceCount < DEFAULT_SEQUENCE_COUNT) {
-            Difficulty newDifficulty = Utils.adjustDifficulty(answers, currentDifficulty);
+            Difficulty newDifficulty = Utils.adjustDifficulty(answers, difficulty);
             Adjustment adjustment = Adjustment.SAME;
             if (newDifficulty != null) {
-                if (newDifficulty.ordinal() > currentDifficulty.ordinal()) {
+                if (newDifficulty.ordinal() > difficulty.ordinal()) {
                     adjustment = Adjustment.RAISED;
-                } else if (newDifficulty.ordinal() < currentDifficulty.ordinal()) {
+                } else if (newDifficulty.ordinal() < difficulty.ordinal()) {
                     adjustment = Adjustment.LOWERED;
                 }
-                currentDifficulty = newDifficulty;
+                difficulty = newDifficulty;
             } else {
                 // TODO: handle max level
             }
             showFragmentWithAnim(containerId, PauseFragment.newInstance(
-                    currentParadigmType, adjustment, sequenceCount), PauseFragment.TAG);
+                    paradigmType, adjustment, sequenceCount), PauseFragment.TAG);
         }
     }
 
@@ -174,7 +174,7 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private boolean isTrainingFinished() {
-        return ParadigmSet.getNext(currentParadigmType) == null;
+        return ParadigmSet.getNext(paradigmType) == null;
     }
 
     private boolean isParadigmFinished() {
@@ -182,35 +182,35 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private void nextSequence() {
-        currentSequence = tr.startAndStoreSequence(currentParadigm, currentDifficulty);
+        sequence = repository.startAndStoreSequence(paradigm, difficulty);
 
         showFragment(containerId,
-                TrainingFragment.newInstance(currentParadigmType, currentDifficulty), TrainingFragment.TAG);
+                TrainingFragment.newInstance(paradigmType, difficulty), TrainingFragment.TAG);
         // TODO remove after debug
         binding.seqCount.setText(String.format("Seq. #: %s", String.valueOf(sequenceCount + 1)));
     }
 
     private void nextParadigm() {
-        ParadigmType next = ParadigmSet.getNext(currentParadigmType);
+        ParadigmType next = ParadigmSet.getNext(paradigmType);
         if (next != null) {
             // reset counter
             sequenceCount = 0;
-            currentParadigmType = next;
-            currentDifficulty = Difficulty.ONE;
+            paradigmType = next;
+            difficulty = Difficulty.ONE;
 
-            currentParadigm = tr.startAndStoreParadigm(currentSession, next);
+            paradigm = repository.startAndStoreParadigm(currentSession, next);
 
             nextSequence();
 
             // TODO remove after debug
-            binding.paradigmCount.setText(currentParadigmType.toString());
+            binding.paradigmCount.setText(paradigmType.toString());
         } else {
             Utils.showAlertDialog(this, null, getString(R.string.errorNoParadigmsLeft));
         }
     }
 
-    public Sequence getCurrentSequence() {
-        return currentSequence;
+    public Sequence getSequence() {
+        return sequence;
     }
 
     public TrainingAppDbHelper getDbHelper() {

@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.utils.Utils;
 
@@ -34,22 +36,6 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
             R.string.resultsCardTitle
     };
     private static final Map<Integer, List<Pair<Integer, Integer>>> CARD_OPTIONS_MAP = new HashMap<>();
-    static {
-        CARD_OPTIONS_MAP.put(R.string.mainCardTitle, Arrays.asList(
-                new Pair<>(R.string.sideMenuOptionIntro, R.drawable.icons8_home),
-                new Pair<>(R.string.sideMenuOptionAbout, R.drawable.icons8_about)
-        ));
-        CARD_OPTIONS_MAP.put(R.string.modesCardTitle, Arrays.asList(
-            new Pair<>(R.string.sideMenuOptionTutorial, R.drawable.icons8_classroom),
-            new Pair<>(R.string.sideMenuOptionTrial, R.drawable.icons8_test_tube),
-            new Pair<>(R.string.sideMenuOptionTraining, R.drawable.icons8_barbell),
-            new Pair<>(R.string.sideMenuOptionTest, R.drawable.icons8_survey)
-        ));
-        CARD_OPTIONS_MAP.put(R.string.resultsCardTitle, Arrays.asList(
-            new Pair<>(R.string.lastSessionPerformanceOptionTitle, R.drawable.icons8_area_chart),
-            new Pair<>(R.string.allSessionsPerformanceOptionTitle, R.drawable.icons8_measure)
-        ));
-    }
 
     private final Context context;
     private final OnMenuOptionSelectedListener listener;
@@ -57,9 +43,28 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
     private List<Integer> activeOptionPosition;
     private RecyclerView menuCardRecycler;
 
-    public MenuCardAdapter(Context context, OnMenuOptionSelectedListener listener) {
+    public MenuCardAdapter(BaseActivity context, OnMenuOptionSelectedListener listener) {
         this.context = context;
         this.listener = listener;
+
+        boolean isAdmin = context.getPreferenceManager().getIsAdminSession();
+
+        CARD_OPTIONS_MAP.put(R.string.mainCardTitle, Arrays.asList(
+                new Pair<>(R.string.sideMenuOptionIntro, R.drawable.icons8_home),
+                new Pair<>(R.string.sideMenuOptionAbout, R.drawable.icons8_about)
+        ));
+        List<Pair<Integer, Integer>> modeCardList = new LinkedList<>(Arrays.asList(
+                new Pair<>(R.string.sideMenuOptionTutorial, R.drawable.icons8_classroom),
+                new Pair<>(R.string.sideMenuOptionTrial, R.drawable.icons8_test_tube),
+                new Pair<>(R.string.sideMenuOptionTraining, R.drawable.icons8_barbell)));
+        if (isAdmin) {
+            modeCardList.add(new Pair<>(R.string.sideMenuOptionTest, R.drawable.icons8_survey));
+        }
+        CARD_OPTIONS_MAP.put(R.string.modesCardTitle, modeCardList);
+        CARD_OPTIONS_MAP.put(R.string.resultsCardTitle, Arrays.asList(
+                new Pair<>(R.string.lastSessionPerformanceOptionTitle, R.drawable.icons8_area_chart),
+                new Pair<>(R.string.allSessionsPerformanceOptionTitle, R.drawable.icons8_measure)
+        ));
     }
 
     @Override
@@ -152,9 +157,9 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
             if (titleId == R.string.sideMenuOptionIntro) home = holder.itemView;
             // re-highlight last active view if activity was recreated
             if (activeOptionPosition != null
-                && activeOptionPosition.get(0) == positionInParent
-                && activeOptionPosition.get(1) == position) {
-                    setActiveOptionColor(holder.itemView);
+                    && activeOptionPosition.get(0) == positionInParent
+                    && activeOptionPosition.get(1) == position) {
+                setActiveOptionColor(holder.itemView);
             }
         }
 
