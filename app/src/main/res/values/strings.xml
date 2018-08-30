@@ -5,14 +5,6 @@
     <string name="shape">Tvar</string>
     <string name="sequence">Řada</string>
     <string name="startHelpColorParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>BARVY</b>]]> podnětů na jedné straně obrazovky.</string>
-    <string name="welcomeText"><![CDATA[<h1>Vítejte v aplikaci Filter It!</h1>
-        Právě se nacházíte na hlavní obrazovce, kde si můžete vybrat jednu z možností:
-        <li>&nbsp;<b>TRÉNINK</b> - pro zahájení tréninku</li>
-        <li>&nbsp;<b>INSTRUKCE</b> - pro podrobné vysvětlení jednotlivých úkolů</li>
-        <li>&nbsp;<b>ZÁCVIK</b> - pro nezávazné vyzkoušení jednotlivých úkolů a úrovní</li>
-        </br>
-        Jak se Vám dařilo v jednotlivých úkolech zjistíte v části "Výsledky"]]>
-    </string>
     <string name="tutorialPrepareForTrialText">Následující pokusy poběží normální rychlostí, která je poměrně rychlá, připravte se…</string>
     <string name="countDownFragmentContinueBtnText">Pokračovat v tréninku</string>
     <string name="countDownFragmentMessageText">Trénink se ukončí jako neplatný za: </string>

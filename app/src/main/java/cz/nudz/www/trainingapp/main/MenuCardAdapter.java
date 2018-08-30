@@ -87,6 +87,9 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         MenuOptionAdapter menuOptionAdapter = new MenuOptionAdapter(CARD_OPTIONS_MAP.get(cardTitleId), position);
         holder.optionsList.setAdapter(menuOptionAdapter);
         holder.optionsList.setLayoutManager(new LinearLayoutManager(context, VERTICAL, false));
+
+        // HACK: this makes recycler view recreate all holders and thus we lose out-of-reach highlighting
+        holder.setIsRecyclable(false);
     }
 
     @Override
@@ -119,21 +122,10 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         this.activeOptionPosition = activeOptionPosition;
     }
 
-    /**
-     * Created by P8P67 on 11/4/2017.
-     */
-
     protected class MenuOptionAdapter extends RecyclerView.Adapter<MenuOptionAdapter.ViewHolder> {
 
         private final List<Pair<Integer, Integer>> options;
         private final int positionInParent;
-        private RecyclerView menuOptionRecycler;
-
-        @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            super.onAttachedToRecyclerView(recyclerView);
-            menuOptionRecycler = recyclerView;
-        }
 
         public MenuOptionAdapter(List<Pair<Integer, Integer>> options, int positionInParent) {
             this.options = options;
@@ -185,9 +177,14 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
                 v.setOnClickListener((View view) -> {
                     // remove filter from previously active option
                     if (activeOptionPosition != null) {
-                        final MenuCardAdapter.ViewHolder cardViewHolder = (MenuCardAdapter.ViewHolder) menuCardRecycler.findViewHolderForAdapterPosition(activeOptionPosition.get(0));
-                        final MenuOptionAdapter.ViewHolder optionsViewHolder = (ViewHolder) cardViewHolder.optionsList.findViewHolderForAdapterPosition(activeOptionPosition.get(1));
-                        optionsViewHolder.itemView.setBackgroundColor(android.R.color.transparent);
+                        final MenuCardAdapter.ViewHolder cardViewHolder = (MenuCardAdapter.ViewHolder)
+                            menuCardRecycler.findViewHolderForAdapterPosition(activeOptionPosition.get(0));
+                        // If findViewHolderForAdapterPosition returns null, it means last selected view was recreated anyway
+                        if (cardViewHolder != null) {
+                            final MenuOptionAdapter.ViewHolder optionsViewHolder = (ViewHolder)
+                                cardViewHolder.optionsList.findViewHolderForAdapterPosition(activeOptionPosition.get(1));
+                            optionsViewHolder.itemView.setBackgroundColor(android.R.color.transparent);
+                        }
                     }
                     setActiveOptionPosition(Arrays.asList(positionInParent, getAdapterPosition()));
                     setActiveOptionColor(view);

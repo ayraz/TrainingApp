@@ -6,14 +6,6 @@
 <string name="shape">Shape</string>
 <string name="sequence">Sequence</string>
 <string name="startHelpColorParadigm">In this experiment you have to indicate, whether there has been a change of <![CDATA[<b>COLOR</b>]]> of stimuli on one side of the screen.</string>
-<string name="welcomeText"><![CDATA[<h1>Welcome in the application Filter It!</h1>
-        Right now you are at the main screen, you may navigate to all of the application\'s options from here:
-        <li>&nbsp;<b>TRAINING</b> - to begin a training session</li>
-        <li>&nbsp;<b>INSTRUCTIONS</b> - for detailed instructions of each task</li>
-        <li>&nbsp;<b>FAMILIARIZATION</b> - to try each task with varying levels of difficulty</li>
-        </br>
-        To see how you succeeded in each task during training session go to the section "Results"]]>
-    </string>
 <string name="tutorialPrepareForTrialText">Following trials will run in normal speed, which is quite fast, get ready…</string>
 <string name="countDownFragmentContinueBtnText">Continue with the training</string>
 <string name="countDownFragmentMessageText">The session will end as invalid in: </string>
