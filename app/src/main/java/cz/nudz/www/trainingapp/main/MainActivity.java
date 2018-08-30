@@ -24,7 +24,6 @@ import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.DataExporter;
 import cz.nudz.www.trainingapp.data.Repository;
-import cz.nudz.www.trainingapp.data.tables.User;
 import cz.nudz.www.trainingapp.databinding.MainActivityBinding;
 import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
@@ -54,7 +53,6 @@ public class MainActivity extends BaseActivity implements
     private MainActivityBinding binding;
     private DataExporter dataExporter;
     private MenuCardAdapter menuCardAdapter;
-    private ParadigmType firstParadigm;
     private int containerId;
 
     public static void startActivity(Context context, String initialFragmentTag) {
@@ -96,9 +94,12 @@ public class MainActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.app_bar, menu);
 
-        boolean isAdminSession = getPreferenceManager().getIsAdminSession();
-        menu.findItem(R.id.action_settings).setVisible(isAdminSession);
-        menu.findItem(R.id.action_create_user).setVisible(isAdminSession);
+        boolean isAdmin = getPreferenceManager().getIsAdminSession();
+        menu.findItem(R.id.action_settings).setVisible(isAdmin);
+        menu.findItem(R.id.action_create_user).setVisible(isAdmin);
+
+        getSupportActionBar().setLogo(R.drawable.icons8_filter);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -108,6 +109,8 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
+        containerId = binding.fragmentContainer.getId();
+
         dataExporter = new DataExporter(this, new DataExporter.DataExportListener() {
             @Override
             public void onExportStart() {
@@ -124,8 +127,6 @@ public class MainActivity extends BaseActivity implements
                 binding.progressBar.setProgress(progress);
             }
         });
-        firstParadigm = ParadigmSet.getAt(0);
-        containerId = binding.fragmentContainer.getId();
 
         // make sure we have a logged in user before we can proceed with anything
         if (getSessionManager().checkLogin()) {
@@ -140,17 +141,21 @@ public class MainActivity extends BaseActivity implements
                         getSupportFragmentManager().popBackStack();
                     }
                 }
+                boolean isAdmin = getPreferenceManager().getIsAdminSession();
                 switch (optionStringId) {
-                    case R.string.introOptionTitle:
+                    case R.string.sideMenuOptionIntro:
                         showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
                         break;
-                    case R.string.trainingOptionTitle:
-                        showFragmentWithAnim(containerId, MessageFragment.newInstance(firstParadigm), MessageFragment.TAG);
+                    case R.string.sideMenuOptionTraining:
+                        ParadigmSet.setOperationMode(ParadigmSet.OperationMode.TRAINING);
+                        showFragmentWithAnim(containerId, MessageFragment.newInstance(ParadigmSet.getAt(0)), MessageFragment.TAG);
                         break;
-                    case R.string.tutorialOptionTitle:
+                    case R.string.sideMenuOptionTutorial:
+                        ParadigmSet.setOperationMode(isAdmin ? ParadigmSet.OperationMode.ALL : ParadigmSet.OperationMode.TRAINING);
                         showFragmentWithAnim(containerId, new TutorialPagerFragment(), TutorialPagerFragment.TAG);
                         break;
-                    case R.string.trialOptionTitle:
+                    case R.string.sideMenuOptionTrial:
+                        ParadigmSet.setOperationMode(isAdmin ? ParadigmSet.OperationMode.ALL : ParadigmSet.OperationMode.TRAINING);
                         showFragmentWithAnim(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
@@ -159,11 +164,16 @@ public class MainActivity extends BaseActivity implements
                     case R.string.allSessionsPerformanceOptionTitle:
                         showFragmentWithAnim(containerId, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
+                    case R.string.sideMenuOptionTest:
+                        ParadigmSet.setOperationMode(ParadigmSet.OperationMode.TEST);
+                        showFragmentWithAnim(containerId, MessageFragment.newInstance(ParadigmSet.getAt(0)), MessageFragment.TAG);
+                        break;
                 }
             });
             binding.menuList.setAdapter(menuCardAdapter);
             final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             binding.menuList.setLayoutManager(layoutManager);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !isAppInLockTaskMode()) {
                 startLockTask();
             }
@@ -259,7 +269,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void navigateToTrainingActivity() {
-        TrainingActivity.startActivity(this, firstParadigm);
+        TrainingActivity.startActivity(this);
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 

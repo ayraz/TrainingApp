@@ -30,10 +30,12 @@
     <string name="errorNotLoggedIn">Nejste přihlášeni, budete přesměrováni na přihlašovací obrazovku.</string>
     <string name="errorTitle">Chyba</string>
     <string name="goBackBtnText">Vrátit se</string>
-    <string name="trainingOptionTitle">Trénink</string>
-    <string name="trialOptionTitle">Zácvik</string>
-    <string name="tutorialOptionTitle">Instrukce</string>
-    <string name="introOptionTitle">Úvod</string>
+    <string name="sideMenuOptionTraining">Trénink</string>
+    <string name="sideMenuOptionTrial">Zácvik</string>
+    <string name="sideMenuOptionTutorial">Instrukce</string>
+    <string name="sideMenuOptionIntro">Úvod</string>
+    <string name="sideMenuOptionAbout">O aplikaci</string>
+    <string name="sideMenuOptionTest">Test</string>
     <string name="lastSessionPerformanceOptionTitle">Poslední Trénink</string>
     <string name="allSessionsPerformanceOptionTitle">Všechny Tréninky</string>
     <string name="lastSessionColorResultsTitle">Výsledky posledního tréninku - BARVA</string>
@@ -110,9 +112,11 @@
     <string name="thankYouForTrainingMessage">Děkujeme Vám za Vaš čas a snahu.\nPro ukončení tréninku a zobrazení Vašich výsledků stiskněte tlačítko:</string>
     <string name="finishBtnText">KONEC</string>
 
-    <string name="settings_option">Nastavení</string>
-    <string name="settings_set_trial_num">Nastavit počet pokusů</string>
-    <string name="settings_set_trial_presentation">Nastavit prezentační čas</string>
+    <string name="settingsOption">Nastavení</string>
+    <string name="settingsSetTrialNum">Nastavit počet pokusů</string>
+    <string name="settingsSetTrialNumSummary">Nastavte počet pokusů pro režim zácviku\n(Platí pro všechny uživatele na zařízení)</string>
+    <string name="settingsSetTrialPresentation">Nastavit prezentační čas</string>
+    <string name="settingsSetTrialPresentationSummary">Nastavte jak dlouho trvá doba prezentace pokusů v milisekundách, v režimu zácviku\n(Platí pro všechny uživatele na zařízení)</string>
 
     <string name="homeFile">home.html</string>
 </resources>

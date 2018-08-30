@@ -457,7 +457,7 @@ public abstract class TrainingFragment extends Fragment {
                 // TODO: remove this hardcoded dependency
                 TrainingActivity parentActivity = (TrainingActivity) getActivity();
                 RuntimeExceptionDao<Trial, Integer> trialDao = parentActivity.getDbHelper().getTrialDao();
-                currentTrial.setSequence(parentActivity.getCurrentSequence());
+                currentTrial.setSequence(parentActivity.getSequence());
                 currentTrial.setCorrect(answer);
                 currentTrial.setResponseTimeMillis(answer != null ? trialResponseTime : null);
                 trialDao.create(currentTrial);

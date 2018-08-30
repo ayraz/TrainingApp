@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.util.Date;
-
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.tables.User;
@@ -23,7 +21,7 @@ public class PreferenceActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preference_activity);
 
-        setTitle(R.string.settings_option);
+        setTitle(R.string.settingsOption);
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.containerId, new PreferenceFragment(), PreferenceFragment.TAG)

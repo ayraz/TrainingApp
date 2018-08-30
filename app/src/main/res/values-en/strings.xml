@@ -31,10 +31,11 @@
 <string name="errorNotLoggedIn">You are not logged in, you will be redirected to login screen.</string>
 <string name="errorTitle">Error</string>
 <string name="goBackBtnText">Back</string>
-<string name="trainingOptionTitle">Training</string>
-<string name="trialOptionTitle">Familiarization</string>
-<string name="tutorialOptionTitle">Instructions</string>
-<string name="introOptionTitle">Introduction</string>
+<string name="sideMenuOptionTraining">Training</string>
+<string name="sideMenuOptionTrial">Familiarization</string>
+<string name="sideMenuOptionTutorial">Instructions</string>
+<string name="sideMenuOptionIntro">Introduction</string>
+<string name="sideMenuOptionAbout">About</string>
 <string name="lastSessionPerformanceOptionTitle">Last training</string>
 <string name="allSessionsPerformanceOptionTitle">All trainings</string>
 <string name="lastSessionColorResultsTitle">Results from last training – COLOR</string>
@@ -111,9 +112,11 @@
 <string name="thankYouForTrainingMessage">Thank you for your efforts.\nTo end training session and see your results press below button:</string>
 <string name="finishBtnText">END</string>
 
-<string name="settings_option">Settings</string>
-<string name="settings_set_trial_num">Set number of trials</string>
-<string name="settings_set_trial_presentation">Set presentation time</string>
+<string name="settingsOption">Settings</string>
+<string name="settingsSetTrialNum">Set number of trials</string>
+<string name="settingsSetTrialNumSummary">Set how many trials will occur in familiarization mode\n(Applies to all users on the device)</string>
+<string name="settingsSetTrialPresentation">Set presentation time</string>
+<string name="settingsSetTrialPresentationSummary">Set how long a trial\'s presentation time will last in milliseconds, in familiarization mode\n(Applies to all users on the device)</string>
 
 <string name="homeFile">home_en.html</string>
 </resources>
