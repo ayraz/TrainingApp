@@ -52,7 +52,6 @@ public class MainActivity extends BaseActivity implements
 
     private MainActivityBinding binding;
     private DataExporter dataExporter;
-    private MenuCardAdapter menuCardAdapter;
     private int containerId;
 
     public static void startActivity(Context context, String initialFragmentTag) {
@@ -131,13 +130,13 @@ public class MainActivity extends BaseActivity implements
         // make sure we have a logged in user before we can proceed with anything
         if (getSessionManager().checkLogin()) {
             setSupportActionBar(binding.appBar);
-            menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
+            MenuCardAdapter menuCardAdapter = new MenuCardAdapter(this, optionStringId -> {
                 // unlock orientation if it was locked
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                     FragmentManager.BackStackEntry lastEntry = getLastFragment();
                     if (lastEntry.getName().equals(TrainingFragment.TAG)
-                        || lastEntry.getName().equals(CountDownFragment.TAG)) {
+                            || lastEntry.getName().equals(CountDownFragment.TAG)) {
                         getSupportFragmentManager().popBackStack();
                     }
                 }
@@ -171,8 +170,6 @@ public class MainActivity extends BaseActivity implements
                 }
             });
             binding.menuList.setAdapter(menuCardAdapter);
-            final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            binding.menuList.setLayoutManager(layoutManager);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !isAppInLockTaskMode()) {
                 startLockTask();
@@ -180,13 +177,13 @@ public class MainActivity extends BaseActivity implements
             if (getIntent().hasExtra(KEY_INITIAL_FRAGMENT)) {
                 switch (getIntent().getStringExtra(KEY_INITIAL_FRAGMENT)) {
                     case SessionRecapFragment.TAG:
-                        menuCardAdapter.setActiveOptionPosition(Arrays.asList(2, 0));
+//                        menuCardAdapter.setActiveOptionPosition(Arrays.asList(2, 0));
                         showFragmentWithAnim(containerId, new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                 }
             } else if (savedInstanceState == null) {
                 // navigate to welcome fragment
-                menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
+//                menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
                 showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
             }
         }
@@ -196,20 +193,9 @@ public class MainActivity extends BaseActivity implements
         return getSupportFragmentManager()
                 .getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (menuCardAdapter != null) {
-            outState.putIntegerArrayList(KEY_ACTIVE_OPTION_POS,
-                    new ArrayList<>(menuCardAdapter.getActiveOptionPosition()));
-        }
-    }
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        menuCardAdapter.setActiveOptionPosition(savedInstanceState.getIntegerArrayList(KEY_ACTIVE_OPTION_POS));
     }
 
     @Override

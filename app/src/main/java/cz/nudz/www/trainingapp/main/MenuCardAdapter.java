@@ -1,16 +1,25 @@
 package cz.nudz.www.trainingapp.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,10 +36,10 @@ import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
  * Created by P8P67 on 11/4/2017.
  */
 
-public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHolder> {
+public class MenuCardAdapter extends ArrayAdapter<Integer> {
 
     // order here defines order of cards in recycler
-    private static final int[] CARD_TITLES_IDS = {
+    private static final Integer[] CARD_TITLES_IDS = {
             R.string.mainCardTitle,
             R.string.modesCardTitle,
             R.string.resultsCardTitle
@@ -39,14 +48,12 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
 
     private final Context context;
     private final OnMenuOptionSelectedListener listener;
-    private View home;
-    private List<Integer> activeOptionPosition;
-    private RecyclerView menuCardRecycler;
+    private final List<ListView> optionLists = new ArrayList<>();
 
     public MenuCardAdapter(BaseActivity context, OnMenuOptionSelectedListener listener) {
+        super(context, R.layout.menu_card, CARD_TITLES_IDS);
         this.context = context;
         this.listener = listener;
-
         boolean isAdmin = context.getPreferenceManager().getIsAdminSession();
 
         CARD_OPTIONS_MAP.put(R.string.mainCardTitle, Arrays.asList(
@@ -67,43 +74,28 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         ));
     }
 
+    @NonNull
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        menuCardRecycler = recyclerView;
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        CardView view = (CardView) inflate(R.layout.menu_card, parent);
+
+        TextView title = view.findViewById(R.id.cardTitle);
+        Integer cardTitleId = CARD_TITLES_IDS[position];
+        title.setText(cardTitleId);
+
+        ListView list = view.findViewById(R.id.optionList);
+        MenuOptionAdapter menuOptionAdapter = new MenuOptionAdapter(CARD_OPTIONS_MAP.get(cardTitleId), list);
+        list.setAdapter(menuOptionAdapter);
+        list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+
+        optionLists.add(list);
+
+        return view;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_card, parent, false);
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        int cardTitleId = CARD_TITLES_IDS[position];
-        holder.cardTitle.setText(cardTitleId);
-
-        MenuOptionAdapter menuOptionAdapter = new MenuOptionAdapter(CARD_OPTIONS_MAP.get(cardTitleId), position);
-        holder.optionsList.setAdapter(menuOptionAdapter);
-        holder.optionsList.setLayoutManager(new LinearLayoutManager(context, VERTICAL, false));
-    }
-
-    @Override
-    public int getItemCount() {
-        return CARD_TITLES_IDS.length;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final TextView cardTitle;
-        private final RecyclerView optionsList;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            this.cardTitle = itemView.findViewById(R.id.cardTitle);
-            this.optionsList = itemView.findViewById(R.id.optionList);
-        }
+    private View inflate(@LayoutRes int layout, @NonNull ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return inflater.inflate(layout, parent, false);
     }
 
     public interface OnMenuOptionSelectedListener {
@@ -111,90 +103,46 @@ public class MenuCardAdapter extends RecyclerView.Adapter<MenuCardAdapter.ViewHo
         void onSelection(int optionStringId);
     }
 
-    public List<Integer> getActiveOptionPosition() {
-        return activeOptionPosition;
-    }
-
-    public void setActiveOptionPosition(List<Integer> activeOptionPosition) {
-        this.activeOptionPosition = activeOptionPosition;
-    }
-
-    /**
-     * Created by P8P67 on 11/4/2017.
-     */
-
-    protected class MenuOptionAdapter extends RecyclerView.Adapter<MenuOptionAdapter.ViewHolder> {
+    protected class MenuOptionAdapter extends ArrayAdapter<Pair<Integer, Integer>> {
 
         private final List<Pair<Integer, Integer>> options;
-        private final int positionInParent;
-        private RecyclerView menuOptionRecycler;
+        private final ListView list;
 
-        @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            super.onAttachedToRecyclerView(recyclerView);
-            menuOptionRecycler = recyclerView;
-        }
-
-        public MenuOptionAdapter(List<Pair<Integer, Integer>> options, int positionInParent) {
+        public MenuOptionAdapter(List<Pair<Integer, Integer>> options, ListView list) {
+            super(context, R.layout.menu_option, options);
             this.options = options;
-            this.positionInParent = positionInParent;
+            this.list = list;
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_option, parent, false);
-            return new ViewHolder(v);
-        }
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            ViewGroup view = (ViewGroup) inflate(R.layout.menu_option, parent);
 
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
             Integer titleId = options.get(position).first;
             Integer iconId = options.get(position).second;
-            holder.title.setText(titleId);
-            holder.icon.setImageDrawable(context.getResources().getDrawable(iconId));
+            ImageView icon = view.findViewById(R.id.optionIcon);
+            TextView title = view.findViewById(R.id.optionTitle);
+            title.setText(titleId);
+            icon.setImageDrawable(context.getResources().getDrawable(iconId));
 
-            // catch home btn for later
-            if (titleId == R.string.sideMenuOptionIntro) home = holder.itemView;
-            // re-highlight last active view if activity was recreated
-            if (activeOptionPosition != null
-                    && activeOptionPosition.get(0) == positionInParent
-                    && activeOptionPosition.get(1) == position) {
-                setActiveOptionColor(holder.itemView);
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return options.size();
-        }
-
-        public void setActiveOptionColor(View option) {
-            Utils.setBackgroundAndKeepPadding(option, context.getResources().getColor(R.color.menuOptionSelected));
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            private final ImageView icon;
-            private final TextView title;
-
-            public ViewHolder(View v) {
-                super(v);
-                icon = v.findViewById(R.id.optionIcon);
-                title = v.findViewById(R.id.optionTitle);
-
-                v.setOnClickListener((View view) -> {
-                    // remove filter from previously active option
-                    if (activeOptionPosition != null) {
-                        final MenuCardAdapter.ViewHolder cardViewHolder = (MenuCardAdapter.ViewHolder) menuCardRecycler.findViewHolderForAdapterPosition(activeOptionPosition.get(0));
-                        final MenuOptionAdapter.ViewHolder optionsViewHolder = (ViewHolder) cardViewHolder.optionsList.findViewHolderForAdapterPosition(activeOptionPosition.get(1));
-                        optionsViewHolder.itemView.setBackgroundColor(android.R.color.transparent);
+            view.setOnClickListener(v -> {
+                // remove filter from previously active option
+                for (ListView lv : optionLists) {
+                    if (lv.getCheckedItemCount() != 0) {
+                        View childAt = lv.getChildAt(lv.getCheckedItemPosition());
+                        childAt.setBackgroundColor(android.R.color.transparent);
                     }
-                    setActiveOptionPosition(Arrays.asList(positionInParent, getAdapterPosition()));
-                    setActiveOptionColor(view);
+                }
+                setActiveOptionColor(v);
 
-                    listener.onSelection(options.get(getAdapterPosition()).first);
-                });
-            }
+                listener.onSelection(options.get(list.getPositionForView(v)).first);
+            });
+            return view;
+        }
+
+        void setActiveOptionColor(View option) {
+            Utils.setBackgroundAndKeepPadding(option, context.getResources().getColor(R.color.menuOptionSelected));
         }
     }
 }
