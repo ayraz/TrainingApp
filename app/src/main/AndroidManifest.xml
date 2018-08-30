@@ -13,18 +13,20 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity" />
-        <!-- Training must not be interrupted by rotation, keyboard, or other config changes -->
-        <activity
-            android:name=".training.TrainingActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|mcc|mnc"
-            android:screenOrientation="landscape" />
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".main.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|mcc|mnc"
+            android:screenOrientation="landscape"/>
+        <!-- Training must not be interrupted by rotation, keyboard, or other config changes -->
+        <activity
+            android:name=".training.TrainingActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|mcc|mnc"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".preferences.PreferenceActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"/>
