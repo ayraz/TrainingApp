@@ -50,7 +50,8 @@ public abstract class LineChartFragment<X extends String, Y extends Integer> ext
         activity = (BaseActivity) getActivity();
         repository = new Repository(activity);
 
-        setChartNoData(binding.colorChart, binding.positionChart, binding.shapeChart);
+        setChartNoData(binding.colorChart, binding.positionChart);
+//        setChartNoData(binding.colorChart, binding.positionChart, binding.shapeChart);
 
         return binding.getRoot();
     }

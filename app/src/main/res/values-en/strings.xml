@@ -44,6 +44,7 @@
 <string name="selectParadigmTypeForTrialTitle">Select task for a familiarization</string>
 <string name="startHelpShapeParadigm"> In this experiment you have to indicate, whether there has been a change of <![CDATA[<b>SHAPE</b>]]> of stimuli on one side of the screen.</string>
 <string name="startTrainingBtnText">Start training</string>
+<string name="startTestBtnText">Start test</string>
 <string name="nextBtnText">Next</string>
 <string name="prevBtnText">Previous</string>
 <string name="cueHelpColorParadigm">There is a fixation cross in the middle of the screen. The arrow above it indicates side for remembering color of stimuli. In this case it is on the <![CDATA[<b>RIGHT]]> from fixation cross.</string>
@@ -60,11 +61,12 @@
 <string name="nowYouTryMessage"><![CDATA[<b>NOW, WHEN YOU KNOW HOW TO DO IT,\nYOU CAN TRY A FEW TRIALS</b>]]></string>
 <string name="shortPause">Short pause, there is only fixation cross on the screen.</string>
 <string name="continueBtnText">Understand, go to the training.</string>
-<string name="warningText">!WARNING – THE WHOLE TRAINING SESSION LASTS APPROXIMATELY 20 MINUTES!</string>
+<string name="trainingWarningText">!WARNING – THE WHOLE TRAINING SESSION LASTS APPROXIMATELY 20 MINUTES!</string>
+<string name="testWarningText">!WARNING – THE ENTIRE TEST LASTS APPROXIMATELY 20 MINUTES!</string>
 <string name="yes">yes</string>
 <string name="actionExportData">Export training data</string>
 <string name="logout">Log out</string>
-<string name="dataExportSuccess">The data was succesfully exported.</string>
+<string name="dataExportSuccess">The data was successfully exported.</string>
 <string name="modeSelectionTitle">Mode selection</string>
 <string name="performanceSummaryTitle">Performance summary</string>
 <string name="colorParadigmPerformanceSummary">Performance summary of color task</string>

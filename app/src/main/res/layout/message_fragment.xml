@@ -27,7 +27,7 @@
             android:id="@+id/warningFragmentWarning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/warningText"
+            tools:text="@string/trainingWarningText"
             android:textAlignment="center"
             android:textColor="@color/red"
             android:textSize="24sp"
@@ -39,12 +39,12 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
         <Button
-            android:id="@+id/warningFragmentStartTrainingBtn"
+            android:id="@+id/warningFragmentStartBtn"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
-            android:text="@string/startTrainingBtnText"
+            tools:text="@string/startTrainingBtnText"
             android:visibility="gone"
             tools:visibility="visible"
             app:layout_constraintRight_toRightOf="parent"

@@ -148,7 +148,7 @@ public class MainActivity extends BaseActivity implements
                         break;
                     case R.string.sideMenuOptionTraining:
                         ParadigmSet.setOperationMode(ParadigmSet.OperationMode.TRAINING);
-                        showFragmentWithAnim(containerId, MessageFragment.newInstance(ParadigmSet.getAt(0)), MessageFragment.TAG);
+                        replaceFragment(containerId, MessageFragment.newInstance(ParadigmSet.getAt(0)), MessageFragment.TAG, true);
                         break;
                     case R.string.sideMenuOptionTutorial:
                         ParadigmSet.setOperationMode(isAdmin ? ParadigmSet.OperationMode.ALL : ParadigmSet.OperationMode.TRAINING);
@@ -159,14 +159,16 @@ public class MainActivity extends BaseActivity implements
                         showFragmentWithAnim(containerId, new TrialSelectionFragment(), TrialSelectionFragment.TAG);
                         break;
                     case R.string.lastSessionPerformanceOptionTitle:
+                        ParadigmSet.setOperationMode(isAdmin ? ParadigmSet.OperationMode.ALL : ParadigmSet.OperationMode.TRAINING);
                         showFragmentWithAnim(containerId, new SessionRecapFragment(), SessionRecapFragment.TAG);
                         break;
                     case R.string.allSessionsPerformanceOptionTitle:
+                        ParadigmSet.setOperationMode(isAdmin ? ParadigmSet.OperationMode.ALL : ParadigmSet.OperationMode.TRAINING);
                         showFragmentWithAnim(containerId, new PerformanceSummaryFragment(), PerformanceSummaryFragment.TAG);
                         break;
                     case R.string.sideMenuOptionTest:
                         ParadigmSet.setOperationMode(ParadigmSet.OperationMode.TEST);
-                        showFragmentWithAnim(containerId, MessageFragment.newInstance(ParadigmSet.getAt(0)), MessageFragment.TAG);
+                        replaceFragment(containerId, MessageFragment.newInstance(ParadigmSet.getAt(0)), MessageFragment.TAG, true);
                         break;
                 }
             });

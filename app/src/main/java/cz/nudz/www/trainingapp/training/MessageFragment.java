@@ -90,8 +90,16 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.message_fragment, container, false);
-
         parent = (BaseActivity) getActivity();
+
+        if (ParadigmSet.getOperationMode() == ParadigmSet.OperationMode.TRAINING) {
+            binding.warningFragmentWarning.setText(R.string.trainingWarningText);
+            binding.warningFragmentStartBtn.setText(R.string.startTrainingBtnText);
+        } else {
+            binding.warningFragmentWarning.setText(R.string.testWarningText);
+            binding.warningFragmentStartBtn.setText(R.string.startTestBtnText);
+        }
+
         paradigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
         if (getArguments().containsKey(KEY_ADJUSTMENT)) {
             adjustment = Adjustment.valueOf(getArguments().getString(KEY_ADJUSTMENT));

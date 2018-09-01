@@ -44,6 +44,7 @@
     <string name="selectParadigmTypeForTrialTitle">Výběr úkolu pro zácvik</string>
     <string name="startHelpShapeParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>TVARU</b>]]> podnětů na jedné straně obrazovky.</string>
     <string name="startTrainingBtnText">Začít trénink</string>
+    <string name="startTestBtnText">Začít test</string>
     <string name="nextBtnText">Další</string>
     <string name="prevBtnText">Předchozí</string>
     <string name="cueHelpColorParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování barvy podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
@@ -60,7 +61,8 @@
     <string name="nowYouTryMessage"><![CDATA[<b>NYNÍ, KDYŽ UŽ VÍTE, JAK NA TO,\nMŮŽETE SI VYZKOUŠET PÁR ZÁCVIČNÝCH ÚKOLŮ</b>]]></string>
     <string name="shortPause">Krátká pauza, na obrazovce vidíte pouze fixační kříž.</string>
     <string name="continueBtnText">Rozumím, přejít k tréninku.</string>
-    <string name="warningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
+    <string name="trainingWarningText">!UPOZORNĚNÍ – CELÝ TRÉNINK BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
+    <string name="testWarningText">!UPOZORNĚNÍ – CELÝ TEST BUDE TRVAT PŘIBLIŽNĚ 20 MINUT!</string>
     <string name="yes">ano</string>
     <string name="actionExportData">Export výcvikových údaju</string>
     <string name="logout">Odhlásit se</string>

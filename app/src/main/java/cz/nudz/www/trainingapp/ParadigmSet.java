@@ -31,6 +31,7 @@ public abstract class ParadigmSet {
         ALL
     }
 
+    private static OperationMode operationMode;
     private static List<ParadigmType> paradigmSet;
 
     public static void setOperationMode(final OperationMode mode) {
@@ -48,6 +49,7 @@ public abstract class ParadigmSet {
                 throw new RuntimeException(String.format(mode == null
                         ? "Mode is null" : "Invalid mode: %s", mode));
         }
+        operationMode = mode;
     }
     
     /**
@@ -75,6 +77,10 @@ public abstract class ParadigmSet {
 
     public static List<ParadigmType> getParadigmTypes() {
         return new ArrayList<>(paradigmSet);
+    }
+
+    public static OperationMode getOperationMode() {
+        return operationMode;
     }
 
     public static int size() {

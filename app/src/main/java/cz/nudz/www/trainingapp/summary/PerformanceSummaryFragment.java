@@ -36,11 +36,11 @@ public class PerformanceSummaryFragment extends LineChartFragment<String, Intege
 
         tasks.add(executeTask(binding.colorChart, ParadigmType.COLOR));
         tasks.add(executeTask(binding.positionChart, ParadigmType.POSITION));
-        tasks.add(executeTask(binding.shapeChart, ParadigmType.SHAPE));
+//        tasks.add(executeTask(binding.shapeChart, ParadigmType.SHAPE));
 
         binding.colorChartTitle.setText(R.string.allSessionsColorResultsTitle);
         binding.positionChartTitle.setText(R.string.allSessionsPositionResultsTitle);
-        binding.shapeChartTitle.setText(R.string.allSessionsShapeResultsTitle);
+//        binding.shapeChartTitle.setText(R.string.allSessionsShapeResultsTitle);
 
         return root;
     }

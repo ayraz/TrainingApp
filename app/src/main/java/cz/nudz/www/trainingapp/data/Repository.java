@@ -153,7 +153,7 @@ public class Repository {
             while (cursor.moveToNext()) {
                 try {
                     results.add(new Pair<>(
-                            // TODO: uh oh, perhaps find a better way to do this...
+                            // TODO: perhaps find a better way to do this
                             new SimpleDateFormat("dd/MM/yyyy").format(
                                     new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(
                                             cursor.getString(cursor.getColumnIndex("startDate")))),
