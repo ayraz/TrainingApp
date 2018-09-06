@@ -103,7 +103,7 @@ public class Repository {
         paradigmDao.update(paradigm);
     }
 
-    public Sequence startAndStoreSequence(Paradigm paradigm, Difficulty difficulty) {
+    public Sequence createAndStoreSequence(Paradigm paradigm, Difficulty difficulty) {
         Sequence sequence = new Sequence();
         sequence.setParadigm(paradigm);
         sequence.setStartDate(new Date());
@@ -235,12 +235,13 @@ public class Repository {
      * @return
      */
     public boolean hasOnlyShortPauses() {
-        // final array hack to simulate closure
         boolean longPause = false;
         final int ALLOWED_PAUSE = 15; // seconds
         for (ParadigmType type : ParadigmType.values()) {
-            Paradigm paradigm = getLastParadigm(type);
-            longPause = longPause || ((paradigm.getPauseDurationMillis() / 1000) > ALLOWED_PAUSE);
+            Paradigm lastParadigm = getLastParadigm(type);
+            if (lastParadigm != null) {
+                longPause = longPause || ((lastParadigm.getPauseDurationMillis() / 1000) > ALLOWED_PAUSE);
+            }
         }
         return !longPause;
     }
@@ -252,9 +253,12 @@ public class Repository {
     public boolean hasRaisedDiffInAllParadigms() {
         boolean allRaised = true;
         for (ParadigmType type : ParadigmType.values()) {
-            List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
-            int currMaxDiff = sequenceMaxDifficulty(currSeq);
-            allRaised = allRaised && (currMaxDiff > Difficulty.toInteger(Difficulty.ONE));
+            Paradigm lastParadigm = getLastParadigm(type);
+            if (lastParadigm != null) {
+                List<Sequence> currSeq = getSequences(lastParadigm.getId());
+                int currMaxDiff = sequenceMaxDifficulty(currSeq);
+                allRaised = allRaised && (currMaxDiff > Difficulty.toInteger(Difficulty.ONE));
+            }
         }
         return allRaised;
     }
@@ -266,11 +270,14 @@ public class Repository {
     public boolean hasImprovedInAllParadigms() {
         boolean allImproved = true;
         for (ParadigmType type : ParadigmType.values()) {
-            List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
-            List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
-            int currMaxDiff = sequenceMaxDifficulty(currSeq);
-            int prevMaxDiff = sequenceMaxDifficulty(prevSeq);
-            allImproved = allImproved && (currMaxDiff > prevMaxDiff);
+            Paradigm lastParadigm = getLastParadigm(type);
+            if (lastParadigm != null) {
+                List<Sequence> currSeq = getSequences(lastParadigm.getId());
+                List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
+                int currMaxDiff = sequenceMaxDifficulty(currSeq);
+                int prevMaxDiff = sequenceMaxDifficulty(prevSeq);
+                allImproved = allImproved && (currMaxDiff > prevMaxDiff);
+            }
         }
         return allImproved;
     }
@@ -284,10 +291,13 @@ public class Repository {
         int currSum = 0;
         int prevSum = 0;
         for (ParadigmType type : ParadigmType.values()) {
-            List<Sequence> currSeq = getSequences(getLastParadigm(type).getId());
-            List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
-            currSum += sequenceMaxDifficulty(currSeq);
-            prevSum += sequenceMaxDifficulty(prevSeq);
+            Paradigm lastParadigm = getLastParadigm(type);
+            if (lastParadigm != null) {
+                List<Sequence> currSeq = getSequences(lastParadigm.getId());
+                List<Sequence> prevSeq = getSequences(getPenultimateParadigm(type).getId());
+                currSum += sequenceMaxDifficulty(currSeq);
+                prevSum += sequenceMaxDifficulty(prevSeq);
+            }
         }
         return prevSum <= currSum;
     }

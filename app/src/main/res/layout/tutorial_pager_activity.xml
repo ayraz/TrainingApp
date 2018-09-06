@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
-        <android.support.v4.view.ViewPager
+        <cz.nudz.www.trainingapp.tutorial.NonSwipeableViewPager
             android:id="@+id/tutorialActivityPager"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -15,8 +15,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </android.support.v4.view.ViewPager>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/tutorialActivityNextBtn"

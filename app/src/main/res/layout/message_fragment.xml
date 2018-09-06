@@ -23,6 +23,20 @@
             app:layout_constraintTop_toBottomOf="@+id/warningFragmentWarning"
             tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." />
 
+        <LinearLayout
+            android:id="@+id/difficultyGrid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/warningFragmentExplanation" />
+
         <TextView
             android:id="@+id/warningFragmentWarning"
             android:layout_width="wrap_content"
@@ -78,7 +92,6 @@
             android:layout_marginStart="8dp"
             android:text="@string/yourProgressInTaskTitle"
             android:visibility="gone"
-            tools:visibility="visible"
             android:textSize="24sp"
             android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toTopOf="@id/progressGrid"
@@ -94,11 +107,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/warningFragmentWarning"
-            tools:layout_editor_absoluteY="583dp" />
+            app:layout_constraintBottom_toTopOf="@id/warningFragmentWarning" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -16,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import cz.nudz.www.trainingapp.BaseActivity;
 import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.databinding.MessageFragmentBinding;
 import cz.nudz.www.trainingapp.enums.Adjustment;
+import cz.nudz.www.trainingapp.enums.Difficulty;
 import cz.nudz.www.trainingapp.enums.ParadigmType;
 import cz.nudz.www.trainingapp.tutorial.TutorialFragmentFactory;
 import cz.nudz.www.trainingapp.utils.Utils;
@@ -35,19 +37,22 @@ import static cz.nudz.www.trainingapp.training.TrainingActivity.KEY_PARADIGM;
 public class MessageFragment extends Fragment {
 
     public static final String KEY_ADJUSTMENT = "KEY_ADJUSTMENT";
+    public static final String KEY_DIFFICULTY = "KEY_DIFFICULTY";
     public static final String KEY_SEQ_COUNT = "KEY_SEQUENCE_COUNT";
     public static final String TAG = MessageFragment.class.getSimpleName();
 
+    private BaseActivity parent;
     private MessageFragmentBinding binding;
+    private MessageFragmentListener listener;
+
     private ParadigmType paradigmType;
     private Adjustment adjustment;
-    private MessageFragmentListener listener;
-    private BaseActivity parent;
-    private int currSeqCount;
+    private int seqCount;
+    private Difficulty difficulty;
 
     public static MessageFragment newInstance(@NonNull ParadigmType paradigmType) {
         MessageFragment messageFragment = new MessageFragment();
-        Bundle bundle = bundleArguments(paradigmType, null, null);
+        Bundle bundle = bundleArguments(paradigmType, null, null, null);
         messageFragment.setArguments(bundle);
         return messageFragment;
     }
@@ -61,9 +66,10 @@ public class MessageFragment extends Fragment {
      */
     public static MessageFragment newInstance(@NonNull ParadigmType paradigmType,
                                               @NonNull Adjustment adjustment,
-                                              int sequenceCount) {
+                                              int sequenceCount,
+                                              @Nullable Difficulty difficulty) {
         MessageFragment messageFragment = new MessageFragment();
-        Bundle bundle = bundleArguments(paradigmType, adjustment, sequenceCount);
+        Bundle bundle = bundleArguments(paradigmType, adjustment, sequenceCount, difficulty);
         messageFragment.setArguments(bundle);
         return messageFragment;
     }
@@ -71,7 +77,8 @@ public class MessageFragment extends Fragment {
     @NonNull
     public static Bundle bundleArguments(@NonNull ParadigmType paradigmType,
                                          @Nullable Adjustment adjustment,
-                                         @Nullable Integer sequenceCount) {
+                                         @Nullable Integer sequenceCount,
+                                         @Nullable Difficulty difficulty) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_PARADIGM, paradigmType.toString());
         if (adjustment != null) {
@@ -79,6 +86,9 @@ public class MessageFragment extends Fragment {
         }
         if (sequenceCount != null) {
             bundle.putInt(KEY_SEQ_COUNT, sequenceCount);
+        }
+        if (difficulty != null) {
+            bundle.putString(KEY_DIFFICULTY, difficulty.toString());
         }
         return bundle;
     }
@@ -103,8 +113,9 @@ public class MessageFragment extends Fragment {
         paradigmType = ParadigmType.valueOf(getArguments().getString(KEY_PARADIGM));
         if (getArguments().containsKey(KEY_ADJUSTMENT)) {
             adjustment = Adjustment.valueOf(getArguments().getString(KEY_ADJUSTMENT));
-            currSeqCount = getArguments().getInt(KEY_SEQ_COUNT);
-            if (currSeqCount == 0) {
+            seqCount = getArguments().getInt(KEY_SEQ_COUNT);
+            difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
+            if (seqCount == 0) {
                 throw error("sequence count cannot be 0.");
             }
             initSequencePause();
@@ -120,16 +131,18 @@ public class MessageFragment extends Fragment {
         binding.warningFragmentExplanation.setText(Html.fromHtml(getString(getHelpTextForSequencePause())));
         Utils.setViewsVisibility(VISIBLE,
                 binding.progressGrid,
-                binding.progressTitle);
+                binding.progressTitle,
+                binding.difficultyGrid);
         fillProgressGrid();
+        fillDifficultyGrid();
     }
 
     private void initParadigmPause() {
         if (isFirstParadigm()) {
-            binding.warningFragmentStartTrainingBtn.setOnClickListener(v -> listener.startTraining());
+            binding.warningFragmentStartBtn.setOnClickListener(v -> listener.startTraining());
             Utils.setViewsVisibility(VISIBLE,
                     binding.warningFragmentWarning,
-                    binding.warningFragmentStartTrainingBtn);
+                    binding.warningFragmentStartBtn);
         } else {
             adjustGuide();
         }
@@ -149,16 +162,15 @@ public class MessageFragment extends Fragment {
 
     private void fillProgressGrid() {
         for (int i = 1; i <= TrainingActivity.DEFAULT_SEQUENCE_COUNT; ++i) {
-            final ImageView cb = createCheckBox(i);
-            binding.progressGrid.addView(cb);
+            binding.progressGrid.addView(createCheckBox(i));
         }
     }
 
     private ImageView createCheckBox(int position) {
         final ImageView iv = new ImageView(getActivity());
         Drawable drawable;
-        final boolean checked = position <= currSeqCount;
-        final boolean current = position - 1 == currSeqCount;
+        final boolean checked = position <= seqCount;
+        final boolean current = position - 1 == seqCount;
         if (checked) {
             drawable = getResources().getDrawable(R.drawable.progress_check_box_done);
             iv.setColorFilter(getResources().getColor(android.R.color.holo_green_light),
@@ -177,6 +189,24 @@ public class MessageFragment extends Fragment {
         iv.setImageDrawable(drawable);
 
         return iv;
+    }
+
+    private void fillDifficultyGrid() {
+        for (Difficulty d : Difficulty.values()) {
+            binding.difficultyGrid.addView(createDifficultyView(d));
+        }
+    }
+
+    private TextView createDifficultyView(Difficulty d) {
+        TextView v = new TextView(getContext());
+        v.setText(String.valueOf(Difficulty.toInteger(d)));
+        v.setTextSize(32);
+        v.setPadding(8, 0, 8, 0);
+        // highlight next difficulty
+        if (difficulty.equals(d)) {
+            v.setBackground(getResources().getDrawable(R.drawable.border_red));
+        }
+        return v;
     }
 
     @Override

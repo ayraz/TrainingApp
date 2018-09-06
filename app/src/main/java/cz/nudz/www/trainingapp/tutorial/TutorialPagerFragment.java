@@ -1,7 +1,5 @@
 package cz.nudz.www.trainingapp.tutorial;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,11 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 import java.util.List;
 
@@ -35,7 +31,7 @@ public class TutorialPagerFragment extends Fragment implements
     public static final String TAG = TutorialPagerFragment.class.getSimpleName();
     public static final int TUTORIAL_TRIAL_COUNT = 2;
 
-    private ViewPager pager;
+    private NonSwipeableViewPager pager;
     private TutorialPagerAdapter pagerAdapter;
     private TutorialPagerActivityBinding binding;
 
@@ -144,4 +140,5 @@ public class TutorialPagerFragment extends Fragment implements
             return TutorialFragmentFactory.TOTAL_PAGE_COUNT;
         }
     }
+
 }

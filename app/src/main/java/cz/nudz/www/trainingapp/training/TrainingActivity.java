@@ -36,8 +36,8 @@ public class TrainingActivity extends BaseActivity implements
         ThankYouFragment.ThankYouFragmentListener {
 
     public static final String KEY_PARADIGM = "KEY_PARADIGM";
-    public static final int DEFAULT_SEQUENCE_COUNT = 1;
-    public static final int DEFAULT_TRIAL_COUNT = 1;
+    public static final int DEFAULT_SEQUENCE_COUNT = 2;
+    public static final int DEFAULT_TRIAL_COUNT = 2;
 
     private TrainingActivityBinding binding;
     private int containerId;
@@ -163,7 +163,7 @@ public class TrainingActivity extends BaseActivity implements
                 // TODO: handle max level
             }
             showFragmentWithAnim(containerId, PauseFragment.newInstance(
-                    paradigmType, adjustment, sequenceCount), PauseFragment.TAG);
+                    paradigmType, adjustment, sequenceCount, newDifficulty), PauseFragment.TAG);
         }
     }
 
@@ -182,7 +182,7 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private void nextSequence() {
-        sequence = repository.startAndStoreSequence(paradigm, difficulty);
+        sequence = repository.createAndStoreSequence(paradigm, difficulty);
 
         showFragment(containerId,
                 TrainingFragment.newInstance(paradigmType, difficulty), TrainingFragment.TAG);

@@ -54,6 +54,7 @@ public abstract class TrainingFragment extends Fragment {
     private static final String KEY_PRESENTATION_TIME = "KEY_PRESENTATION_TIME";
 
     // Measure = milliseconds
+    private static final int PRE_SEQUENCE_INTERVAL = 1500;
     private static final int CUE_INTERVAL = 300;
     private static final int POST_CUE_PAUSE = 250;
     public static final int MEMORIZATION_INTERVAL = 250;
@@ -180,6 +181,8 @@ public abstract class TrainingFragment extends Fragment {
             isTrainingMode = false;
         }
 
+        disableAnswerBtns();
+
         return binding.getRoot();
     }
 
@@ -244,7 +247,7 @@ public abstract class TrainingFragment extends Fragment {
 
                 trialRunner = new TrialRunner();
                 // give user half second to focus
-                handler.postDelayed(trialRunner, 500);
+                handler.postDelayed(trialRunner, PRE_SEQUENCE_INTERVAL);
             }
         });
     }
@@ -500,31 +503,25 @@ public abstract class TrainingFragment extends Fragment {
             }
             return stimuli;
         }
+    }
 
-        private void disableAnswerBtns() {
-            binding.trainingFragmentDifferentBtn.setClickable(false);
-            binding.trainingFragmentSameBtn.setClickable(false);
-            binding.trainingFragmentDifferentBtn.setLongClickable(false);
-            binding.trainingFragmentSameBtn.setLongClickable(false);
-        }
+    private void disableAnswerBtns() {
+        binding.overlay.setVisibility(View.VISIBLE);
+    }
 
-        private void refreshAnswerBtns() {
-            binding.trainingFragmentSameBtn.cancelLongPress();
-            binding.trainingFragmentDifferentBtn.cancelLongPress();
-            binding.trainingFragmentSameBtn.clearAnimation();
-            binding.trainingFragmentDifferentBtn.clearAnimation();
-            Utils.setViewsVisibility(INVISIBLE,
-                    binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
-            Utils.setViewsVisibility(VISIBLE,
-                    binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
-        }
+    private void refreshAnswerBtns() {
+        binding.trainingFragmentSameBtn.cancelLongPress();
+        binding.trainingFragmentDifferentBtn.cancelLongPress();
+        binding.trainingFragmentSameBtn.clearAnimation();
+        binding.trainingFragmentDifferentBtn.clearAnimation();
+        Utils.setViewsVisibility(INVISIBLE,
+                binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+        Utils.setViewsVisibility(VISIBLE,
+                binding.trainingFragmentDifferentBtn, binding.trainingFragmentSameBtn);
+    }
 
-        private void enableAnswerBtns() {
-            binding.trainingFragmentDifferentBtn.setClickable(true);
-            binding.trainingFragmentSameBtn.setClickable(true);
-            binding.trainingFragmentDifferentBtn.setLongClickable(true);
-            binding.trainingFragmentSameBtn.setLongClickable(true);
-        }
+    private void enableAnswerBtns() {
+        binding.overlay.setVisibility(View.GONE);
     }
 
     protected abstract void initStimuli(List<ImageView> stimuli);
