@@ -3,6 +3,7 @@ package cz.nudz.www.trainingapp.main;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,24 @@ import cz.nudz.www.trainingapp.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class WebFragment extends Fragment {
 
-    public static final String TAG = HomeFragment.class.getSimpleName();
+    public static final String TAG = WebFragment.class.getSimpleName();
+
     private static final String WWW_PATH = "file:///android_asset/www/";
+    private static final String KEY_FILE_NAME = "KEY_FILE_NAME";
 
-    public HomeFragment() {
-        // Required empty public constructor
+    private WebFragment() {
+
+    }
+
+    public static WebFragment newInstance(final @StringRes int fileName) {
+        Bundle args = new Bundle();
+        args.putInt(KEY_FILE_NAME, fileName);
+
+        WebFragment fragment = new WebFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -30,8 +42,9 @@ public class HomeFragment extends Fragment {
 
         final WebView webView = root.findViewById(R.id.webView);
         webView.setBackgroundColor(Color.TRANSPARENT);
-        // pick home file based on current locale
-        webView.loadUrl(WWW_PATH + getString(R.string.homeFile));
+
+        // pick file based on current locale
+        webView.loadUrl(WWW_PATH + getString(getArguments().getInt(KEY_FILE_NAME)));
 
         // Inflate the layout for this fragment
         return root;

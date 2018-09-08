@@ -112,5 +112,6 @@
     <string name="settingsSetTrialPresentation">Nastavit prezentační čas</string>
     <string name="settingsSetTrialPresentationSummary">Nastavte jak dlouho trvá doba prezentace pokusů v milisekundách, v režimu zácviku\n(Platí pro všechny uživatele na zařízení)</string>
 
-    <string name="homeFile">home.html</string>
+    <string name="homeHtml">home.html</string>
+    <string name="aboutHtml">about.html</string>
 </resources>

@@ -112,5 +112,6 @@
 <string name="settingsSetTrialPresentation">Set presentation time</string>
 <string name="settingsSetTrialPresentationSummary">Set how long a trial\'s presentation time will last in milliseconds, in familiarization mode\n(Applies to all users on the device)</string>
 
-<string name="homeFile">home_en.html</string>
+<string name="homeHtml">home_en.html</string>
+<string name="aboutHtml">about_en.html</string>
 </resources>

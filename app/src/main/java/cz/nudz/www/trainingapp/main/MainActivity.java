@@ -16,7 +16,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import cz.nudz.www.trainingapp.BaseActivity;
@@ -137,14 +136,17 @@ public class MainActivity extends BaseActivity implements
                 if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
                     FragmentManager.BackStackEntry lastEntry = getLastFragment();
                     if (lastEntry.getName().equals(TrainingFragment.TAG)
-                        || lastEntry.getName().equals(CountDownFragment.TAG)) {
+                            || lastEntry.getName().equals(CountDownFragment.TAG)) {
                         getSupportFragmentManager().popBackStack();
                     }
                 }
                 boolean isAdmin = getPreferenceManager().getIsAdminSession();
                 switch (optionStringId) {
                     case R.string.sideMenuOptionIntro:
-                        showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
+                        replaceFragment(containerId, WebFragment.newInstance(R.string.homeHtml), WebFragment.TAG, true);
+                        break;
+                    case R.string.sideMenuOptionAbout:
+                        replaceFragment(containerId, WebFragment.newInstance(R.string.aboutHtml), WebFragment.TAG, true);
                         break;
                     case R.string.sideMenuOptionTraining:
                         ParadigmSet.setOperationMode(ParadigmSet.OperationMode.TRAINING);
@@ -189,7 +191,7 @@ public class MainActivity extends BaseActivity implements
             } else if (savedInstanceState == null) {
                 // navigate to welcome fragment
                 menuCardAdapter.setActiveOptionPosition(Arrays.asList(0, 0));
-                showFragmentWithAnim(containerId, new HomeFragment(), HomeFragment.TAG);
+                replaceFragment(containerId, WebFragment.newInstance(R.string.homeHtml), WebFragment.TAG, true);
             }
         }
     }
