@@ -22,7 +22,7 @@ public class WebFragment extends Fragment {
     private static final String WWW_PATH = "file:///android_asset/www/";
     private static final String KEY_FILE_NAME = "KEY_FILE_NAME";
 
-    private WebFragment() {
+    public WebFragment() {
 
     }
 

@@ -224,7 +224,7 @@ public class TrainingActivity extends BaseActivity implements
         getDbHelper().getTrainingSessionDao().update(currentSession);
 
         // End training session.
-        showFragmentWithAnim(containerId, new ThankYouFragment(), ThankYouFragment.TAG);
+        showFragmentWithAnim(containerId, ThankYouFragment.newInstance(false), ThankYouFragment.TAG);
     }
 
     @Override
@@ -233,7 +233,16 @@ public class TrainingActivity extends BaseActivity implements
     }
 
     private void showQuestionnaire() {
-        showFragmentWithAnim(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
+        if (ParadigmSet.getOperationMode() == ParadigmSet.OperationMode.TEST) {
+            showFragmentWithAnim(containerId, ThankYouFragment.newInstance(true), ThankYouFragment.TAG);
+        } else {
+            showFragmentWithAnim(containerId, new QuestionnaireFragment(), QuestionnaireFragment.TAG);
+        }
+    }
+
+    @Override
+    public void returnToTraining() {
+        TrainingActivity.super.onBackPressed();
     }
 
     @Override
