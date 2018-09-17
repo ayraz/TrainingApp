@@ -55,9 +55,13 @@ public class LoginActivity extends BaseActivity {
             List<User> existingUsers = getHelper().getUserDao().queryBuilder()
                     .orderBy("lastLoginDate", false)
                     .query();
-            List<String> names = CollectionUtils.map(existingUsers, (user) -> user.getUsername());
-            if (!existingUsers.isEmpty()) {
-                binding.existingUserList.setAdapter(new ArrayAdapter<String>(this, R.layout.simple_text_line, names));
+            List<String> names = CollectionUtils.map(existingUsers, User::getUsername);
+            // remove admin from suggestions
+            names = CollectionUtils.filter(names, name -> !name.equals("##"));
+            if (!names.isEmpty()) {
+                binding.existingUserList.setAdapter(new ArrayAdapter<>(this, R.layout.simple_text_line, names));
+            } else {
+                binding.lastLoginListLabel.setVisibility(View.GONE);
             }
         } catch (SQLException e) {
             Log.e(TAG, e.getMessage());

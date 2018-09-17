@@ -61,23 +61,11 @@ public class PreferenceManager {
 
     public int getTrialCount() {
         String key = context.getString(R.string.pref_trial_number);
-        int result;
-        try {
-            result = Integer.parseInt(pref.getString(key, null));
-        } catch (NumberFormatException ex) {
-            result = TEST_TRIAL_COUNT;
-        }
-        return result;
+        return pref.getInt(key, TEST_TRIAL_COUNT);
     }
 
     public int getPresentationTime() {
         String key = context.getString(R.string.pref_trial_presentation_time);
-        int result;
-        try {
-            result = Integer.parseInt(pref.getString(key, null));
-        } catch (NumberFormatException ex) {
-            result = TrainingFragment.MEMORIZATION_INTERVAL;
-        }
-        return result;
+        return pref.getInt(key, TrainingFragment.MEMORIZATION_INTERVAL);
     }
 }

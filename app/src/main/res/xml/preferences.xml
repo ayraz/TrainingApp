@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
+    <cz.nudz.www.trainingapp.preferences.SeekBarPreference
         android:key="@string/pref_trial_number"
         android:title="@string/settingsSetTrialNum"
-        android:inputType="number"
         android:summary="@string/settingsSetTrialNumSummary"
-        android:persistent="true"/>
+        android:persistent="true"
+        android:defaultValue="3"
+        app:minValue="3"
+        app:maxValue="20"
+        app:stepValue="1"/>
 
-    <EditTextPreference
+    <cz.nudz.www.trainingapp.preferences.SeekBarPreference
         android:key="@string/pref_trial_presentation_time"
         android:title="@string/settingsSetTrialPresentation"
-        android:inputType="number"
         android:summary="@string/settingsSetTrialPresentationSummary"
-        android:persistent="true"/>
+        android:persistent="true"
+        android:defaultValue="100"
+        app:minValue="100"
+        app:maxValue="500"
+        app:stepValue="50"/>
 
 </PreferenceScreen>
