@@ -76,7 +76,6 @@ public abstract class TrainingFragment extends Fragment {
     private Difficulty difficulty;
     private Integer trialCount;
     private Integer presentationTime;
-    private boolean isTrainingMode;
     private ParadigmType paradigmType;
 
     private List<Boolean> answers;
@@ -169,21 +168,22 @@ public abstract class TrainingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.training_fragment, container, false);
 
-        trialCount = TrainingActivity.DEFAULT_TRIAL_COUNT;
-        answers = new ArrayList<>(trialCount);
-        grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
         difficulty = Difficulty.valueOf(getArguments().getString(KEY_DIFFICULTY));
         paradigmType = ParadigmType.valueOf(getArguments().getString(TrainingActivity.KEY_PARADIGM));
-        isTrainingMode = true;
-        if (getArguments().containsKey(KEY_TRIAL_COUNT)) {
-            trialCount = getArguments().getInt(KEY_TRIAL_COUNT);
-            presentationTime = getArguments().getInt(KEY_PRESENTATION_TIME);
-            isTrainingMode = false;
-        }
+        trialCount = getArguments().getInt(KEY_TRIAL_COUNT, TrainingActivity.DEFAULT_TRIAL_COUNT);
+        presentationTime = getArguments().getInt(KEY_PRESENTATION_TIME, MEMORIZATION_INTERVAL);
+
+        answers = new ArrayList<>(trialCount);
+        grids = new ConstraintLayout[]{binding.trainingFragmentLeftGrid, binding.trainingFragmentRightGrid};
 
         disableAnswerBtns();
 
         return binding.getRoot();
+    }
+
+    private boolean isTrainingMode() {
+        return !getArguments().containsKey(KEY_PRESENTATION_TIME)
+                && !getArguments().containsKey(KEY_TRIAL_COUNT);
     }
 
     /**
@@ -376,9 +376,7 @@ public abstract class TrainingFragment extends Fragment {
 
                                 }, (int) (RETENTION_INTERVAL * DEBUG_SLOW));
 
-                            }, (int) ((presentationTime != null
-                                    ? presentationTime
-                                    : MEMORIZATION_INTERVAL) * DEBUG_SLOW * SPEED_FACTOR));
+                            }, (int) (presentationTime * DEBUG_SLOW * SPEED_FACTOR));
 
                         }, (int) (CUE_INTERVAL * DEBUG_SLOW * SPEED_FACTOR));
 
@@ -454,7 +452,7 @@ public abstract class TrainingFragment extends Fragment {
 
             answers.add(answer);
 
-            if (isTrainingMode) {
+            if (isTrainingMode()) {
                 // response time in millis
                 long trialResponseTime = (new Date()).getTime() - responseStartTime.getTime();
                 // TODO: remove this hardcoded dependency
