@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FILTER IT</string>
     <string name="color">Barva</string>
-    <string name="position">Pozice</string>
+    <string name="position">Orientace</string>
     <string name="shape">Tvar</string>
     <string name="sequence">Řada</string>
     <string name="startHelpColorParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>BARVY</b>]]> podnětů na jedné straně obrazovky.</string>
@@ -31,14 +31,14 @@
     <string name="lastSessionPerformanceOptionTitle">Poslední Trénink</string>
     <string name="allSessionsPerformanceOptionTitle">Všechny Tréninky</string>
     <string name="lastSessionColorResultsTitle">Výsledky posledního tréninku - BARVA</string>
-    <string name="lastSessionPositionResultsTitle">Výsledky posledního tréninku - POZICE</string>
+    <string name="lastSessionPositionResultsTitle">Výsledky posledního tréninku - ORIENTACE</string>
     <string name="lastSessionShapeResultsTitle">Výsledky posledního tréninku - TVAR</string>
     <string name="allSessionsColorResultsTitle">Přehled výsledků všech tréninků – BARVA</string>
-    <string name="allSessionsPositionResultsTitle">Přehled výsledků všech tréninků – POZICE</string>
+    <string name="allSessionsPositionResultsTitle">Přehled výsledků všech tréninků – ORIENTACE</string>
     <string name="allSessionsShapeResultsTitle">Přehled výsledků všech tréninků – TVAR</string>
     <string name="no">NE</string>
     <string name="ok">OK</string>
-    <string name="startHelpPositionParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>POZICE</b>]]> podnětů na jedné straně obrazovky.</string>
+    <string name="startHelpPositionParadigm">V tomto experimentu bude Vaším úkolem určit, zda došlo ke změně <![CDATA[<b>ORIENTACE</b>]]> podnětů na jedné straně obrazovky.</string>
     <string name="quitTrainingDialogMessage">Jste si jisti, že chcete ukončit trénink?</string>
     <string name="quitTrainingDialogTitle">Ukončení tréninku</string>
     <string name="selectParadigmTypeForTrialTitle">Výběr úkolu pro zácvik</string>
@@ -48,15 +48,15 @@
     <string name="nextBtnText">Další</string>
     <string name="prevBtnText">Předchozí</string>
     <string name="cueHelpColorParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování barvy podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
-    <string name="cueHelpPositionParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování pozice podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
+    <string name="cueHelpPositionParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování orientace podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
     <string name="cueHelpShapeParadigm">Uprostřed obrazovky je fixační kříž. Šipka nad ním určuje stranu pro zapamatování tvaru podnětů. V tomto případě je to <![CDATA[<b>VPRAVO]]> od fixačního kříže.</string>
     <string name="identificationHelpColorParadigm"><b>TEST</b> – Změnily se barvy na straně označené šipkou oproti předloze nebo jsou stejné?</string>
     <string name="identificationHelpShapeParadigm"><b>TEST</b> – Změnily se tvary na straně označené šipkou oproti předloze nebo jsou stejné?</string>
-    <string name="identificationHelpPositionParadigm"><b>TEST</b> – Změnily se pozice na straně označené šipkou oproti předloze nebo jsou stejné?</string>
+    <string name="identificationHelpPositionParadigm"><b>TEST</b> – Změnily se orientace na straně označené šipkou oproti předloze nebo jsou stejné?</string>
     <string name="interTrialPauseHelp">Pauza – krátký odpočinek před dalším pokusem.</string>
     <string name="longerPause">Delší pauza, na obrazovce vidíte pouze fixační kříž.</string>
     <string name="memorizeColorHelp">PŘEDLOHA - Snažte si zapamatovat barvy podnětů na straně určené šipkou.</string>
-    <string name="memorizePositionHelp">PŘEDLOHA - Snažte si zapamatovat pozice podnětů na straně určené šipkou.</string>
+    <string name="memorizePositionHelp">PŘEDLOHA - Snažte si zapamatovat orientace podnětů na straně určené šipkou.</string>
     <string name="memorizeShapeHelp">PŘEDLOHA - Snažte si zapamatovat tvary podnětů na straně určené šipkou.</string>
     <string name="nowYouTryMessage"><![CDATA[<b>NYNÍ, KDYŽ UŽ VÍTE, JAK NA TO,\nMŮŽETE SI VYZKOUŠET PÁR ZÁCVIČNÝCH ÚKOLŮ</b>]]></string>
     <string name="shortPause">Krátká pauza, na obrazovce vidíte pouze fixační kříž.</string>
@@ -70,7 +70,7 @@
     <string name="modeSelectionTitle">Výběr Režimu</string>
     <string name="performanceSummaryTitle">Přehled Výkonnosti</string>
     <string name="colorParadigmPerformanceSummary">Přehled výkonu v úkolu - barva</string>
-    <string name="positionParadigmPerformanceSummary">Přehled výkonu v úkolu - pozice</string>
+    <string name="positionParadigmPerformanceSummary">Přehled výkonu v úkolu - orientace</string>
     <string name="shapeParadigmPerformanceSummary">Přehled výkonu v úkolu - tvar</string>
     <string name="lastLoginAsLabel">Poslední přihlášení jako: </string>
     <string name="usernameLabel">Uživatelské Jméno</string>

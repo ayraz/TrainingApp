@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import cz.nudz.www.trainingapp.BaseActivity;
+import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.SessionManager;
 import cz.nudz.www.trainingapp.data.tables.Paradigm;
@@ -52,7 +53,7 @@ public class Repository {
             "JOIN TrainingSession ts ON ts.user_id = u.username " +
             "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
             "JOIN Sequence s ON s.paradigm_id = p.id " +
-            "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
+            "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 AND ts.isTest = 0 " +
             "GROUP BY ts.id, ts.startDate " +
             "ORDER BY ts.startDate ASC";
 
@@ -61,7 +62,7 @@ public class Repository {
             "JOIN TrainingSession ts ON ts.user_id = u.username " +
             "JOIN Paradigm p ON p.trainingSession_id = ts.id " +
             "JOIN Sequence s ON s.paradigm_id = p.id " +
-            "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 " +
+            "WHERE u.username = ? AND p.paradigmType = ? AND ts.isFinished = 1 AND ts.isTest = 0 " +
             "ORDER BY ts.startDate DESC, s.id ASC " +
             "LIMIT " + TrainingActivity.DEFAULT_SEQUENCE_COUNT;
 
@@ -81,6 +82,7 @@ public class Repository {
         trainingSession.setUser(user);
         trainingSession.setStartDate(new Date());
         trainingSession.setFinished(false);
+        trainingSession.setTest(ParadigmSet.getOperationMode() == ParadigmSet.OperationMode.TEST);
         trainingSessionDao.create(trainingSession);
         return trainingSession;
     }

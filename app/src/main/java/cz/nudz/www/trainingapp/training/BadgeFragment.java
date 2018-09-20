@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import cz.nudz.www.trainingapp.BaseActivity;
+import cz.nudz.www.trainingapp.ParadigmSet;
 import cz.nudz.www.trainingapp.R;
 import cz.nudz.www.trainingapp.data.Repository;
 import cz.nudz.www.trainingapp.databinding.BadgeFragmentBinding;
@@ -66,7 +67,11 @@ public class BadgeFragment extends DialogFragment {
         int rating = 0;
         StringBuilder msg = new StringBuilder();
         boolean pauses = tr.hasOnlyShortPauses();
-        boolean sameOrBetter = tr.isCurrentSessionSameOrBetter();
+        // TODO this condition does not really make sense for test mode
+        boolean sameOrBetter = false;
+        if (ParadigmSet.getOperationMode() == ParadigmSet.OperationMode.TRAINING) {
+            sameOrBetter = tr.isCurrentSessionSameOrBetter();
+        }
         boolean diffInAllParadigms = tr.hasRaisedDiffInAllParadigms();
         if (pauses) {
             rating += 1;

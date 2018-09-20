@@ -24,6 +24,9 @@ public class TrainingSession {
     @DatabaseField(canBeNull = false)
     private boolean isFinished;
 
+    @DatabaseField(canBeNull = false)
+    private boolean isTest;
+
     @DatabaseField(canBeNull = false, foreign = true)
     private User user;
 
@@ -89,5 +92,13 @@ public class TrainingSession {
 
     public void setDifficultyAnswer(int difficultyAnswer) {
         this.difficultyAnswer = difficultyAnswer;
+    }
+
+    public boolean isTest() {
+        return isTest;
+    }
+
+    public void setTest(boolean test) {
+        isTest = test;
     }
 }
