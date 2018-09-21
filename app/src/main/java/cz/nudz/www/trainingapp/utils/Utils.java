@@ -88,7 +88,7 @@ public class Utils {
      */
     public static Difficulty adjustDifficulty(List<Boolean> answers, Difficulty currentDifficulty) {
         int raiseThreshold = (int) (answers.size() * 0.9);
-        int lowerThreshold = (int) (answers.size() * 0.5);
+        int lowerThreshold = (int) (answers.size() * 0.7);
         int correctCount = 0;
         for (Boolean answer : answers) {
             if (answer != null && answer) {
