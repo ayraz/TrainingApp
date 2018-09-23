@@ -77,7 +77,7 @@
     <string name="loginBtnText">Přihlásit se</string>
     <string name="difficultyLabel">Úroveň: </string>
     <string name="tryColorParadigmBtn">Vyzkoušet "Barvu"</string>
-    <string name="tryPositionParadigmBtn">Vyzkoušet "Pozici"</string>
+    <string name="tryPositionParadigmBtn">Vyzkoušet "Orientaci"</string>
     <string name="tryShapeParadigmBtn">Vyzkoušet "Tvar"</string>
     <string name="mainCardTitle">Hlavní</string>
     <string name="modesCardTitle">Režimy</string>
